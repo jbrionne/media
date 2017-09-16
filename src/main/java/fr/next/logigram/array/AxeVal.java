@@ -1,8 +1,13 @@
 package fr.next.logigram.array;
 
-public interface AxeVal {
+import java.io.Serializable;
 
-	void setAxe(Axe axe);
+public interface AxeVal<T>  extends Serializable {
+
+	void setAxe(Axe<? extends AxeVal<T>> axe);
 	
-	Object getValue();
+	T getValue();
+	
+	void setValue(T value);
+	
 }

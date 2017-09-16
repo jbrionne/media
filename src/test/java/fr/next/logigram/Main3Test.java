@@ -5,7 +5,6 @@ import java.util.List;
 
 import fr.next.logigram.array.Axe;
 import fr.next.logigram.array.AxeOrd;
-import fr.next.logigram.array.AxeOrdNum;
 import fr.next.logigram.array.AxeValue;
 import fr.next.logigram.process.History;
 import junit.framework.TestCase;

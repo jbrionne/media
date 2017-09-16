@@ -2,11 +2,10 @@ package fr.next.logigram;
 
 import java.util.List;
 
-import fr.next.logigram.array.Array2DOrd;
+import fr.next.logigram.array.ArrayXDOrd;
 import fr.next.logigram.array.Axe;
-import fr.next.logigram.array.AxeOrdNum;
 import fr.next.logigram.array.AxeValue;
-import fr.next.logigram.array.logigram.Array2DOrdValue;
+import fr.next.logigram.array.impl.logigram.ArrayLogigramValue;
 import fr.next.logigram.draw.Draw;
 import fr.next.logigram.process.Action;
 import fr.next.logigram.process.Case;
@@ -31,7 +30,7 @@ public class Logigram {
 	public ResultStrategy strategyExclusionByLine() {
 		ResultStrategy rGlobal = new ResultStrategy();
 		for(Axe<AxeValue<String>> domain : array2DWorld.getDomains()) {
-			List<Array2DOrd<Array2DOrdValue, String>> arraysWithColFixed = array2DWorld.findAllArrays2DWithDomainInCol(domain);
+			List<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>> arraysWithColFixed = array2DWorld.findAllArrays2DWithDomainInCol(domain);
 			strategy.strategyExclusionByLine(rGlobal, arraysWithColFixed);
 		}
 		return rGlobal;
@@ -40,7 +39,7 @@ public class Logigram {
 	public ResultStrategy strategyExclusionByCol() {
 		ResultStrategy rGlobal = new ResultStrategy();
 		for(Axe<AxeValue<String>> domain : array2DWorld.getDomains()) {
-			List<Array2DOrd<Array2DOrdValue,String>> arrays2DWithLineFixed = array2DWorld.findAllArrays2DWithDomainInLine(domain);
+			List<ArrayXDOrd<ArrayLogigramValue,String, Axe<AxeValue<String>>>> arrays2DWithLineFixed = array2DWorld.findAllArrays2DWithDomainInLine(domain);
 			strategy.strategyExclusionByCol(rGlobal, arrays2DWithLineFixed);
 		}
 		return rGlobal;
@@ -94,7 +93,7 @@ public class Logigram {
 		}
 	}
 
-	private void addAction(String action, int i, int j, Array2DOrd<Array2DOrdValue, String> array2D, Array2DOrdValue value, List<Case> casesInContext) {
+	private void addAction(String action, int i, int j, ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> array2D, ArrayLogigramValue value, List<Case> casesInContext) {
 		StringBuilder strB = new StringBuilder();
 		for (Case c : casesInContext) {
 			if (strB.length() != 0) {
@@ -102,7 +101,7 @@ public class Logigram {
 			}
 			strB.append(Draw.getAlpha(c.getIndexLine()) + (c.getIndexCol()+ 1));
 		}
-		history.addAction(action + " " + array2D.getAxeLine().toString() + ", " + array2D.getAxeCol().toString() + ", "
+		history.addAction(action + " " + array2D.getAxe(0).toString() + ", " + array2D.getAxe(1).toString() + ", "
 				+ " col " + j +  "  line " + (i) + ", " + value + "  > "
 				+ strB.toString());
 	}

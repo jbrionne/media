@@ -3,11 +3,11 @@ package fr.next.logigram;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.next.logigram.array.Array2DOrd;
+import fr.next.logigram.array.ArrayXDOrd;
 import fr.next.logigram.array.Axe;
 import fr.next.logigram.array.AxeOrd;
 import fr.next.logigram.array.AxeValue;
-import fr.next.logigram.array.logigram.Array2DOrdValue;
+import fr.next.logigram.array.impl.logigram.ArrayLogigramValue;
 import fr.next.logigram.process.History;
 import junit.framework.TestCase;
 
@@ -79,43 +79,43 @@ public class Main4Test extends TestCase  {
 		
 		Array2DWorld cubeWorld = new Array2DWorld(domains);
 		Logigram logigram = new Logigram(new History(), cubeWorld);
-		Array2DOrd<Array2DOrdValue, String> cPC = cubeWorld.getArray2D(domPersons, domCaches);
-		cPC.setValue(CED, _5, Array2DOrdValue.NEG);
-		cPC.setValue(CLEM, _1, Array2DOrdValue.NEG);
-		cPC.setValue(CLEM, _2, Array2DOrdValue.NEG);
-		cPC.setValue(DYLAN, _4, Array2DOrdValue.NEG);
-		cPC.setValue(DYLAN, _5, Array2DOrdValue.NEG);
-		cPC.setValue(JOAO, _1, Array2DOrdValue.NEG);
+		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> cPC = cubeWorld.getArray2D(domPersons, domCaches);
+		cPC.setValue(ArrayLogigramValue.NEG, CED, _5);
+		cPC.setValue(ArrayLogigramValue.NEG, CLEM, _1);
+		cPC.setValue(ArrayLogigramValue.NEG, CLEM, _2);
+		cPC.setValue(ArrayLogigramValue.NEG, DYLAN, _4);
+		cPC.setValue(ArrayLogigramValue.NEG, DYLAN, _5);
+		cPC.setValue(ArrayLogigramValue.NEG, JOAO, _1);
 		
-		Array2DOrd<Array2DOrdValue, String> cPD = cubeWorld.getArray2D(domPersons, domDuree);
-		cPD.setValue(DYLAN, BLEUE, Array2DOrdValue.NEG);
-		cPD.setValue(DYLAN, VERTE, Array2DOrdValue.NEG);
-		
-		
-		Array2DOrd<Array2DOrdValue, String> cPCl = cubeWorld.getArray2D(domPersons, domClasse);
-		cPCl.setValue(FLORIAN, PARIS, Array2DOrdValue.NEG);
-		cPCl.setValue(JOAO, PARIS, Array2DOrdValue.NEG);
-		cPCl.setValue(DYLAN, BARCELONE, Array2DOrdValue.NEG);
+		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> cPD = cubeWorld.getArray2D(domPersons, domDuree);
+		cPD.setValue(ArrayLogigramValue.NEG, DYLAN, BLEUE);
+		cPD.setValue(ArrayLogigramValue.NEG, DYLAN, VERTE);
 		
 		
-		Array2DOrd<Array2DOrdValue, String> cClC = cubeWorld.getArray2D(domClasse, domCaches);
-		cClC.setValue(BARCELONE, _1, Array2DOrdValue.NEG);
-		cClC.setValue(BARCELONE, _2, Array2DOrdValue.NEG);
-		cClC.setValue(MARSEILLE, _5, Array2DOrdValue.NEG);
-		cClC.setValue(PARIS, _1, Array2DOrdValue.NEG);
-		cClC.setValue(PARIS, _2, Array2DOrdValue.NEG);
+		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> cPCl = cubeWorld.getArray2D(domPersons, domClasse);
+		cPCl.setValue(ArrayLogigramValue.NEG, FLORIAN, PARIS);
+		cPCl.setValue(ArrayLogigramValue.NEG, JOAO, PARIS);
+		cPCl.setValue(ArrayLogigramValue.NEG, DYLAN, BARCELONE);
 		
-		Array2DOrd<Array2DOrdValue, String> cClD = cubeWorld.getArray2D(domClasse, domDuree);
-		cClD.setValue(BARCELONE, VERTE, Array2DOrdValue.NEG);
-		cClD.setValue(MANCHESTER, BLEUE, Array2DOrdValue.NEG);
-		cClD.setValue(MARSEILLE, ROUGE, Array2DOrdValue.NEG);
 		
-		Array2DOrd<Array2DOrdValue, String> cDC = cubeWorld.getArray2D(domDuree, domCaches);
-		cDC.setValue(BLANCHE, _1, Array2DOrdValue.NEG);
-		cDC.setValue(BLANCHE, _4, Array2DOrdValue.NEG);
-		cDC.setValue(BLANCHE, _5, Array2DOrdValue.NEG);
-		cDC.setValue(BLEUE, _4, Array2DOrdValue.NEG);
-		cDC.setValue(BLEUE, _5, Array2DOrdValue.NEG);
+		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> cClC = cubeWorld.getArray2D(domClasse, domCaches);
+		cClC.setValue(ArrayLogigramValue.NEG, BARCELONE, _1);
+		cClC.setValue(ArrayLogigramValue.NEG, BARCELONE, _2);
+		cClC.setValue(ArrayLogigramValue.NEG, MARSEILLE, _5);
+		cClC.setValue(ArrayLogigramValue.NEG, PARIS, _1);
+		cClC.setValue(ArrayLogigramValue.NEG, PARIS, _2);
+		
+		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> cClD = cubeWorld.getArray2D(domClasse, domDuree);
+		cClD.setValue(ArrayLogigramValue.NEG, BARCELONE, VERTE);
+		cClD.setValue(ArrayLogigramValue.NEG, MANCHESTER, BLEUE);
+		cClD.setValue(ArrayLogigramValue.NEG, MARSEILLE, ROUGE);
+		
+		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> cDC = cubeWorld.getArray2D(domDuree, domCaches);
+		cDC.setValue(ArrayLogigramValue.NEG, BLANCHE, _1);
+		cDC.setValue(ArrayLogigramValue.NEG, BLANCHE, _4);
+		cDC.setValue(ArrayLogigramValue.NEG, BLANCHE, _5);
+		cDC.setValue(ArrayLogigramValue.NEG, BLEUE, _4);
+		cDC.setValue(ArrayLogigramValue.NEG, BLEUE, _5);
 		
 		logigram.draw(9);
 		

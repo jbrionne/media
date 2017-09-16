@@ -2,10 +2,10 @@ package fr.next.logigram.draw;
 
 import java.util.List;
 
-import fr.next.logigram.array.Array2DOrd;
+import fr.next.logigram.array.ArrayXDOrd;
 import fr.next.logigram.array.Axe;
 import fr.next.logigram.array.AxeValue;
-import fr.next.logigram.array.logigram.Array2DOrdValue;
+import fr.next.logigram.array.impl.logigram.ArrayLogigramValue;
 
 public class Draw {
 	
@@ -22,7 +22,7 @@ public class Draw {
 	 * @param domainSize size of the domains list
 	 * @param arrays2D arrays
 	 */
-	public static void draw(int maxLabel, int domainSize, List<Array2DOrd<Array2DOrdValue, String>> arrays2D) {
+	public static void draw(int maxLabel, int domainSize, List<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>> arrays2D) {
 
 		int addLabel = 4;
 
@@ -31,8 +31,8 @@ public class Draw {
 				inline(" ");
 			}
 			for (int i = 0; i < domainSize - 1; i++) {
-				Array2DOrd<Array2DOrdValue, String> cRef = arrays2D.get(i);
-				Axe<AxeValue<String>> dCol = cRef.getAxeCol();
+				ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> cRef = arrays2D.get(i);
+				Axe<AxeValue<String>> dCol = cRef.getAxe(1);
 				for (AxeValue<String> s : dCol.getElements()) {
 					if (k > s.getValue().length() - 1) {
 						inline(" ");
@@ -52,8 +52,8 @@ public class Draw {
 		}
 		int index = 0;
 		for (int i = 0; i < domainSize - 1; i++) {
-			Array2DOrd<Array2DOrdValue, String> cRef = arrays2D.get(i);
-			for (int k = 0; k < cRef.getAxeCol().getElements().size(); k++) {
+			ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> cRef = arrays2D.get(i);
+			for (int k = 0; k < cRef.getAxe(1).getElements().size(); k++) {
 				inline(getAlpha(index));
 				inline(" ");
 				index++;
@@ -68,10 +68,10 @@ public class Draw {
 		int sizeFirst = domainSize - 1;
 		int inc = 1;
 		while (first < arrays2D.size()) {
-			Array2DOrd<Array2DOrdValue, String> cRef = arrays2D.get(first);
-			int nbLine = cRef.getAxeLine().getElements().size();
+			ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> cRef = arrays2D.get(first);
+			int nbLine = cRef.getAxe(0).getElements().size();
 			for (int j = 0; j < nbLine; j++) {
-				String ref = cRef.getAxeLine().getElements().get(j).getValue();
+				String ref = cRef.getAxe(0).getElements().get(j).getValue();
 				StringBuilder strB = new StringBuilder();
 				for (int k = 0; k < maxLabel; k++) {
 					if (k < ref.length()) {
@@ -90,8 +90,8 @@ public class Draw {
 				inline(" ");
 
 				for (int i = first; i < first + sizeFirst; i++) {
-					Array2DOrd<Array2DOrdValue, String> c = arrays2D.get(i);
-					for (Array2DOrdValue ca : c.getLine(j)) {
+					ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c = arrays2D.get(i);
+					for (ArrayLogigramValue ca : c.getValuesForAnAxe(0, j)) {
 						inline(ca.getCode());
 						inline(" ");
 					}

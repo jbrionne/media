@@ -2,19 +2,21 @@ package fr.next.logigram.process;
 
 import java.util.List;
 
-import fr.next.logigram.array.Array2DOrd;
-import fr.next.logigram.array.logigram.Array2DOrdValue;
+import fr.next.logigram.array.ArrayXDOrd;
+import fr.next.logigram.array.Axe;
+import fr.next.logigram.array.AxeValue;
+import fr.next.logigram.array.impl.logigram.ArrayLogigramValue;
 
 public class Action {
 
 	private String action;
 	private int indexLine;
 	private int indexCol;
-	private Array2DOrd<Array2DOrdValue, String> array2D;
-	private Array2DOrdValue value;
+	private ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> array2D;
+	private ArrayLogigramValue value;
 	private List<Case> casesInContext;
 	
-	public Action(String action, int indexLine, int indexCol, Array2DOrd<Array2DOrdValue, String> array2D, Array2DOrdValue value, List<Case> casesInContext) {
+	public Action(String action, int indexLine, int indexCol, ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> array2D, ArrayLogigramValue value, List<Case> casesInContext) {
 		super();
 		this.action = action;
 		this.indexLine = indexLine;
@@ -36,11 +38,11 @@ public class Action {
 		return indexCol;
 	}
 
-	public Array2DOrd<Array2DOrdValue, String> getArray() {
+	public ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> getArray() {
 		return array2D;
 	}
 
-	public Array2DOrdValue getValue() {
+	public ArrayLogigramValue getValue() {
 		return value;
 	}
 

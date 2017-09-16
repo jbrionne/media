@@ -1,17 +1,19 @@
 package fr.next.logigram.process;
 
-import fr.next.logigram.array.Array2DOrd;
-import fr.next.logigram.array.logigram.Array2DOrdValue;
+import fr.next.logigram.array.ArrayXDOrd;
+import fr.next.logigram.array.Axe;
+import fr.next.logigram.array.AxeValue;
+import fr.next.logigram.array.impl.logigram.ArrayLogigramValue;
 
 public class Case {
 
-	private Array2DOrd<Array2DOrdValue, String> array2D;
+	private ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> array2D;
 	
 	private int indexLine;
 	private int indexCol;
-	private Array2DOrdValue value;
+	private ArrayLogigramValue value;
 
-	public Case(Array2DOrd<Array2DOrdValue, String> array2D, Array2DOrdValue value, int indexLine, int indexCol) {
+	public Case(ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> array2D, ArrayLogigramValue value, int indexLine, int indexCol) {
 		super();
 		this.value = value;
 		this.indexLine = indexLine;
@@ -19,11 +21,11 @@ public class Case {
 		this.array2D = array2D;
 	}
 
-	public Array2DOrdValue getValue() {
+	public ArrayLogigramValue getValue() {
 		return value;
 	}
 
-	public void setValue(Array2DOrdValue value) {
+	public void setValue(ArrayLogigramValue value) {
 		this.value = value;
 	}
 
@@ -36,7 +38,7 @@ public class Case {
 		return indexCol;
 	}
 
-	public Array2DOrd<Array2DOrdValue, String> getArray2D() {
+	public ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> getArray2D() {
 		return array2D;
 	}
 

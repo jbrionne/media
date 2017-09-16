@@ -1,15 +1,15 @@
 package fr.next.logigram.process;
 
-import fr.next.logigram.array.logigram.Array2DOrdValue;
+import fr.next.logigram.array.impl.logigram.ArrayLogigramValue;
 
 public class Possibility {
 
 	private String line;
 	private String col;
-	private Array2DOrdValue value;
+	private ArrayLogigramValue value;
 	
 	
-	public Possibility(String line, String col, Array2DOrdValue value) {
+	public Possibility(String line, String col, ArrayLogigramValue value) {
 		super();
 		this.line = line;
 		this.col = col;
@@ -28,10 +28,10 @@ public class Possibility {
 	public void setCol(String col) {
 		this.col = col;
 	}
-	public Array2DOrdValue getValue() {
+	public ArrayLogigramValue getValue() {
 		return value;
 	}
-	public void setValue(Array2DOrdValue value) {
+	public void setValue(ArrayLogigramValue value) {
 		this.value = value;
 	}
 }

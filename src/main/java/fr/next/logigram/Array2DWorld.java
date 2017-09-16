@@ -3,40 +3,57 @@ package fr.next.logigram;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.next.logigram.array.Array2DOrd;
-import fr.next.logigram.array.Array2DOrdProxy;
+import fr.next.logigram.array.ArrayXDOrd;
+import fr.next.logigram.array.ArrayXDOrdProxy;
 import fr.next.logigram.array.Axe;
-import fr.next.logigram.array.AxeOrdNum;
+import fr.next.logigram.array.AxeInt;
 import fr.next.logigram.array.AxeValue;
-import fr.next.logigram.array.Coordinates;
-import fr.next.logigram.array.logigram.Array2DOrdImpl;
-import fr.next.logigram.array.logigram.Array2DOrdValue;
+import fr.next.logigram.array.CoordinatesXDByIndices;
+import fr.next.logigram.array.impl.ArrayFactory;
+import fr.next.logigram.array.impl.logigram.ArrayLogigramValue;
 
 public class Array2DWorld {
+	
+	private Axe axeLine;
+	private Axe axeCol;
 
-	private Array2DOrd<Array2DOrd<Array2DOrdValue, String>, String> arrays2D;
+	private ArrayXDOrd<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>, String, Axe<AxeValue<String>>> arrays2D;
 	private List<Axe<AxeValue<String>>> domains;
 
 	public Array2DWorld(List<Axe<AxeValue<String>>> domains) {
 		this.domains = domains;
 		
 		
-		//TODO
+
 		int indexColSize = 0;
 		for (int i = 1; i < domains.size(); i++) {
-			indexColSize += domains.get(i).getElements().size();
+			for(int j=0; j < domains.get(i).getElements().size(); j++) {
+				indexColSize++;
+			}
 		}
 		Axe<AxeValue<String>> d0 = domains.get(0);
 		int indexLineSize = d0.getElements().size();
 		for (int i = domains.size() - 1; i > 0; i--) {
-			indexLineSize += domains.get(i).getElements().size();
+			for(int j=0; j < domains.get(i).getElements().size(); j++) {
+				indexLineSize++;
+			}
 		}
-		arrays2D = new Array2DWordImpl(indexLineSize, indexColSize);
 		
+		AxeInt axeInteger = new AxeInt<>("integer", Integer.MAX_VALUE);
+		axeLine = new AxeInt<>("worldLine", indexLineSize);
+		axeCol = new AxeInt<>("worldCol", indexColSize);
+		
+		//arrays2D = new Array2DWordImpl(indexLineSize, indexColSize);
+		List<Axe> axes = new ArrayList();
+		axes.add(axeLine);
+		axes.add(axeCol);
+		int[] indices = new int[] { 0, 0 };
+		arrays2D = (ArrayXDOrd<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValueForWorld(axeLine, axeCol, new CoordinatesXDByIndices(axes, indices));
 		int indexColO = 0;
 		for (int i = 1; i < domains.size(); i++) {
-			Array2DOrd<Array2DOrdValue, String> array = new Array2DOrdImpl(d0, domains.get(i), new Coordinates(0, indexColO));
-			arrays2D.setValue(0, indexColO, array);
+			int[] indices2 = new int[] { 0, indexColO};
+			ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> array = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(d0, domains.get(i), new CoordinatesXDByIndices(axes, indices2));
+			arrays2D.setValueByIndices(array, 0, indexColO);
 			indexColO += domains.get(i).getElements().size();
 		}
 
@@ -44,66 +61,67 @@ public class Array2DWorld {
 		int indexCol = 0;
 		for (int i = domains.size() - 1; i > 0; i--) {
 			for (int j = 1; j < i; j++) {
-				Array2DOrd<Array2DOrdValue, String> array2D = new Array2DOrdImpl(domains.get(i), domains.get(j), new Coordinates(indexLine, indexCol));
-				arrays2D.setValue(indexLine, indexCol, array2D);
+				int[] indices2 = new int[] { indexLine, indexCol};
+				ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> array2D = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domains.get(i), domains.get(j), new CoordinatesXDByIndices(axes, indices2));
+				arrays2D.setValueByIndices(array2D, indexLine, indexCol);
 				indexCol += domains.get(j).getElements().size();
 			}
 			indexLine += domains.get(i).getElements().size();
 		}
 	}
 
-	public Array2DOrd<Array2DOrdValue, String> getArray2D(Axe<AxeValue<String>> domainLine, Axe<AxeValue<String>> domainCol) {
-		for (Array2DOrd<Array2DOrdValue, String> a : arrays2D.getAll()) {
+	public ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> getArray2D(Axe<AxeValue<String>> domainLine, Axe<AxeValue<String>> domainCol) {
+		for (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> a : arrays2D.getAll()) {
 			if ((!domainLine.equals(domainCol))
-					&& (a.getAxeLine().equals(domainLine)
-							&& a.getAxeCol().equals(domainCol))) {
+					&& (a.getAxe(0).equals(domainLine)
+							&& a.getAxe(1).equals(domainCol))) {
 				return a;
 			}
 		}
 		return null;
 	}
 
-	public List<Array2DOrd<Array2DOrdValue, String>> findAllArrays2DWithDomainInCol(Axe<AxeValue<String>> domainName) {
-		List<Array2DOrd<Array2DOrdValue, String>> arrays2DWithDomainInCol = new ArrayList<>();
-		for (Array2DOrd<Array2DOrdValue, String> a : arrays2D.getAll()) {
-			if (a.getAxeCol().equals(domainName)) {
+	public List<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>> findAllArrays2DWithDomainInCol(Axe<AxeValue<String>> domainName) {
+		List<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>> arrays2DWithDomainInCol = new ArrayList<>();
+		for (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> a : arrays2D.getAll()) {
+			if (a.getAxe(1).equals(domainName)) {
 				arrays2DWithDomainInCol.add(a);
 			}
-			if (a.getAxeLine().equals(domainName)) {
-				arrays2DWithDomainInCol.add(new Array2DOrdProxy<Array2DOrdValue, String>(a));
+			if (a.getAxe(0).equals(domainName)) {
+				arrays2DWithDomainInCol.add(new ArrayXDOrdProxy<ArrayLogigramValue, String, Axe<AxeValue<String>>>(a, new int [] {1, 0}, String.class));
 			}
 		}
 		return arrays2DWithDomainInCol;
 	}
 
-	public List<Array2DOrd<Array2DOrdValue, String>> findAllArrays2DWithDomainInLine(Axe<AxeValue<String>> domainName) {
-		List<Array2DOrd<Array2DOrdValue, String>> arrays2DWithDomainInLine = new ArrayList<>();
-		for (Array2DOrd<Array2DOrdValue, String> a : arrays2D.getAll()) {
-			if (a.getAxeLine().equals(domainName)) {
+	public List<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>> findAllArrays2DWithDomainInLine(Axe<AxeValue<String>> domainName) {
+		List<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>> arrays2DWithDomainInLine = new ArrayList<>();
+		for (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> a : arrays2D.getAll()) {
+			if (a.getAxe(0).equals(domainName)) {
 				arrays2DWithDomainInLine.add(a);
 			}
-			if (a.getAxeCol().equals(domainName)) {
-				arrays2DWithDomainInLine.add(new Array2DOrdProxy<Array2DOrdValue, String>(a));
+			if (a.getAxe(1).equals(domainName)) {
+				arrays2DWithDomainInLine.add(new ArrayXDOrdProxy<ArrayLogigramValue, String, Axe<AxeValue<String>>>(a, new int [] {1, 0}, String.class));
 			}
 		}
 		return arrays2DWithDomainInLine;
 	}
 
-	public Array2DOrd<Array2DOrdValue, String> getArray2DSpecific(AxeValue<String> aEl, AxeValue<String> bEl) throws AssertionError {
+	public ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> getArray2DSpecific(AxeValue<String> aEl, AxeValue<String> bEl) throws AssertionError {
 		Axe<AxeValue<String>> domainWithA = aEl.getAxe();
 		Axe<AxeValue<String>> domainWithB = bEl.getAxe();
-		Array2DOrd<Array2DOrdValue, String> a = getArray2D(domainWithA, domainWithB);
+		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> a = getArray2D(domainWithA, domainWithB);
 		if (a == null) {
-			Array2DOrd<Array2DOrdValue, String> v = getArray2D(domainWithB, domainWithA);
+			ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> v = getArray2D(domainWithB, domainWithA);
 			if (v == null) {
 				throw new AssertionError();
 			}
-			a = new Array2DOrdProxy<Array2DOrdValue, String>(v);
+			a = new ArrayXDOrdProxy<ArrayLogigramValue, String, Axe<AxeValue<String>>>(v, new int [] {1, 0}, String.class);
 		}
 		return a;
 	}
 
-	public List<Array2DOrd<Array2DOrdValue, String>> getArrays2D() {
+	public List<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>> getArrays2D() {
 		return arrays2D.getAll();
 	}
 
