@@ -27,35 +27,35 @@ public class AxeOrdNum<T extends AxeVal> extends AxeOrd<T> {
 	
 	private void writeObject(ObjectOutputStream oos) throws IOException {
 		oos.writeObject(name);
-		oos.writeInt(unit);
-		for (T e : elements) {
-			if (e.getValue() instanceof Axe) {
-				Axe a = (Axe) e.getValue();
-				a.removeElements();
+		if(elements != null) {
+			for (T e : elements) {
+				if (e.getValue() instanceof AxeValue) {
+					AxeValue a = (AxeValue) e.getValue();
+					a.getAxe().removeElements();
+				}
 			}
 		}
-		if(elements != null) {
-			oos.writeObject(elements);
-		}
+		oos.writeObject(elements);
+		oos.writeInt(unit);
 	}
 
 	private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
 		name = (String) ois.readObject();
-		unit = ois.readInt();
 		Object o = ois.readObject();
 		if(o != null) {
 		elements = (List<T>) o;
 		for (T m : elements) {
-				if(m.getValue() instanceof Axe) {
-					Axe a = (Axe) m.getValue();
-					Axe fullAxe = (Axe) Memory.getInstance().findAndGetContent(a.getName());
+				if(m.getValue() instanceof AxeValue) {
+					AxeValue axeValue = (AxeValue) m.getValue();
+					Axe fullAxe = (Axe) Memory.getInstance().findAndGetContent(axeValue.getAxe().getName());
 					if(fullAxe == null) {
-						throw new AssertionError(a.getName() + " doesn't exist");
+						throw new AssertionError(axeValue.getAxe().getName() + " doesn't exist");
 					}
-					m.setValue(a);
+					axeValue.setAxe(fullAxe);
 				}
 			}
 		}
+		unit = ois.readInt();
 	}
 
 }

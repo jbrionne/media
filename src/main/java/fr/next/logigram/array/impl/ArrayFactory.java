@@ -73,8 +73,8 @@ public class ArrayFactory {
 		return new ArrayXDGenericImpl<>(String.class, coordinates, domainLettre);
 	}
 
-	public static AxeOrd<AxeValue<Character>> mot(String m) {
-		AxeOrd<AxeValue<Character>> mot = new AxeOrd<AxeValue<Character>>(m);
+	public static AxeOrd<AxeValue<AxeValue<Character>>> mot(String m) {
+		AxeOrd<AxeValue<AxeValue<Character>>> mot = new AxeOrd<AxeValue<AxeValue<Character>>>(m);
 		for (int i = 0; i < m.length(); i++) {
 			char c = m.charAt(i);
 			AxeValue<Character> val = null;
@@ -87,7 +87,7 @@ public class ArrayFactory {
 			if(val == null) {
 				throw new AssertionError("Unable to find " + c);
 			}
-			mot.add(val);
+			mot.add(new AxeValue<AxeValue<Character>>(val));
 		}
 		return mot;
 	}
@@ -100,10 +100,11 @@ public class ArrayFactory {
 	}
 
 	public static AxeOrd<AxeValue<Character>> alpha() {
-		Object a = memory.findAndGetContent("alpha");
+		String id = "alpha";
+		Object a = memory.findAndGetContent(id);
 		AxeOrd<AxeValue<Character>> alpha = null;
 		if (a == null) {
-			alpha = new AxeOrd<AxeValue<Character>>("lettre alphabet");
+			alpha = new AxeOrd<AxeValue<Character>>(id);
 			alpha.add(new AxeValue<Character>('a'));
 			alpha.add(new AxeValue<Character>('b'));
 			alpha.add(new AxeValue<Character>('c'));
@@ -156,7 +157,7 @@ public class ArrayFactory {
 			alpha.add(new AxeValue<Character>('X'));
 			alpha.add(new AxeValue<Character>('Y'));
 			alpha.add(new AxeValue<Character>('Z'));
-			memory.save("alpha", alpha);
+			memory.save(id, alpha);
 		} else {
 			alpha = (AxeOrd<AxeValue<Character>>) a;
 		}

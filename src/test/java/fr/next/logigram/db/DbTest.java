@@ -54,10 +54,10 @@ public class DbTest extends TestCase {
 	}
 	
 	public void testAxeDb2() throws Exception {
-		AxeOrd<AxeValue<Character>> test = mot("test");
-		AxeOrd<AxeValue<Character>> autre = mot("autre");
-		
-		
+		AxeOrd<AxeValue<AxeValue<Character>>> test = mot("test");
+		byte[] serializeObject = SerialObject.serialize(test);
+		System.out.println(serializeObject.length);
+		assertTrue(serializeObject.length < 1000);
 	}
 
 }

@@ -29,17 +29,21 @@ public class CluedoTest extends TestCase {
 		int[] indices = new int[] { 0, 0};
 		
 		
-		AxeOrd<AxeValue<Character>> test = mot("test");
-		for(AxeValue<Character> c : test.getElements()) {
+		AxeOrd<AxeValue<AxeValue<Character>>> test = mot("test");
+		for(AxeValue<AxeValue<Character>> c : test.getElements()) {
 			System.out.println(c.getValue());
 		}
 		
-		AxeOrd<AxeValue<AxeOrd<AxeValue<Character>>>> type = new AxeOrd<AxeValue<AxeOrd<AxeValue<Character>>>>("type");
-		type.add(new AxeValue<AxeOrd<AxeValue<Character>>>(mot("IA")));
-		type.add(new AxeValue<AxeOrd<AxeValue<Character>>>(mot("Humain")));
+		AxeOrd<AxeValue<String>> attribute = new AxeOrd<AxeValue<String>>("attribute");
+		attribute.add(new AxeValue<String>("Nom"));
+		attribute.add(new AxeValue<String>("Type"));
+		
+		AxeOrd<AxeValue<AxeOrd<AxeValue<AxeValue<Character>>>>> type = new AxeOrd<AxeValue<AxeOrd<AxeValue<AxeValue<Character>>>>>("type");
+		type.add(new AxeValue<AxeOrd<AxeValue<AxeValue<Character>>>>(mot("IA")));
+		type.add(new AxeValue<AxeOrd<AxeValue<AxeValue<Character>>>>(mot("Humain")));
 		
 		AxeOrd<AxeValue<? extends Object>> h = new AxeOrd<AxeValue<? extends Object>>("player");
-		h.add(new AxeValue<AxeOrd<AxeValue<Character>>>(mot("H")));
+		h.add(new AxeValue<AxeOrd<AxeValue<AxeValue<Character>>>>(mot("H")));
 		h.add(type.getElements().get(0));
 		
 		AxeOrd<AxeValue<String>> player = new AxeOrd<AxeValue<String>>("player");

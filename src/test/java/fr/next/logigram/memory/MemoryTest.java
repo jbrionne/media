@@ -40,12 +40,12 @@ public class MemoryTest extends TestCase {
 
 	public void testMemory() {
 		
-		AxeOrd<AxeValue<Character>> m = ArrayFactory.mot("test");
+		AxeOrd<AxeValue<AxeValue<Character>>> m = ArrayFactory.mot("test");
 		memory.save("test", m);
-		AxeOrd<AxeValue<Character>> exM = (AxeOrd<AxeValue<Character>>) memory.findAndGetContent("test");
+		AxeOrd<AxeValue<AxeValue<Character>>> exM = (AxeOrd<AxeValue<AxeValue<Character>>>) memory.findAndGetContent("test");
 		assertEquals(m.getName(), exM.getName());
 		for(int i = 0 ; i < m.getElements().size(); i++) {
-			assertEquals(m.getElements().get(i).getValue(), exM.getElements().get(i).getValue());
+			assertEquals(m.getElements().get(i).getValue().getValue(), exM.getElements().get(i).getValue().getValue());
 		}
 	}
 	

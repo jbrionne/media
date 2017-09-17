@@ -13,6 +13,8 @@ public class ManageEspace implements IManageEspace{
 	
 	public static String TSPHERE = "TSPHERE";
 	public static String TBOX = "TBOX";
+	public static String TLIGNE = "TLIGNE";
+	public static String TLIGNEBEZIER = "TLIGNEBEZIER";
 	
 	public Espace getEspace(){
 		return esp;
@@ -44,6 +46,16 @@ public class ManageEspace implements IManageEspace{
 		}else if(type.equals(TBOX)){
 			t = esp.addToRootBranchGroupAndTransform();
 			ReturnAddObject r = esp.addBoxToTransform(id, t, 1f, 1f, 1f, withCollision);
+			i.setT(r.getT());
+			return r.getT();
+		} else if(type.equals(TLIGNE)){
+			t = esp.addToRootBranchGroupAndTransform();			
+			ReturnAddObject r = esp.addLineToTransform(id, t, -1.0f, 0, 0, +1.0f, 0, 0);
+			i.setT(r.getT());
+			return r.getT();
+		}else if(type.equals(TLIGNEBEZIER)){
+			t = esp.addToRootBranchGroupAndTransform();	
+			ReturnAddObject r = esp.addLineBezierToTransform(id, t, -0.8f , -0.6f, -0.2f,0.2f, 0.2f,0.3f, 0.8f,-0.5f);
 			i.setT(r.getT());
 			return r.getT();
 		}
