@@ -2,6 +2,7 @@ package fr.next.media.array.impl;
 
 import fr.next.media.array.ArrayXDOrd;
 import fr.next.media.array.Axe;
+import fr.next.media.array.AxeFunctions;
 import fr.next.media.array.AxeOrd;
 import fr.next.media.array.AxeVal;
 import fr.next.media.array.AxeValue;
@@ -12,7 +13,7 @@ import fr.next.media.memory.Memory;
 public class ArrayFactory {
 
 	private static Memory memory = Memory.getInstance();
-
+	
 	public static <K, G extends Axe<? extends AxeVal<K>>> ArrayXDOrd<?, K, G> newInstanceArrayLogigramValue(
 			G domainLine, G domainCol, CoordinatesXDByIndices coordinates) {
 		return new ArrayXDWithEmptyValueGenericImpl(ArrayLogigramValue.class, coordinates, ArrayLogigramValue.EMPTY,
@@ -78,10 +79,12 @@ public class ArrayFactory {
 		for (int i = 0; i < m.length(); i++) {
 			char c = m.charAt(i);
 			AxeValue<Character> val = null;
-			for (AxeValue<Character> k : alpha().getElements()) {
-				if (k.getValue().charValue() == c) {
-					val = k;
-					break;
+			for (AxeValue<Axe> k : AxeFunctions.list(alphaMini(), alphaMaj()).getElements()) {
+				for(Object o : k.getValue().getElements()) {
+					if (((AxeValue<Character>) o).getValue().charValue() == c) {
+						val = (AxeValue<Character>) o;
+						break;
+					}
 				}
 			}
 			if(val == null) {
@@ -92,15 +95,8 @@ public class ArrayFactory {
 		return mot;
 	}
 
-	public static void link() {
-		// TODO
-		AxeOrd<AxeValue<String>> link = new AxeOrd<AxeValue<String>>("lien");
-		link.add(new AxeValue<String>("left"));
-		link.add(new AxeValue<String>("right"));
-	}
-
-	public static AxeOrd<AxeValue<Character>> alpha() {
-		String id = "alpha";
+	public static AxeOrd<AxeValue<Character>> alphaMini() {
+		String id = Memory.ALPHA_MIN_ID;
 		Object a = memory.findAndGetContent(id);
 		AxeOrd<AxeValue<Character>> alpha = null;
 		if (a == null) {
@@ -130,7 +126,19 @@ public class ArrayFactory {
 			alpha.add(new AxeValue<Character>('w'));
 			alpha.add(new AxeValue<Character>('x'));
 			alpha.add(new AxeValue<Character>('y'));
-			alpha.add(new AxeValue<Character>('z'));
+			memory.save(id, alpha);
+		} else {
+			alpha = (AxeOrd<AxeValue<Character>>) a;
+		}
+		return alpha;
+	}
+	
+	public static AxeOrd<AxeValue<Character>> alphaMaj() {
+		String id = Memory.ALPHA_MAJ_ID;
+		Object a = memory.findAndGetContent(id);
+		AxeOrd<AxeValue<Character>> alpha = null;
+		if (a == null) {
+			alpha = new AxeOrd<AxeValue<Character>>(id);
 			alpha.add(new AxeValue<Character>('A'));
 			alpha.add(new AxeValue<Character>('B'));
 			alpha.add(new AxeValue<Character>('C'));

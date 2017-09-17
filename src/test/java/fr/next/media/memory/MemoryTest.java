@@ -1,11 +1,7 @@
 package fr.next.media.memory;
 
-import static fr.next.media.array.impl.ArrayFactory.mot;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.plaf.metal.MetalInternalFrameTitlePane;
 
 import fr.next.media.array.ArrayXDOrd;
 import fr.next.media.array.Axe;
@@ -15,8 +11,6 @@ import fr.next.media.array.AxeValue;
 import fr.next.media.array.CoordinatesXDByIndices;
 import fr.next.media.array.impl.ArrayFactory;
 import fr.next.media.array.impl.logigram.ArrayLogigramValue;
-import fr.next.media.memory.Memory;
-import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class MemoryTest extends TestCase {

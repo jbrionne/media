@@ -2,6 +2,8 @@ package fr.next.media.memory;
 
 import java.util.concurrent.locks.ReentrantLock;
 
+import fr.next.media.array.AxeOrd;
+import fr.next.media.array.AxeValue;
 import fr.next.media.db.ManageOrientDb;
 import fr.next.media.db.SerialObject;
 
@@ -15,7 +17,16 @@ public class Memory {
 	
 	private static Memory INSTANCE = new Memory();
 	
-	private Memory() {};
+	public static String BOOLEAN_ID = "boolean";
+	public static String ALPHA_MIN_ID = "alpha_min";
+	public static String ALPHA_MAJ_ID = "alpha_maj";
+	
+	private Memory() {
+		AxeOrd<AxeValue<Boolean>> booleanAxe = new AxeOrd<AxeValue<Boolean>>(BOOLEAN_ID);
+		booleanAxe.add(new AxeValue<Boolean>(true));
+		booleanAxe.add(new AxeValue<Boolean>(false));
+		save(BOOLEAN_ID, booleanAxe);
+	};
 	
 	public static Memory getInstance() {
 		return INSTANCE;
