@@ -79,9 +79,9 @@ public class ArrayFactory {
 		for (int i = 0; i < m.length(); i++) {
 			char c = m.charAt(i);
 			AxeValue<Character> val = null;
-			for (AxeValue<Axe> k : AxeFunctions.list(alphaMini(), alphaMaj()).getElements()) {
-				for(Object o : k.getValue().getElements()) {
-					if (((AxeValue<Character>) o).getValue().charValue() == c) {
+			for (AxeValue<Axe<AxeValue<Character>>> k : AxeFunctions.list(alphaMini(), alphaMaj()).getElements()) {
+				for(AxeValue<Character> o : k.getValue().getElements()) {
+					if (o.getValue().charValue() == c) {
 						val = (AxeValue<Character>) o;
 						break;
 					}

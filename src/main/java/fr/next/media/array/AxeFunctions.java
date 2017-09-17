@@ -2,19 +2,19 @@ package fr.next.media.array;
 
 public class AxeFunctions {
 
-	public static Axe<AxeValue<Axe>> list(Axe... axes) {
-		Axe<AxeValue<Axe>> list = new AxeOrd<AxeValue<Axe>>("list");
-		for(Axe axe : axes) {
-			list.add(new AxeValue<Axe>(axe));
+	 public static <T> Axe<AxeValue<Axe<AxeValue<T>>>> list(Axe<AxeValue<T>>... axes) {
+		Axe<AxeValue<Axe<AxeValue<T>>>> list = new AxeOrd<AxeValue<Axe<AxeValue<T>>>>("list");
+		for(Axe<AxeValue<T>> axe : axes) {
+			list.add(new AxeValue<Axe<AxeValue<T>>>(axe));
 		}
 		return list;
 	}
 	
-	public static Axe union(Axe... axes) {
+	public static <T> Axe<AxeValue<T>> union(Axe<AxeValue<T>>... axes) {
 		throw new AssertionError("Not yet implemented");
 	}
 	
-	public static Axe intersection(Axe... axes) {
+	public static <T> Axe<AxeValue<T>> intersection(Axe<AxeValue<T>>... axes) {
 		throw new AssertionError("Not yet implemented");
 	}
 	
