@@ -1,7 +1,7 @@
 # Programmation Repère
 
 
-Warning : Unstable and in progress !
+Warning : Unstable and in progress ! lib 3D for macosx !
 
 Tout est repère ! L'objectif est d'aller plus loin que la programmation orientée objet en ajoutant des méthodes de base sur la manipulation des repères.
 
