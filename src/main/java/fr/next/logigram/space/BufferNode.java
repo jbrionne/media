@@ -1,4 +1,4 @@
-package fr.next.logigram.espace;
+package fr.next.logigram.space;
 
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.scene.Geometry;

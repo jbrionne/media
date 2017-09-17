@@ -1,21 +1,21 @@
-package fr.next.logigram.espace;
+package fr.next.logigram.space;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import fr.next.logigram.espace.Espace;
-import fr.next.logigram.espace.IManageEspace;
-import fr.next.logigram.espace.ManageEspace;
-import fr.next.logigram.espace.MyInstance;
+import fr.next.logigram.space.Space;
+import fr.next.logigram.space.ISpace;
+import fr.next.logigram.space.ManageEspace;
+import fr.next.logigram.space.MyInstance;
 import junit.framework.TestCase;
 
-public class EspaceTest extends TestCase {
+public class SpaceTest extends TestCase {
 
 	private static  AtomicBoolean started = new AtomicBoolean(false);
 
 	public void test2D() throws InterruptedException   {
 		
-		Espace esp = new Espace(started);
-		IManageEspace mesp = new ManageEspace(esp);
+		Space esp = new Space(started);
+		ISpace mesp = new ManageEspace(esp);
 		esp.start();
 		while(!started.get()) {
 			Thread.sleep(1000);

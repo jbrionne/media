@@ -1,11 +1,11 @@
-package fr.next.logigram.espace;
+package fr.next.logigram.space;
 
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 
-public interface IManageEspace {
+public interface ISpace {
 
-	Espace getEspace();
+	Space getEspace();
 	
 	Node imagineX(MyInstance i);	
 	

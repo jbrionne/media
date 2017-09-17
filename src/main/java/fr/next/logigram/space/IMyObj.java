@@ -1,4 +1,4 @@
-package fr.next.logigram.espace;
+package fr.next.logigram.space;
 
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Transform;

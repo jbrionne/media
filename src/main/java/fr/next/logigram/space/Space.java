@@ -1,4 +1,4 @@
-package fr.next.logigram.espace;
+package fr.next.logigram.space;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -35,7 +35,7 @@ import com.jme3.scene.shape.Curve;
 import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Sphere;
 
-public class Espace extends SimpleApplication implements PhysicsCollisionListener {
+public class Space extends SimpleApplication implements PhysicsCollisionListener {
 
 	private Thread mainThread;
 	private AtomicBoolean started;
@@ -44,7 +44,7 @@ public class Espace extends SimpleApplication implements PhysicsCollisionListene
 	private static Material materialRed;
 	private static Material materialShadow;
 
-	public Espace(AtomicBoolean started) {
+	public Space(AtomicBoolean started) {
 		this.started = started;
 	}
 

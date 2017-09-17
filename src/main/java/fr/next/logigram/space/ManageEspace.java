@@ -1,4 +1,4 @@
-package fr.next.logigram.espace;
+package fr.next.logigram.space;
 
 
 import com.jme3.math.Vector3f;
@@ -6,9 +6,9 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Line;
 
-public class ManageEspace implements IManageEspace{
+public class ManageEspace implements ISpace{
 
-	private Espace esp;
+	private Space esp;
 	private final static float value = 5f;
 	
 	public static String TSPHERE = "TSPHERE";
@@ -16,12 +16,12 @@ public class ManageEspace implements IManageEspace{
 	public static String TLIGNE = "TLIGNE";
 	public static String TLIGNEBEZIER = "TLIGNEBEZIER";
 	
-	public Espace getEspace(){
+	public Space getEspace(){
 		return esp;
 	}
 	
 	
-	public ManageEspace(Espace esp){
+	public ManageEspace(Space esp){
 		this.esp = esp;	
 	}
 	
