@@ -28,7 +28,7 @@ public class ManageOrientDb {
 	}
 
 	private void initalize() {
-		WriteReader.makeDir(pathDb);
+		WriterReader.makeDir(pathDb);
 		ODatabaseThreadLocalFactory customFactory = new MyCustomRecordFactory("plocal:" + pathDb);
 		Orient.instance().registerThreadDatabaseFactory(customFactory);
 		db = (ODatabaseDocumentTx) customFactory.getThreadDatabase();

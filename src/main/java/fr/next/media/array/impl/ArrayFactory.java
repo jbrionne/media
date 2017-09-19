@@ -79,7 +79,7 @@ public class ArrayFactory {
 		for (int i = 0; i < m.length(); i++) {
 			char c = m.charAt(i);
 			AxeValue<Character> val = null;
-			for (AxeValue<Axe<AxeValue<Character>>> k : AxeFunctions.list(alphaMini(), alphaMaj()).getElements()) {
+			for (AxeValue<Axe<AxeValue<Character>>> k : AxeFunctions.listGen(alphaMini(), alphaMaj(), num()).getElements()) {
 				for(AxeValue<Character> o : k.getValue().getElements()) {
 					if (o.getValue().charValue() == c) {
 						val = (AxeValue<Character>) o;
@@ -93,6 +93,29 @@ public class ArrayFactory {
 			mot.add(new AxeValue<AxeValue<Character>>(val));
 		}
 		return mot;
+	}
+	
+	public static AxeOrd<AxeValue<Character>> num() {
+		String id = Memory.NUM_ID;
+		Object a = memory.findAndGetContent(id);
+		AxeOrd<AxeValue<Character>> alpha = null;
+		if (a == null) {
+			alpha = new AxeOrd<AxeValue<Character>>(id);
+			alpha.add(new AxeValue<Character>('0'));
+			alpha.add(new AxeValue<Character>('1'));
+			alpha.add(new AxeValue<Character>('2'));
+			alpha.add(new AxeValue<Character>('3'));
+			alpha.add(new AxeValue<Character>('4'));
+			alpha.add(new AxeValue<Character>('5'));
+			alpha.add(new AxeValue<Character>('6'));
+			alpha.add(new AxeValue<Character>('7'));
+			alpha.add(new AxeValue<Character>('8'));
+			alpha.add(new AxeValue<Character>('9'));
+			memory.save(id, alpha);
+		} else {
+			alpha = (AxeOrd<AxeValue<Character>>) a;
+		}
+		return alpha;
 	}
 
 	public static AxeOrd<AxeValue<Character>> alphaMini() {

@@ -28,6 +28,9 @@ public class AxeOrd<T extends AxeVal> implements Axe<T> {
 
 	@Override
 	public void add(T e) {
+		if(e.getAxe() != null && !e.getAxe().equals(this)) {
+			throw new AssertionError("Cannot override axe " + e.getAxe().getName() + " " + this.getName());
+		}
 		e.setAxe(this);
 		this.elements.add(e);
 	}

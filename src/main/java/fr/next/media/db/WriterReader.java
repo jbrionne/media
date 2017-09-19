@@ -11,9 +11,9 @@ import java.io.LineNumberReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class WriteReader {
+public class WriterReader {
 
-	private final static Logger logger = LoggerFactory.getLogger(WriteReader.class);
+	private final static Logger logger = LoggerFactory.getLogger(WriterReader.class);
 
 	public static void read(String fileNamePath) {
 		String myLine = null;
@@ -27,16 +27,16 @@ public class WriteReader {
 		}
 	}
 
-	public static void writeFile(String name1, String sourceCode) {
-		try (FileWriter fstream = new FileWriter(name1); BufferedWriter out = new BufferedWriter(fstream);) {
+	public static void writeFile(String path, String name, String sourceCode) {
+		try (FileWriter fstream = new FileWriter(new File(path, name).getAbsolutePath()); BufferedWriter out = new BufferedWriter(fstream);) {
 			out.write(sourceCode);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 	}
 
-	public static void makeDir(String cibleJava) {
-		String[] b = cibleJava.split("/");
+	public static void makeDir(String dir) {
+		String[] b = dir.split("/");
 		StringBuilder strB = new StringBuilder();
 		subMakeDir(b, strB, b.length);
 	}

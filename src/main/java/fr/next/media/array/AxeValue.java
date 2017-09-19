@@ -26,7 +26,7 @@ public class AxeValue<T>  implements AxeVal<T> {
 		return value;
 	}
 
-	@SuppressWarnings("unchecked")
+	@Override
 	public <G extends Axe<? extends AxeVal<T>>>  G  getAxe() {
 		return (G) axe;
 	}
