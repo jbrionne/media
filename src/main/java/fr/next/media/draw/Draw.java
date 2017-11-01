@@ -5,6 +5,7 @@ import java.util.List;
 import fr.next.media.array.ArrayXDOrd;
 import fr.next.media.array.Axe;
 import fr.next.media.array.AxeValue;
+import fr.next.media.array.impl.ArrayXDWithEmptyValueGenericImpl;
 import fr.next.media.array.impl.logigram.ArrayLogigramValue;
 
 public class Draw {
@@ -22,7 +23,7 @@ public class Draw {
 	 * @param domainSize size of the domains list
 	 * @param arrays2D arrays
 	 */
-	public static void draw(int maxLabel, int domainSize, List<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>> arrays2D) {
+	public static void drawLogigram(int maxLabel, int domainSize, List<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>> arrays2D) {
 
 		int addLabel = 4;
 
@@ -103,6 +104,25 @@ public class Draw {
 			inlineln();
 			first = first + sizeFirst;
 			sizeFirst--;
+		}
+	}
+	
+	public static void draw(ArrayXDOrd arrays2D) {
+		inline("        ");
+		for (Object a :  arrays2D.getAxe(1).getElements()) {
+			AxeValue x = (AxeValue) a;
+			inline(x.getValue().toString());
+			inline(" ");
+		}
+		inlineln();
+		for (int i = 0; i < arrays2D.getAxe(0).size(); i++) {
+			inline(((AxeValue) arrays2D.getAxe(0).getElements().get(i)).getValue().toString());
+			inline(" ");
+			for (int j = 0; j < arrays2D.getAxe(1).size(); j++) {
+				inline(arrays2D.getValueByIndices(i, j).toString());
+				inline(" ");
+			}
+			inlineln();
 		}
 	}
 	

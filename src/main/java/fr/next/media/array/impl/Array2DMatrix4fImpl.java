@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
 
 import fr.next.media.array.ArrayXDOrd;
 import fr.next.media.array.Axe;
 import fr.next.media.array.AxeVal;
+import fr.next.media.array.CoordOperation;
 import fr.next.media.array.CoordinatesXDByIndices;
 
 public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> implements ArrayXDOrd<Float, K, G> {
@@ -159,6 +163,62 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> implemen
 			throw new AssertionError();
 		}
 		this.cases.setTranslation(values[0], values[1], values[2]);
+	}
+	
+	@Override
+	public List<Pair<K, Float>> getPairForAnAxe(int indexAxe, int indexToFind) {
+		List<Pair<K, Float>> pair = new ArrayList<>();
+		List<Float> values = null;
+		G domains = null;
+		if(indexAxe == 0) {
+			values = Arrays.asList(getLine(indexToFind));
+			domains = domainLine;
+		} else {
+			values = Arrays.asList(getCol(indexToFind));
+			domains = domainCol;
+		}
+		int index = 0;
+		for(Float c : values) {
+			K d =  domains.getElements().get(index).getValue();
+			pair.add(new ImmutablePair<K, Float>(d, c));
+			index++;
+		}
+		return pair;
+	}
+
+	@Override
+	public Float getValueFromUpperAxeCoord(K... upperAxeIndices) {
+		if (coordinates.getAxesSize() < 2) {
+			throw new AssertionError(
+					"Not compatible axes : upper reference should have at least the same number of axes");
+		}
+		Object valueAxeLine = null;
+		Object valueAxeCol = null;
+		for (int i = 0; i < coordinates.getAxesSize(); i++) {
+			boolean found = false;
+			if (domainLine.getName().equals(coordinates.getAxe(i).getName())) {
+				found = true;
+				if(upperAxeIndices[i] instanceof CoordOperation) {
+					valueAxeLine = ((CoordOperation<K>) upperAxeIndices[i])
+						.sub((K) coordinates.getAxe(i).getElements().get(coordinates.getIndex(i)));
+				} else if(upperAxeIndices[i] instanceof Integer) {
+					valueAxeLine = (Integer) upperAxeIndices[i] - (Integer) coordinates.getAxe(i).getElements().get(coordinates.getIndex(i)).getValue();
+						
+				}
+			} else if (domainCol.getName().equals(coordinates.getAxe(i).getName())) {
+				found = true;
+				if(upperAxeIndices[i] instanceof CoordOperation) {
+					valueAxeCol = ((CoordOperation<K>) upperAxeIndices[i])
+						.sub((K) coordinates.getAxe(i).getElements().get(coordinates.getIndex(i)));
+				} else if(upperAxeIndices[i] instanceof Integer) {
+					valueAxeCol = (Integer) upperAxeIndices[i] - (Integer) coordinates.getAxe(i).getElements().get(coordinates.getIndex(i)).getValue();
+				}
+			}
+			if (!found) {
+				throw new AssertionError("Not compatible axes : unable to find " + coordinates.getAxe(i).getName());
+			}
+		}
+		return getValue((K) valueAxeLine, (K) valueAxeCol);
 	}
 
 }

@@ -44,7 +44,7 @@ public class Array2DWorld {
 		axeCol = new AxeInt<>("worldCol", indexColSize);
 		
 		//arrays2D = new Array2DWordImpl(indexLineSize, indexColSize);
-		List<Axe> axes = new ArrayList();
+		List<Axe<AxeValue>> axes = new ArrayList();
 		axes.add(axeLine);
 		axes.add(axeCol);
 		int[] indices = new int[] { 0, 0 };
@@ -121,7 +121,7 @@ public class Array2DWorld {
 		return a;
 	}
 
-	public List<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>> getArrays2D() {
+	public List getArrays2D() {
 		return arrays2D.getAll();
 	}
 

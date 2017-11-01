@@ -1,9 +1,10 @@
 package fr.next.media.array.impl;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -14,49 +15,26 @@ import fr.next.media.array.AxeVal;
 import fr.next.media.array.CoordOperation;
 import fr.next.media.array.CoordinatesXDByIndices;
 
-public class ArrayXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> implements ArrayXDOrd<T, K, G> {
+public class MapXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> implements ArrayXDOrd<T, K, G> {
 
-	private Object cases;
+	private Map cases;
 
 	private G[] domains;
 
 	private CoordinatesXDByIndices coordinates;
 
 	private Class<T> clazz;
-
+	
 	private T emptyVal;
 
 	@SuppressWarnings("unchecked")
-	public ArrayXDWithEmptyValueGenericImpl(Class<T> clazz, CoordinatesXDByIndices coordinates, T emptyVal,
+	public MapXDWithEmptyValueGenericImpl(Class<T> clazz, CoordinatesXDByIndices coordinates, T emptyVal,
 			G... domains) {
 		this.clazz = clazz;
 		this.domains = domains;
 		this.coordinates = coordinates;
 		this.emptyVal = emptyVal;
-		int[] sizes = new int[domains.length];
-		int index = 0;
-		for (G d : domains) {
-			sizes[index] = d.size();
-			index++;
-		}
-		cases = Array.newInstance(clazz, sizes);
-
-		Object o = cases;
-		recEmpty(o, 0);
-	}
-
-	private void recEmpty(Object o, int index) {
-		for (int k = 0; k < Array.getLength(o); k++) {
-			Object i = Array.get(o, k);
-			if(index == domains.length - 2) {
-				for (int x = 0; x < Array.getLength(i); x++) {
-					((T[]) i)[x] = emptyVal;
-				}
-			} else {
-				int dim = index + 1;
-				recEmpty(i, dim);
-			}
-		}
+		cases = new HashMap<>();
 	}
 
 	@Override
@@ -67,40 +45,43 @@ public class ArrayXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeV
 			indices[i] = Axe.findIndex(values[i], d);
 			i++;
 		}
-
 		setValueInternal(value, indices);
 	}
 
 	private T getValueInternal(int... indices) {
-		Object o = cases;
-		boolean monoDim = false;
-		int i = 0;
-		while (!monoDim) {
-			o = Array.get(o, indices[i]);
-			if(i == domains.length - 2) {
-				monoDim = true;
-				o = ((T[]) o)[indices[i + 1]];
+		Map currentMap = cases;
+		for(int i : indices) {
+			if(i == indices.length - 1) {
+				return (T)  currentMap.get(i);
+			} else {
+				Object  m = currentMap.get(i);
+				if(m == null) {
+					return emptyVal;
+				} else {
+				   currentMap = (Map) m;
+				}
 			}
-			i++;
 		}
-		if (o != null) {
-			return (T) o;
-		} else {
-			return null;
-		}
+		throw new AssertionError("no value for map");
 	}
 
 	private void setValueInternal(T value, int... indices) {
-		Object o = cases;
-		boolean monoDim = false;
-		int i = 0;
-		while (!monoDim) {
-			o = Array.get(o, indices[i]);
-			if(i == domains.length - 2) {
-				monoDim = true;
-				((T[]) o)[indices[i + 1]] = value;
+		Map currentMap = cases;
+		int loop = 0;
+		for(int i : indices) {
+			if(loop == indices.length - 1) {
+				currentMap.put(i, value);
+			} else {
+				Object  m = currentMap.get(i);
+				if(m == null) {
+					Map nextMap = new HashMap<>();
+					currentMap.put(i, nextMap);
+					currentMap = nextMap;
+				} else {
+				   currentMap = (Map) m;
+				}
 			}
-			i++;
+			loop++;
 		}
 	}
 
@@ -149,66 +130,74 @@ public class ArrayXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeV
 		rec(all, cases, 0);
 		return all;
 	}
-
-	private void recWithIndex(List<T> all, Object o, int[] indices, int index, int indexAxe, int indexToFind) {
-		for (int k = 0; k < Array.getLength(o); k++) {
-			indices[index] = k;
-			Object i = Array.get(o, k);
-			if (index  == domains.length - 2) {
-				for (int x = 0; x < Array.getLength(i); x++) {
-					indices[index + 1] = x;
+	
+	private void recWithIndex(List<T> all, Map o, int[] indices, int index, int indexAxe, int indexToFind) {
+	    for(Object eo : o.entrySet()) {
+	    	Entry e = (Entry) eo;
+	    	indices[index] = (int) e.getKey();
+	    	Object i = e.getValue();
+		    if (index  == domains.length - 2) {
+				Map ii = (Map) i;
+			    for(Object ieo : ii.entrySet()) {
+			    	Entry ie = (Entry) ieo;
+			    	indices[index + 1] = (int) ie.getKey();
 					if (indices[indexAxe] == indexToFind) {
-						Object z = Array.get(i, x);
+						Object z = ie.getValue();
 						if (z != null) {
 							all.add((T) z);
 						}
 					}
 				}
 			} else {
-				
 				int dim = index + 1;
-				recWithIndex(all, i, indices, dim, indexAxe, indexToFind);
+				recWithIndex(all, (Map) i, indices, dim, indexAxe, indexToFind);
 			}
 		}
 	}
 	
-	private void recWithIndexWithKey(List<Pair<K, T>> all, Object o, int[] indices, int index, int indexAxe, int indexToFind) {
-		for (int k = 0; k < Array.getLength(o); k++) {
-			indices[index] = k;
-			Object i = Array.get(o, k);
-			if (index  == domains.length - 2) {
-				for (int x = 0; x < Array.getLength(i); x++) {
-					indices[index + 1] = x;
+	private void recWithIndexWithKey(List<Pair<K,T>> all, Map o, int[] indices, int index, int indexAxe, int indexToFind) {
+	    for(Object eo : o.entrySet()) {
+	    	Entry e = (Entry) eo;
+	    	indices[index] = (int) e.getKey();
+	    	Object i = e.getValue();
+		    if (index  == domains.length - 2) {
+				Map ii = (Map) i;
+			    for(Object ieo : ii.entrySet()) {
+			    	Entry ie = (Entry) ieo;
+			    	indices[index + 1] = (int) ie.getKey();
 					if (indices[indexAxe] == indexToFind) {
-						Object z = Array.get(i, x);
+						Object z = ie.getValue();
 						if (z != null) {
-							all.add(new ImmutablePair<K, T>((K) domains[indexAxe].getElements().get(x).getValue(), (T) z));
+							all.add(new ImmutablePair<K,T>((K) domains[indexAxe].getElements().get((int) ie.getKey()).getValue(), (T) z));
 						}
 					}
 				}
 			} else {
 				int dim = index + 1;
-				recWithIndexWithKey(all, i, indices, dim, indexAxe, indexToFind);
+				recWithIndexWithKey(all, (Map) i, indices, dim, indexAxe, indexToFind);
 			}
 		}
 	}
 
-	private void rec(List<T> all, Object o, int index) {
-		for (int k = 0; k < Array.getLength(o); k++) {
-			Object i = Array.get(o, k);
-			if (index  == domains.length - 2) {
-				for (int x = 0; x < Array.getLength(i); x++) {
-					Object z = Array.get(i, x);
+	private void rec(List<T> all, Map o, int index) {
+	      for(Object eo : o.entrySet()) {
+	    	Entry e = (Entry) eo;
+	    	Object i = e.getValue();
+	    	if (index  == domains.length - 2) {
+				Map ii = (Map) i;
+				for (int x = 0; x < ii.size(); x++) {
+					Object z = ii.get(x);
 					if (z != null) {
 						all.add((T) z);
 					}
 				}
 			} else {
 				int dim = index + 1;
-				rec(all, i, dim);
+				rec(all, (Map) i, dim);
 			}
-		}
+	      }
 	}
+	
 	
 	@Override
 	public void setTranslation(Class<T> clazzT, T... values) {
@@ -228,9 +217,8 @@ public class ArrayXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeV
 	@Override
 	public List<Pair<K, T>> getPairForAnAxe(int indexAxe, int indexToFind) {
 		List<Pair<K, T>> all = new ArrayList<>();
-		Object o = cases;
 		int[] indices = new int[domains.length];
-		recWithIndexWithKey(all, o, indices, 0, indexAxe, indexToFind);
+		recWithIndexWithKey(all, cases, indices, 0, indexAxe, indexToFind);
 		return all;
 	}
 	

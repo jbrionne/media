@@ -50,6 +50,16 @@ public class AxeOrd<T extends AxeVal> implements Axe<T> {
 	public List<T> getElements() {
 		return elements;
 	}
+	
+	public boolean containsValue(Object o) {
+		for(T a : elements) {
+			if(a.getValue().equals(o)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 
 	@Override
 	public String toString() {

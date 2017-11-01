@@ -20,6 +20,7 @@ public class Memory {
 	public static String BOOLEAN_ID = "boolean";
 	public static String ALPHA_MIN_ID = "alpha_min";
 	public static String ALPHA_MAJ_ID = "alpha_maj";
+	public static String ACCENT_ID = "accent";
 	public static String NUM_ID = "num";
 	
 	private Memory() {

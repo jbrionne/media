@@ -11,6 +11,7 @@ import fr.next.media.array.AxeValue;
 import fr.next.media.array.CoordinatesXDByIndices;
 import fr.next.media.array.impl.ArrayFactory;
 import fr.next.media.array.impl.logigram.ArrayLogigramValue;
+import fr.next.media.human.MedString;
 import junit.framework.TestCase;
 
 public class MemoryTest extends TestCase {
@@ -35,7 +36,7 @@ public class MemoryTest extends TestCase {
 
 	public void testMemory() {
 		
-		AxeOrd<AxeValue<AxeValue<Character>>> m = ArrayFactory.mot("test");
+		AxeOrd<AxeValue<AxeValue<Character>>> m = new MedString("test");
 		memory.save("test", m);
 		AxeOrd<AxeValue<AxeValue<Character>>> exM = (AxeOrd<AxeValue<AxeValue<Character>>>) memory.findAndGetContent("test");
 		assertEquals(m.getName(), exM.getName());
@@ -63,7 +64,7 @@ public class MemoryTest extends TestCase {
 
 		AxeInt axeLine = new AxeInt<>("worldLine", 1);
 		AxeInt axeCol = new AxeInt<>("worldCol", 1);
-		List<Axe> axes = new ArrayList<>();
+		List<Axe<AxeValue>> axes = new ArrayList<>();
 		axes.add(axeLine);
 		axes.add(axeCol);
 		int[] indices = new int[] { 0, 0 };

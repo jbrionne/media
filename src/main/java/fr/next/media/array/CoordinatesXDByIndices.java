@@ -5,16 +5,16 @@ import java.util.List;
 
 public class CoordinatesXDByIndices implements Serializable {
 
-	private List<Axe> axes;
+	private List<Axe<AxeValue>> axes;
 	
 	private int[] indices;
 
-	public CoordinatesXDByIndices(List<Axe> axes, int[] indices) {
+	public CoordinatesXDByIndices(List<Axe<AxeValue>> axes, int... indices) {
 		super();
 		this.axes = axes;
 		this.indices = indices;
 	}
-
+	
 	public int getIndex(int index) {
 		return indices[index];
 	}
@@ -45,8 +45,12 @@ public class CoordinatesXDByIndices implements Serializable {
 		return true;
 	}
 
-	public Axe getAxe(int index) {
+	public Axe<AxeValue> getAxe(int index) {
 		return axes.get(index);
+	}
+	
+	public int getAxesSize() {
+		return axes.size();
 	}
 
 }

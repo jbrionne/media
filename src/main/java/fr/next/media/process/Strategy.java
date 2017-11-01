@@ -10,6 +10,7 @@ import fr.next.media.array.ArrayXDOrd;
 import fr.next.media.array.Axe;
 import fr.next.media.array.AxeValue;
 import fr.next.media.array.impl.logigram.ArrayLogigramValue;
+import fr.next.media.draw.Draw;
 
 public class Strategy {
 	
@@ -87,7 +88,7 @@ public class Strategy {
 		return null;
 	}
 	
-	private void addAction(ResultStrategy r, String action, int indexLine, int indexCol, ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> array2D, ArrayLogigramValue value, List<Case> casesInContext) {
+	private static void addAction(ResultStrategy r, String action, int indexLine, int indexCol, ArrayXDOrd array2D, ArrayLogigramValue value, List<Case> casesInContext) {
 		Action e = new Action(action, indexLine, indexCol, array2D, value, casesInContext);
 		r.getActions().add(e);
 	}
@@ -148,9 +149,9 @@ public class Strategy {
 	
 	
 	
-	public ResultStrategy strategyFill() {
+	public ResultStrategy strategyFillLine(List<ArrayXDOrd> arrays2D) {
 		ResultStrategy r = new ResultStrategy();
-		for (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c : arrays2D) {
+		for (ArrayXDOrd c : arrays2D) {
 			for (int i = 0; i < c.getAxe(0).getElements().size(); i++) {
 				for (int k = 0; k < c.getAxe(1).getElements().size(); k++) {
 					if (c.getValueByIndices(i, k).equals(ArrayLogigramValue.OK)) {
@@ -162,10 +163,24 @@ public class Strategy {
 											new ArrayList<>());
 									c.setValueByIndices(ArrayLogigramValue.NEG, i, n);
 								} else if (c.getValueByIndices(i, n).equals(ArrayLogigramValue.OK)) {
-									throw new AssertionError();
+									Draw.draw(c);
+									throw new AssertionError("OK value for " + i + "," + n);
 								}
 							}
 						}
+					}
+				}
+			}
+		}
+		return r;
+	}
+	
+	public ResultStrategy strategyFillCol(List<ArrayXDOrd> arrays2D) {
+		ResultStrategy r = new ResultStrategy();
+		for (ArrayXDOrd c : arrays2D) {
+			for (int i = 0; i < c.getAxe(0).getElements().size(); i++) {
+				for (int k = 0; k < c.getAxe(1).getElements().size(); k++) {
+					if (c.getValueByIndices(i, k).equals(ArrayLogigramValue.OK)) {
 						for (int m = 0; m < c.getAxe(0).getElements().size(); m++) {
 							if (m != i) {
 								if (c.getValueByIndices(m, k).equals(ArrayLogigramValue.EMPTY)) {
@@ -184,10 +199,109 @@ public class Strategy {
 		return r;
 	}
 	
-	
-	public ResultStrategy strategyFillIfAllNByLine() {
+	public ResultStrategy strategyFillIfMaxOkByCol(List<ArrayXDOrd> arrays2D, int[] lineMax) {
 		ResultStrategy r = new ResultStrategy();
-		for (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c : arrays2D) {
+		for (ArrayXDOrd c : arrays2D) {
+			for (int i = 0; i < c.getAxe(0).getElements().size(); i++) {
+				int count = 0;
+				for (int k = 0; k < c.getAxe(1).getElements().size(); k++) {
+					if (c.getValueByIndices(i, k).equals(ArrayLogigramValue.OK)) {
+						count++;
+					} 
+				}
+				if (lineMax[i] != -1 && count == lineMax[i]) {
+					for (int k = 0; k < c.getAxe(1).getElements().size(); k++) {
+						if (c.getValueByIndices(i, k).equals(ArrayLogigramValue.EMPTY)) {
+							r.setFindNewCase(true);
+							addAction(r, "O tous trouvés alors tous les autres vides sont N", i, k, c, ArrayLogigramValue.NEG,
+									new ArrayList<>());
+							c.setValueByIndices(ArrayLogigramValue.NEG, i, k);
+						}
+					}
+				}
+			}
+		}
+		return r;
+	}
+	
+	public ResultStrategy strategyFillIfMaxOkByLine(List<ArrayXDOrd> arrays2D, int[] lineMax) {
+		ResultStrategy r = new ResultStrategy();
+		for (ArrayXDOrd c : arrays2D) {
+			for (int i = 0; i < c.getAxe(1).getElements().size(); i++) {
+				int count = 0;
+				for (int k = 0; k < c.getAxe(0).getElements().size(); k++) {
+					if (c.getValueByIndices(k, i).equals(ArrayLogigramValue.OK)) {
+						count++;
+					} 
+				}
+				if (lineMax[i] != -1 && count == lineMax[i]) {
+					for (int k = 0; k < c.getAxe(0).getElements().size(); k++) {
+						if (c.getValueByIndices(k, i).equals(ArrayLogigramValue.EMPTY)) {
+							r.setFindNewCase(true);
+							addAction(r, "O tous trouvés alors tous les autres vides sont N", k, i, c, ArrayLogigramValue.NEG,
+									new ArrayList<>());
+							c.setValueByIndices(ArrayLogigramValue.NEG, k, i);
+						}
+					}
+				}
+			}
+		}
+		return r;
+	}
+	
+	public ResultStrategy strategyFillIfMaxOkByLineByCountN(List<ArrayXDOrd> arrays2D, int[] lineMax) {
+		ResultStrategy r = new ResultStrategy();
+		for (ArrayXDOrd c : arrays2D) {
+			for (int i = 0; i < c.getAxe(1).getElements().size(); i++) {
+				int count = 0;
+				for (int k = 0; k < c.getAxe(0).getElements().size(); k++) {
+					if (c.getValueByIndices(k, i).equals(ArrayLogigramValue.NEG)) {
+						count++;
+					} 
+				}
+				if (lineMax[i] != -1 && count == (c.getAxe(0).getElements().size() - lineMax[i])) {
+					for (int k = 0; k < c.getAxe(0).getElements().size(); k++) {
+						if (c.getValueByIndices(k, i).equals(ArrayLogigramValue.EMPTY)) {
+							r.setFindNewCase(true);
+							addAction(r, "O tous trouvés alors tous les autres vides sont N", k, i, c, ArrayLogigramValue.NEG,
+									new ArrayList<>());
+							c.setValueByIndices(ArrayLogigramValue.OK, k, i);
+						}
+					}
+				}
+			}
+		}
+		return r;
+	}
+	
+	public ResultStrategy strategyFillIfMaxOkByColByCountN(List<ArrayXDOrd> arrays2D, int[] lineMax) {
+		ResultStrategy r = new ResultStrategy();
+		for (ArrayXDOrd c : arrays2D) {
+			for (int i = 0; i < c.getAxe(0).getElements().size(); i++) {
+				int count = 0;
+				for (int k = 0; k < c.getAxe(1).getElements().size(); k++) {
+					if (c.getValueByIndices(i, k).equals(ArrayLogigramValue.NEG)) {
+						count++;
+					} 
+				}
+				if (lineMax[i] != -1 && count == (c.getAxe(1).getElements().size() - lineMax[i])) {
+					for (int k = 0; k < c.getAxe(1).getElements().size(); k++) {
+						if (c.getValueByIndices(i, k).equals(ArrayLogigramValue.EMPTY)) {
+							r.setFindNewCase(true);
+							addAction(r, "O tous trouvés alors tous les autres vides sont N", i, k, c, ArrayLogigramValue.NEG,
+									new ArrayList<>());
+							c.setValueByIndices(ArrayLogigramValue.OK, i, k);
+						}
+					}
+				}
+			}
+		}
+		return r;
+	}
+	
+	public ResultStrategy strategyFillIfAllNByLine(List<ArrayXDOrd> arrays2D) {
+		ResultStrategy r = new ResultStrategy();
+		for (ArrayXDOrd c : arrays2D) {
 			for (int i = 0; i < c.getAxe(1).getElements().size(); i++) {
 				int count = 0;
 				int indexEmpty = -1;
@@ -364,9 +478,9 @@ public class Strategy {
 	}
 	
 	
-	public ResultStrategy strategyFillIfAllNByCol() {
+	public ResultStrategy strategyFillIfAllNByCol(List<ArrayXDOrd> arrays2D) {
 		ResultStrategy r = new ResultStrategy();
-		for (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c : arrays2D) {
+		for (ArrayXDOrd c : arrays2D) {
 			for (int i = 0; i < c.getAxe(0).getElements().size(); i++) {
 				int count = 0;
 				int indexEmpty = -1;

@@ -3,6 +3,8 @@ package fr.next.media.array;
 import java.lang.reflect.Array;
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 public class ArrayXDOrdProxy<T, K, G extends Axe<? extends AxeVal<K>>> implements ArrayXDOrd<T, K, G> {
 
 	private ArrayXDOrd<T, K, G> base;
@@ -100,6 +102,16 @@ public class ArrayXDOrdProxy<T, K, G extends Axe<? extends AxeVal<K>>> implement
 			newIndicesValue[newIndicesOrder[i]] = values[i];
 		}
 		this.base.setScale(clazzT, newIndicesValue);
+	}
+
+	@Override
+	public List<Pair<K, T>> getPairForAnAxe(int indexAxe, int indexToFind) {
+		return this.base.getPairForAnAxe(newIndicesOrder[indexAxe], indexToFind);
+	}
+
+	@Override
+	public T getValueFromUpperAxeCoord(K... upperAxeIndices) {
+		return this.base.getValueFromUpperAxeCoord(upperAxeIndices);
 	}
 
 }

@@ -15,7 +15,7 @@ import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
 
 public class ManageOrientDb {
 
-	private final static Logger logger = LoggerFactory.getLogger(ManageOrientDb.class);
+	private final static Logger LOG = LoggerFactory.getLogger(ManageOrientDb.class);
 
 	private ODatabaseDocumentTx db;
 	private static final String id = "id";
@@ -52,7 +52,7 @@ public class ManageOrientDb {
 	public void save(String idLoc, byte[] mybytes, String classe) {
 		List<ODocument> o = find(idLoc, classe);
 		if (o == null || o.size() == 0) {
-			logger.debug("save : " + idLoc);
+			LOG.debug("save : " + idLoc);
 			Decoup d = getDecoupAndMakeClass(idLoc, classe);
 			ODocument doc = db.newInstance(d.getBefore());
 			doc.field(id, d.getSub());
@@ -76,7 +76,7 @@ public class ManageOrientDb {
 	}
 
 	public List<ODocument> find(String idLoc, String classe) {
-		logger.debug("find " + idLoc);
+		LOG.debug("find " + idLoc);
 
 		Decoup d = getDecoupAndMakeClass(idLoc, classe);
 		return db.query(new OSQLSynchQuery<ODocument>(
@@ -99,7 +99,7 @@ public class ManageOrientDb {
 	}
 
 	public List<ODocument> findBeginWith(String idLoc, String classe) throws Exception {
-		logger.debug("find " + idLoc);
+		LOG.debug("find " + idLoc);
 		Decoup d = getDecoupAndMakeClass(idLoc, classe);
 		return db.query(new OSQLSynchQuery<ODocument>(
 				"select * from " + d.getBefore() + " where " + id + " like '" + d.getSub() + "%'"));
@@ -132,7 +132,7 @@ public class ManageOrientDb {
 				return null;
 			}
 		} else {
-			logger.debug("error recup " + idLoc + " " + result.size());
+			LOG.debug("error recup " + idLoc + " " + result.size());
 			if (result.size() > 1) {
 				throw new AssertionError("Multiple résulats");
 			}

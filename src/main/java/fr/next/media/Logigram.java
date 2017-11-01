@@ -72,17 +72,21 @@ public class Logigram {
 			rGlobal.setFindNewCase(sEIOTAMPL.isFindNewCase() || rGlobal.isFindNewCase());
 			display(sEIOTAMPL);
 
-			ResultStrategy sFillCol = strategy.strategyFillIfAllNByCol();
-			rGlobal.setFindNewCase(sFillCol.isFindNewCase() || rGlobal.isFindNewCase());
-			display(sFillCol);
+			ResultStrategy sFillAllNByCol = strategy.strategyFillIfAllNByCol(array2DWorld.getArrays2D());
+			rGlobal.setFindNewCase(sFillAllNByCol.isFindNewCase() || rGlobal.isFindNewCase());
+			display(sFillAllNByCol);
 
-			ResultStrategy sFillLine = strategy.strategyFillIfAllNByLine();
+			ResultStrategy sFillAllNByLine = strategy.strategyFillIfAllNByLine(array2DWorld.getArrays2D());
+			rGlobal.setFindNewCase(sFillAllNByLine.isFindNewCase() || rGlobal.isFindNewCase());
+			display(sFillAllNByLine);
+
+			ResultStrategy sFillLine = strategy.strategyFillLine(array2DWorld.getArrays2D());
 			rGlobal.setFindNewCase(sFillLine.isFindNewCase() || rGlobal.isFindNewCase());
 			display(sFillLine);
-
-			ResultStrategy sFill = strategy.strategyFill();
-			rGlobal.setFindNewCase(sFill.isFindNewCase() || rGlobal.isFindNewCase());
-			display(sFill);
+			
+			ResultStrategy sFillCol = strategy.strategyFillCol(array2DWorld.getArrays2D());
+			rGlobal.setFindNewCase(sFillCol.isFindNewCase() || rGlobal.isFindNewCase());
+			display(sFillCol);
 		}
 
 	}
@@ -108,7 +112,7 @@ public class Logigram {
 
 
 	public void draw(int maxLabel) {
-		Draw.draw(maxLabel, array2DWorld.getDomains().size(), array2DWorld.getArrays2D());
+		Draw.drawLogigram(maxLabel, array2DWorld.getDomains().size(), array2DWorld.getArrays2D());
 	}
 
 }

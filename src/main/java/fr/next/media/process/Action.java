@@ -12,11 +12,11 @@ public class Action {
 	private String action;
 	private int indexLine;
 	private int indexCol;
-	private ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> array2D;
+	private ArrayXDOrd array2D;
 	private ArrayLogigramValue value;
 	private List<Case> casesInContext;
 	
-	public Action(String action, int indexLine, int indexCol, ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> array2D, ArrayLogigramValue value, List<Case> casesInContext) {
+	public Action(String action, int indexLine, int indexCol, ArrayXDOrd array2D, ArrayLogigramValue value, List<Case> casesInContext) {
 		super();
 		this.action = action;
 		this.indexLine = indexLine;
@@ -38,7 +38,7 @@ public class Action {
 		return indexCol;
 	}
 
-	public ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> getArray() {
+	public ArrayXDOrd getArray() {
 		return array2D;
 	}
 

@@ -1,13 +1,10 @@
 package fr.next.media.db;
 
-import static fr.next.media.array.impl.ArrayFactory.mot;
-
 import org.junit.AfterClass;
 
 import fr.next.media.array.AxeOrd;
 import fr.next.media.array.AxeValue;
-import fr.next.media.db.ManageOrientDb;
-import fr.next.media.db.SerialObject;
+import fr.next.media.human.MedString;
 import junit.framework.TestCase;
 
 public class DbTest extends TestCase {
@@ -56,7 +53,7 @@ public class DbTest extends TestCase {
 	}
 	
 	public void testAxeDb2() throws Exception {
-		AxeOrd<AxeValue<AxeValue<Character>>> test = mot("test");
+		AxeOrd<AxeValue<AxeValue<Character>>> test = new MedString("test");
 		byte[] serializeObject = SerialObject.serialize(test);
 		System.out.println(serializeObject.length);
 		assertTrue(serializeObject.length < 1000);
