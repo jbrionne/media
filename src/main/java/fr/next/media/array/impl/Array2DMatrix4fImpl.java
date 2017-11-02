@@ -23,13 +23,12 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> implemen
 	private G domainLine;
 	private G domainCol;
 
-	private CoordinatesXDByIndices coordinates;
+	private List<CoordinatesXDByIndices> coordinates = new ArrayList<>();
 
 	@SuppressWarnings("unchecked")
-	public Array2DMatrix4fImpl(G domainLine2, G domainCol2, CoordinatesXDByIndices coordinates) {
+	public Array2DMatrix4fImpl(G domainLine2, G domainCol2) {
 		this.domainLine = domainLine2;
 		this.domainCol = domainCol2;
-		this.coordinates = coordinates;
 
 		cases = new Matrix4f();
 	}
@@ -126,9 +125,24 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> implemen
 	}
 
 	@Override
-	public CoordinatesXDByIndices getCoordinates() {
-		return coordinates;
+	public CoordinatesXDByIndices getCoordinates(ArrayXDOrd<Float, K, G> axes) {
+		for(CoordinatesXDByIndices c : coordinates) {
+			boolean found = false;
+			for(int i = 0; i < c.getAxesSize(); i++) {
+				for(G a : axes.getAxes()) {
+					if(c.getAxe(i).equals(a)) {
+						found = true;
+						break;
+					}
+				}
+			}
+			if(found) {
+				return c;
+			}
+		}
+		throw new AssertionError("No coordinates were found");
 	}
+
 
 	@Override
 	public G getAxe(int index) {
@@ -185,9 +199,18 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> implemen
 		}
 		return pair;
 	}
+	
+	@Override
+	public CoordinatesXDByIndices getCoordinates() {
+		if(coordinates.size() == 1) {
+			return coordinates.get(0);
+		}
+		throw new AssertionError("Multiple upper coordinates, use getCoordinates(axes)");
+	}
 
 	@Override
-	public Float getValueFromUpperAxeCoord(K... upperAxeIndices) {
+	public Float getValueFromUpperAxeCoord(ArrayXDOrd<Float, K, G> axes, K... upperAxeIndices) {
+		CoordinatesXDByIndices coordinates = getCoordinates(axes);
 		if (coordinates.getAxesSize() < 2) {
 			throw new AssertionError(
 					"Not compatible axes : upper reference should have at least the same number of axes");
@@ -219,6 +242,19 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> implemen
 			}
 		}
 		return getValue((K) valueAxeLine, (K) valueAxeCol);
+	}
+	
+	@Override
+	public void addCoordinate(CoordinatesXDByIndices coordinates) {
+		this.coordinates.add(coordinates);
+	}
+	
+	@Override
+	public List<G> getAxes() {
+		List<G> a = new ArrayList<>();
+		a.add(domainLine);
+		a.add(domainCol);
+		return a;
 	}
 
 }

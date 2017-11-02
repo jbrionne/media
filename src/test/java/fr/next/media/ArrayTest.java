@@ -10,6 +10,7 @@ import fr.next.media.array.AxeOrd;
 import fr.next.media.array.AxeValue;
 import fr.next.media.array.CoordinatesXDByIndices;
 import fr.next.media.array.impl.ArrayFactory;
+import fr.next.media.array.impl.MapXDWithEmptyValueGenericImpl;
 import fr.next.media.array.impl.logigram.ArrayLogigramValue;
 import junit.framework.TestCase;
 
@@ -45,14 +46,8 @@ public class ArrayTest extends TestCase {
 		domCaches.add(new AxeValue<String>(MUR));
 		domCaches.add(new AxeValue<String>(PIERRE));
 
-		AxeInt axeLine = new AxeInt<>("worldLine", 1);
-		AxeInt axeCol = new AxeInt<>("worldCol", 1);
-		List<Axe<AxeValue>> axes = new ArrayList<>();
-		axes.add(axeLine);
-		axes.add(axeCol);
-		int[] indices = new int[] { 0, 0 };
 		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> array = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory
-				.newInstanceArrayLogigramValue(domPersons, domCaches, new CoordinatesXDByIndices(axes, indices));
+				.newInstanceArrayLogigramValue(domPersons, domCaches);
 		array.setValue(ArrayLogigramValue.NEG, BLANDINE, ARBRE);
 		array.setValue(ArrayLogigramValue.NEG, ASMA, ARBRE);
 		System.out.println(array.getValuesForAnAxe(0, 1));
@@ -78,14 +73,8 @@ public class ArrayTest extends TestCase {
 		domCaches.add(new AxeValue<String>(MUR));
 		domCaches.add(new AxeValue<String>(PIERRE));
 
-		AxeInt axeLine = new AxeInt<>("worldLine", 1);
-		AxeInt axeCol = new AxeInt<>("worldCol", 1);
-		List<Axe<AxeValue>> axes = new ArrayList<>();
-		axes.add(axeLine);
-		axes.add(axeCol);
-		int[] indices = new int[] { 0, 0 };
 		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> array = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory
-				.newInstanceArrayLogigramValueX(domPersons, domCaches, new CoordinatesXDByIndices(axes, indices));
+				.newInstanceArrayLogigramValueX(domPersons, domCaches);
 		array.setValue(ArrayLogigramValue.NEG, BLANDINE, ARBRE);
 		array.setValue(ArrayLogigramValue.NEG, ASMA, ARBRE);
 		// 1 0
@@ -119,17 +108,8 @@ public class ArrayTest extends TestCase {
 		domDuree.add(new AxeValue<String>("4"));
 		domDuree.add(new AxeValue<String>("5"));
 
-		AxeInt axeLine = new AxeInt<>("worldLine", 1);
-		AxeInt axeCol = new AxeInt<>("worldCol", 1);
-		AxeInt axeZ = new AxeInt<>("worldZ", 1);
-		List<Axe<AxeValue>> axes = new ArrayList<>();
-		axes.add(axeLine);
-		axes.add(axeCol);
-		axes.add(axeZ);
-		int[] indices = new int[] { 0, 0, 0 };
 		ArrayXDOrd<String, String, Axe<AxeValue<String>>> array = (ArrayXDOrd<String, String, Axe<AxeValue<String>>>) ArrayFactory
-				.newInstanceArrayLogigramValue3(domPersons, domCaches, domDuree,
-						new CoordinatesXDByIndices(axes, indices));
+				.newInstanceArrayLogigramValue3(domPersons, domCaches, domDuree);
 
 		for (int i = 0; i < 5; i++) {
 			for (int k = 0; k < 5; k++) {
@@ -173,17 +153,8 @@ public class ArrayTest extends TestCase {
 		domDuree.add(new AxeValue<Integer>(4));
 		domDuree.add(new AxeValue<Integer>(5));
 
-		AxeInt axeLine = new AxeInt<>("worldLine", 1);
-		AxeInt axeCol = new AxeInt<>("worldCol", 1);
-		AxeInt axeZ = new AxeInt<>("worldZ", 1);
-		List<Axe<AxeValue>> axes = new ArrayList<>();
-		axes.add(axeLine);
-		axes.add(axeCol);
-		axes.add(axeZ);
-		int[] indices = new int[] { 0, 0, 0 };
 		ArrayXDOrd<String, Integer, Axe<AxeValue<Integer>>> array = (ArrayXDOrd<String, Integer, Axe<AxeValue<Integer>>>) ArrayFactory
-				.newInstanceArrayLogigramValueX3Integer(domPersons, domCaches, domDuree,
-						new CoordinatesXDByIndices(axes, indices));
+				.newInstanceArrayLogigramValueX3Integer(domPersons, domCaches, domDuree);
 
 		for (int i = 0; i < 5; i++) {
 			for (int k = 0; k < 5; k++) {
@@ -228,17 +199,8 @@ public class ArrayTest extends TestCase {
 		domDuree.add(new AxeValue<Integer>(4));
 		domDuree.add(new AxeValue<Integer>(5));
 
-		AxeInt axeLine = new AxeInt<>("worldLine", 1);
-		AxeInt axeCol = new AxeInt<>("worldCol", 1);
-		AxeInt axeZ = new AxeInt<>("worldZ", 1);
-		List<Axe<AxeValue>> axes = new ArrayList<>();
-		axes.add(axeLine);
-		axes.add(axeCol);
-		axes.add(axeZ);
-		int[] indices = new int[] { 0, 0, 0 };
 		ArrayXDOrd<String, Integer, Axe<AxeValue<Integer>>> array = (ArrayXDOrd<String, Integer, Axe<AxeValue<Integer>>>) ArrayFactory
-				.newInstanceArrayLogigramValueMapX3Integer(domPersons, domCaches, domDuree,
-						new CoordinatesXDByIndices(axes, indices));
+				.newInstanceArrayLogigramValueMapX3Integer(domPersons, domCaches, domDuree);
 		
 		for (int i = 0; i < 5; i++) {
 			for (int k = 0; k < 5; k++) {
@@ -275,18 +237,10 @@ public class ArrayTest extends TestCase {
 		domCaches.add(new AxeValue<String>("3"));
 
 
-		AxeInt axeLine = new AxeInt<>("worldLine", 1);
-		AxeInt axeCol = new AxeInt<>("worldCol", 1);
-		List<Axe<AxeValue>> axes = new ArrayList<>();
-		axes.add(axeLine);
-		axes.add(axeCol);
-		int[] indices = new int[] { 0, 0, 0 };
 		ArrayXDOrd<String, String, Axe<AxeValue<String>>> array = (ArrayXDOrd<String, String, Axe<AxeValue<String>>>) ArrayFactory
-				.newInstanceFloatMatrice3f(domPersons, domCaches,
-						new CoordinatesXDByIndices(axes, indices));
+				.newInstanceFloatMatrice3f(domPersons, domCaches);
 		ArrayXDOrd<Float, String, Axe<AxeValue<String>>> arrayGen = (ArrayXDOrd<Float, String, Axe<AxeValue<String>>>) ArrayFactory
-				.newInstanceArray2DFloat(domPersons, domCaches,
-						new CoordinatesXDByIndices(axes, indices));
+				.newInstanceArray2DFloat(domPersons, domCaches);
 		
 		
 		for(int i = 0; i < 3; i++) {
@@ -321,18 +275,10 @@ public class ArrayTest extends TestCase {
 		domCaches.add(new AxeValue<String>("4"));
 
 
-		AxeInt axeLine = new AxeInt<>("worldLine", 1);
-		AxeInt axeCol = new AxeInt<>("worldCol", 1);
-		List<Axe<AxeValue>> axes = new ArrayList<>();
-		axes.add(axeLine);
-		axes.add(axeCol);
-		int[] indices = new int[] { 0, 0};
 		ArrayXDOrd<String, String, Axe<AxeValue<String>>> array = (ArrayXDOrd<String, String, Axe<AxeValue<String>>>) ArrayFactory
-				.newInstanceFloatMatrice4f(domPersons, domCaches,
-						new CoordinatesXDByIndices(axes, indices));
+				.newInstanceFloatMatrice4f(domPersons, domCaches);
 		ArrayXDOrd<Float, String, Axe<AxeValue<String>>> arrayGen = (ArrayXDOrd<Float, String, Axe<AxeValue<String>>>) ArrayFactory
-				.newInstanceArray2DFloat(domPersons, domCaches,
-						new CoordinatesXDByIndices(axes, indices));
+				.newInstanceArray2DFloat(domPersons, domCaches);
 		
 		
 		for(int i = 0; i < 4; i++) {
@@ -353,9 +299,8 @@ public class ArrayTest extends TestCase {
 		
 	}
 	
-	
 	public void testMerge() {
-		Axe<AxeValue> x = new AxeOrd<AxeValue>("x");
+		Axe<AxeValue<Integer>> x = new AxeOrd<>("x");
 		x.add(new AxeValue<Integer>(0));
 		x.add(new AxeValue<Integer>(1));
 		x.add(new AxeValue<Integer>(2));
@@ -365,7 +310,7 @@ public class ArrayTest extends TestCase {
 		x.add(new AxeValue<Integer>(6));
 		x.add(new AxeValue<Integer>(7));
 
-		Axe<AxeValue> y = new AxeOrd<AxeValue>("y");
+		Axe<AxeValue<Integer>> y = new AxeOrd<>("y");
 		y.add(new AxeValue<Integer>(0));
 		y.add(new AxeValue<Integer>(1));
 		y.add(new AxeValue<Integer>(2));
@@ -375,59 +320,53 @@ public class ArrayTest extends TestCase {
 		y.add(new AxeValue<Integer>(6));
 		y.add(new AxeValue<Integer>(7));
 		
-		Axe<AxeValue<Integer>> xLoc1 = new AxeOrd<AxeValue<Integer>>("x");
+		Axe<AxeValue<Integer>> xLoc1 = new AxeOrd<>("x");
 		xLoc1.add(new AxeValue<Integer>(0));
 		xLoc1.add(new AxeValue<Integer>(1));
 		xLoc1.add(new AxeValue<Integer>(2));
 
-		Axe<AxeValue<Integer>> yLoc1 = new AxeOrd<AxeValue<Integer>>("y");
+		Axe<AxeValue<Integer>> yLoc1 = new AxeOrd<>("y");
 		yLoc1.add(new AxeValue<Integer>(0));
 		yLoc1.add(new AxeValue<Integer>(1));
 		yLoc1.add(new AxeValue<Integer>(2));
 		
-		Axe<AxeValue<Integer>> xLoc2 = new AxeOrd<AxeValue<Integer>>("x");
+		Axe<AxeValue<Integer>> xLoc2 = new AxeOrd<>("x");
 		xLoc2.add(new AxeValue<Integer>(0));
 		xLoc2.add(new AxeValue<Integer>(1));
 		xLoc2.add(new AxeValue<Integer>(2));
 		xLoc2.add(new AxeValue<Integer>(3));
 
-		Axe<AxeValue<Integer>> yLoc2 = new AxeOrd<AxeValue<Integer>>("y");
+		Axe<AxeValue<Integer>> yLoc2 = new AxeOrd<>("y");
 		yLoc2.add(new AxeValue<Integer>(0));
 		yLoc2.add(new AxeValue<Integer>(1));
 		yLoc2.add(new AxeValue<Integer>(2));
 		yLoc2.add(new AxeValue<Integer>(3));
 
-		AxeInt axeLine = new AxeInt<>("worldLine", 1);
-		AxeInt axeCol = new AxeInt<>("worldCol", 1);
-		List<Axe<AxeValue>> axes = new ArrayList<>();
-		axes.add(axeLine);
-		axes.add(axeCol);
-		
-		List<Axe<AxeValue>> worldAxes = new ArrayList<>();
-		worldAxes.add(x);
-		worldAxes.add(y);
 		int[] indicesLoc1 = new int[] { 0, 0 };
+		ArrayXDOrd worldAxes = new MapXDWithEmptyValueGenericImpl<>(Integer.class, 0, x, y);
 		ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>> arrayLoc1 = (ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>>) ArrayFactory
-				.newInstanceArray2DFloat(xLoc1, yLoc1,
-						new CoordinatesXDByIndices(worldAxes, indicesLoc1));
-		arrayLoc1.setValue(1f, 0, 0);
-		arrayLoc1.setValue(2f, 0, 1);
-		arrayLoc1.setValue(3f, 1, 0);
-		arrayLoc1.setValue(4f, 1, 1);
+				.newInstanceArray2DFloat(xLoc1, yLoc1);
+		arrayLoc1.addCoordinate(new CoordinatesXDByIndices(worldAxes, indicesLoc1));
+		arrayLoc1.setValue(1.0f, 0, 0);
+		arrayLoc1.setValue(2.0f, 0, 1);
+		arrayLoc1.setValue(3.0f, 1, 0);
+		arrayLoc1.setValue(4.0f, 1, 1);
 		
 		int[] indicesLoc2 = new int[] { 2, 2 };
 		ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>> arrayLoc2 = (ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>>) ArrayFactory
-				.newInstanceArray2DFloat(xLoc2, yLoc2,
+				.newInstanceArray2DFloat(xLoc2, yLoc2);
+		arrayLoc2.addCoordinate(
 						new CoordinatesXDByIndices(worldAxes, indicesLoc2));
-		arrayLoc2.setValue(5f, 0, 0);
-		arrayLoc2.setValue(6f, 0, 1);
-		arrayLoc2.setValue(7f, 0, 2);
-		arrayLoc2.setValue(8f, 1, 0);
-		arrayLoc2.setValue(9f, 1, 1);
-		arrayLoc2.setValue(10f, 1, 2);
-		arrayLoc2.setValue(11f, 2, 0);
-		arrayLoc2.setValue(12f, 2, 1);
-		arrayLoc2.setValue(13f, 2, 2);
+		arrayLoc2.setValue(5.0f, 0, 0);
+		arrayLoc2.setValue(6.0f, 0, 1);
+		arrayLoc2.setValue(7.0f, 0, 2);
+		arrayLoc2.setValue(8.0f, 1, 0);
+		arrayLoc2.setValue(9.0f, 1, 1);
+		arrayLoc2.setValue(10.0f, 1, 2);
+		arrayLoc2.setValue(11.0f, 2, 0);
+		arrayLoc2.setValue(12.0f, 2, 1);
+		arrayLoc2.setValue(13.0f, 2, 2);
+		
 		
 		//  0  1 2  3   4 
 		//0 1f 2f
@@ -435,10 +374,16 @@ public class ArrayTest extends TestCase {
 		//2      5f  6f  7f
 		//3      8f  9f   10f
 		//4      11f 12f  13f
-		assertEquals(4f, arrayLoc1.getValueFromUpperAxeCoord(1, 1));
+		assertEquals(4f, arrayLoc1.getValueFromUpperAxeCoord(worldAxes, 1, 1));
 		
-		assertEquals(9f, arrayLoc2.getValueFromUpperAxeCoord(3, 3));
+		assertEquals(9f, arrayLoc2.getValueFromUpperAxeCoord(worldAxes, 3, 3));
 		
+		
+		//TODO
+		//TODO
+		//Un repère A qui contient un repère B qui lui-même contient deux repères C et D
+		// Si B change alors les coordonnées de C et D change dans le repère A !!
+
 	}
 
 }

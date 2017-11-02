@@ -1,6 +1,7 @@
 package fr.next.media.array;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -54,8 +55,8 @@ public class ArrayXDOrdProxy<T, K, G extends Axe<? extends AxeVal<K>>> implement
 	}
 
 	@Override
-	public CoordinatesXDByIndices getCoordinates() {
-		return this.base.getCoordinates();
+	public CoordinatesXDByIndices getCoordinates(ArrayXDOrd<T, K, G> axes){
+		return this.base.getCoordinates(axes);
 	}
 
 	@Override
@@ -110,8 +111,27 @@ public class ArrayXDOrdProxy<T, K, G extends Axe<? extends AxeVal<K>>> implement
 	}
 
 	@Override
-	public T getValueFromUpperAxeCoord(K... upperAxeIndices) {
-		return this.base.getValueFromUpperAxeCoord(upperAxeIndices);
+	public T getValueFromUpperAxeCoord(ArrayXDOrd<T, K, G> axes, K... upperAxeIndices){
+		return this.base.getValueFromUpperAxeCoord(axes, upperAxeIndices);
+	}
+
+	@Override
+	public void addCoordinate(CoordinatesXDByIndices coordinates) {
+		 this.base.addCoordinate(coordinates);
+	}
+
+	@Override
+	public List<G> getAxes() {
+		List<G> n = new ArrayList<>();
+		for(int i = this.base.getAxes().size(); i >= 0; i--) {
+			n.add(this.base.getAxes().get(i));
+		}
+		return n;
+	}
+
+	@Override
+	public CoordinatesXDByIndices getCoordinates() {
+		return this.base.getCoordinates();
 	}
 
 }

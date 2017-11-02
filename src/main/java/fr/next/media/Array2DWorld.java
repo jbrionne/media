@@ -10,6 +10,7 @@ import fr.next.media.array.AxeInt;
 import fr.next.media.array.AxeValue;
 import fr.next.media.array.CoordinatesXDByIndices;
 import fr.next.media.array.impl.ArrayFactory;
+import fr.next.media.array.impl.MapXDWithEmptyValueGenericImpl;
 import fr.next.media.array.impl.logigram.ArrayLogigramValue;
 
 public class Array2DWorld {
@@ -39,20 +40,18 @@ public class Array2DWorld {
 			}
 		}
 		
-		AxeInt axeInteger = new AxeInt<>("integer", Integer.MAX_VALUE);
 		axeLine = new AxeInt<>("worldLine", indexLineSize);
 		axeCol = new AxeInt<>("worldCol", indexColSize);
 		
-		//arrays2D = new Array2DWordImpl(indexLineSize, indexColSize);
-		List<Axe<AxeValue>> axes = new ArrayList();
-		axes.add(axeLine);
-		axes.add(axeCol);
+		ArrayXDOrd axes = new MapXDWithEmptyValueGenericImpl<>(Integer.class, 0, axeLine, axeCol);
 		int[] indices = new int[] { 0, 0 };
-		arrays2D = (ArrayXDOrd<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValueForWorld(axeLine, axeCol, new CoordinatesXDByIndices(axes, indices));
+		arrays2D = (ArrayXDOrd<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValueForWorld(axeLine, axeCol);
+		arrays2D.addCoordinate(new CoordinatesXDByIndices(axes, indices));
 		int indexColO = 0;
 		for (int i = 1; i < domains.size(); i++) {
 			int[] indices2 = new int[] { 0, indexColO};
-			ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> array = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(d0, domains.get(i), new CoordinatesXDByIndices(axes, indices2));
+			ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> array = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(d0, domains.get(i));
+			array.addCoordinate(new CoordinatesXDByIndices(axes, indices2));
 			arrays2D.setValueByIndices(array, 0, indexColO);
 			indexColO += domains.get(i).getElements().size();
 		}
@@ -62,7 +61,8 @@ public class Array2DWorld {
 		for (int i = domains.size() - 1; i > 0; i--) {
 			for (int j = 1; j < i; j++) {
 				int[] indices2 = new int[] { indexLine, indexCol};
-				ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> array2D = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domains.get(i), domains.get(j), new CoordinatesXDByIndices(axes, indices2));
+				ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> array2D = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domains.get(i), domains.get(j));
+				array2D.addCoordinate(new CoordinatesXDByIndices(axes, indices2));
 				arrays2D.setValueByIndices(array2D, indexLine, indexCol);
 				indexCol += domains.get(j).getElements().size();
 			}

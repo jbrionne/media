@@ -1,15 +1,14 @@
 package fr.next.media.array;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class CoordinatesXDByIndices implements Serializable {
 
-	private List<Axe<AxeValue>> axes;
+	private ArrayXDOrd<?, ?, Axe<AxeValue<?>>> axes;
 	
 	private int[] indices;
 
-	public CoordinatesXDByIndices(List<Axe<AxeValue>> axes, int... indices) {
+	public CoordinatesXDByIndices(ArrayXDOrd<?, ?, Axe<AxeValue<?>>> axes, int... indices) {
 		super();
 		this.axes = axes;
 		this.indices = indices;
@@ -45,12 +44,12 @@ public class CoordinatesXDByIndices implements Serializable {
 		return true;
 	}
 
-	public Axe<AxeValue> getAxe(int index) {
-		return axes.get(index);
+	public Axe<AxeValue<?>> getAxe(int index) {
+		return axes.getAxe(index);
 	}
 	
 	public int getAxesSize() {
-		return axes.size();
+		return axes.getAxes().size();
 	}
 
 }

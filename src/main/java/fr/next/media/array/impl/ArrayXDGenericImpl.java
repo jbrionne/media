@@ -20,15 +20,14 @@ public class ArrayXDGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> implem
 
 	private G[] domains;
 
-	private CoordinatesXDByIndices coordinates;
+	private List<CoordinatesXDByIndices> coordinates = new ArrayList<>();
 
 	private Class<T> clazz;
 
 	@SuppressWarnings("unchecked")
-	public ArrayXDGenericImpl(Class<T> clazz, CoordinatesXDByIndices coordinates, G... domains) {
+	public ArrayXDGenericImpl(Class<T> clazz, G... domains) {
 		this.clazz = clazz;
 		this.domains = domains;
-		this.coordinates = coordinates;
 		int[] sizes = new int[domains.length];
 		int index = 0;
 		for (G d : domains) {
@@ -110,8 +109,30 @@ public class ArrayXDGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> implem
 	}
 
 	@Override
+	public CoordinatesXDByIndices getCoordinates(ArrayXDOrd<T, K, G> axes) {
+		for(CoordinatesXDByIndices c : coordinates) {
+			boolean found = false;
+			for(int i = 0; i < c.getAxesSize(); i++) {
+				for(G a : axes.getAxes()) {
+					if(c.getAxe(i).equals(a)) {
+						found = true;
+						break;
+					}
+				}
+			}
+			if(found) {
+				return c;
+			}
+		}
+		throw new AssertionError("No coordinates were found");
+	}
+
+	@Override
 	public CoordinatesXDByIndices getCoordinates() {
-		return coordinates;
+		if(coordinates.size() == 1) {
+			return coordinates.get(0);
+		}
+		throw new AssertionError("Multiple upper coordinates, use getCoordinates(axes)");
 	}
 
 	@Override
@@ -215,7 +236,8 @@ public class ArrayXDGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> implem
 	}
 	
 	@Override
-	public T getValueFromUpperAxeCoord(K... upperAxeIndices) {
+	public T getValueFromUpperAxeCoord(ArrayXDOrd<T, K, G> axes, K... upperAxeIndices) {
+		CoordinatesXDByIndices coordinates = getCoordinates(axes);
 		if(coordinates.getAxesSize() < domains.length) {
 			throw new AssertionError("Not compatible axes : upper reference should have at least the same number of axes");
 		}
@@ -242,5 +264,15 @@ public class ArrayXDGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> implem
 			}
 		}
 		return getValueByIndices(indices);
+	}
+	
+	@Override
+	public void addCoordinate(CoordinatesXDByIndices coordinates) {
+		this.coordinates.add(coordinates);
+	}
+	
+	@Override
+	public List<G> getAxes() {
+		return Arrays.asList(domains);
 	}
 }

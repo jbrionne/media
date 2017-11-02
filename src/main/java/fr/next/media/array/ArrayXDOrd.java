@@ -15,11 +15,17 @@ public interface ArrayXDOrd<T, K, G extends Axe<? extends AxeVal<K>>> extends Se
 	
 	T getValue(K... indices);
 	
-	T getValueFromUpperAxeCoord(K... upperAxeIndices);
-
+	T getValueFromUpperAxeCoord(ArrayXDOrd<T, K, G> axes, K... upperAxeIndices);
+		
+	CoordinatesXDByIndices getCoordinates(ArrayXDOrd<T, K, G> axes);
+	
 	CoordinatesXDByIndices getCoordinates();
+	
+	void addCoordinate(CoordinatesXDByIndices coordinates);
 
 	G getAxe(int index);
+	
+	List<G> getAxes();
 	
 	List<T> getAll();
 	

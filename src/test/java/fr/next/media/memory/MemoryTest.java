@@ -1,14 +1,9 @@
 package fr.next.media.memory;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.next.media.array.ArrayXDOrd;
 import fr.next.media.array.Axe;
-import fr.next.media.array.AxeInt;
 import fr.next.media.array.AxeOrd;
 import fr.next.media.array.AxeValue;
-import fr.next.media.array.CoordinatesXDByIndices;
 import fr.next.media.array.impl.ArrayFactory;
 import fr.next.media.array.impl.logigram.ArrayLogigramValue;
 import fr.next.media.human.MedString;
@@ -62,14 +57,8 @@ public class MemoryTest extends TestCase {
 		domCaches.add(new AxeValue<String>(MUR));
 		domCaches.add(new AxeValue<String>(PIERRE));
 
-		AxeInt axeLine = new AxeInt<>("worldLine", 1);
-		AxeInt axeCol = new AxeInt<>("worldCol", 1);
-		List<Axe<AxeValue>> axes = new ArrayList<>();
-		axes.add(axeLine);
-		axes.add(axeCol);
-		int[] indices = new int[] { 0, 0 };
 		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> array = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory
-				.newInstanceArrayLogigramValue(domPersons, domCaches, new CoordinatesXDByIndices(axes, indices));
+				.newInstanceArrayLogigramValue(domPersons, domCaches);
 		array.setValue(ArrayLogigramValue.NEG, BLANDINE, ARBRE);
 		array.setValue(ArrayLogigramValue.NEG, ASMA, ARBRE);
 		System.out.println(array.getValuesForAnAxe(0, 1));
@@ -79,8 +68,6 @@ public class MemoryTest extends TestCase {
 
 		memory.save(ENFANT, domPersons);
 		memory.save(CACHETTE, domCaches);
-		memory.save("worldLine", axeLine);
-		memory.save("worldCol", axeCol);
 		memory.save("array", array);
 		
 		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> newArray = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) memory.findAndGetContent("array");

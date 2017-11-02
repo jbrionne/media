@@ -20,14 +20,13 @@ public class Array1DWithEmptyGenericImpl<T, K, G extends Axe<? extends AxeVal<K>
 
 	private G domainLine;
 
-	private CoordinatesXDByIndices coordinates;
+	private List<CoordinatesXDByIndices> coordinates = new ArrayList<>();
 	
 	private T emptyVal;
 
 	@SuppressWarnings("unchecked")
-	Array1DWithEmptyGenericImpl(Class<T> clazz, G domainLine2, CoordinatesXDByIndices coordinates, T emptyVal) {
+	Array1DWithEmptyGenericImpl(Class<T> clazz, G domainLine2, T emptyVal) {
 		this.domainLine = domainLine2;
-		this.coordinates = coordinates;
 		this.emptyVal = emptyVal;
 		cases = (T[]) Array.newInstance(clazz, domainLine2.getElements().size());
 		for (int i = 0; i < cases.length; i++) {
@@ -91,9 +90,32 @@ public class Array1DWithEmptyGenericImpl<T, K, G extends Axe<? extends AxeVal<K>
 	}
 
 	@Override
-	public CoordinatesXDByIndices getCoordinates() {
-		return coordinates;
+	public CoordinatesXDByIndices getCoordinates(ArrayXDOrd<T, K, G> axes) {
+		for(CoordinatesXDByIndices c : coordinates) {
+			boolean found = false;
+			for(int i = 0; i < c.getAxesSize(); i++) {
+				for(G a : axes.getAxes()) {
+					if(c.getAxe(i).equals(a)) {
+						found = true;
+						break;
+					}
+				}
+			}
+			if(found) {
+				return c;
+			}
+		}
+		throw new AssertionError("No coordinates were found");
 	}
+	
+	@Override
+	public CoordinatesXDByIndices getCoordinates() {
+		if(coordinates.size() == 1) {
+			return coordinates.get(0);
+		}
+		throw new AssertionError("Multiple upper coordinates, use getCoordinates(axes)");
+	}
+
 	
 	@Override
 	public List<T> getValuesForAnAxe(int indexAxe, int indexToFind) {
@@ -128,7 +150,8 @@ public class Array1DWithEmptyGenericImpl<T, K, G extends Axe<? extends AxeVal<K>
 	}
 	
 	@Override
-	public T getValueFromUpperAxeCoord(K... upperAxeIndices) {
+	public T getValueFromUpperAxeCoord(ArrayXDOrd<T, K, G> axes, K... upperAxeIndices) {
+		CoordinatesXDByIndices coordinates = getCoordinates(axes);
 		if (coordinates.getAxesSize() < 1) {
 			throw new AssertionError(
 					"Not compatible axes : upper reference should have at least the same number of axes");
@@ -150,6 +173,18 @@ public class Array1DWithEmptyGenericImpl<T, K, G extends Axe<? extends AxeVal<K>
 			}
 		}
 		return getValue((K) valueAxeLine);
+	}
+	
+	@Override
+	public void addCoordinate(CoordinatesXDByIndices coordinates) {
+		this.coordinates.add(coordinates);
+	}
+	
+	@Override
+	public List<G> getAxes() {
+		List<G> a = new ArrayList<>();
+		a.add(domainLine);
+		return a;
 	}
 
 }

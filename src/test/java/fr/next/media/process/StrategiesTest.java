@@ -10,6 +10,7 @@ import fr.next.media.array.AxeOrd;
 import fr.next.media.array.AxeValue;
 import fr.next.media.array.CoordinatesXDByIndices;
 import fr.next.media.array.impl.ArrayFactory;
+import fr.next.media.array.impl.MapXDWithEmptyValueGenericImpl;
 import fr.next.media.array.impl.logigram.ArrayLogigramValue;
 import fr.next.media.draw.Draw;
 import fr.next.media.process.History;
@@ -70,20 +71,19 @@ public class StrategiesTest extends TestCase {
 		Axe axeLine = new AxeOrd<>("worldLine");
 		Axe axeCol = new AxeOrd<>("worldCol");
 		
-		List<Axe<AxeValue>> axes = new ArrayList<>();
-		axes.add(axeLine);
-		axes.add(axeCol);
+		ArrayXDOrd axes = new MapXDWithEmptyValueGenericImpl<>(Integer.class, 0, axeLine, axeCol);
 		int[] indices00 = new int[] {0, 0};
 		int[] indices01 = new int[] {0, 1};
-		int[] indices20 = new int[] {2, 0};
 		List<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>> cubes = new ArrayList<>();
-		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c1 = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domPersons, domCaches, new CoordinatesXDByIndices(axes, indices00));
-		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c2 = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domPersons, domClasse, new CoordinatesXDByIndices(axes,indices01));
+		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c1 = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domPersons, domCaches);
+		c1.addCoordinate(new CoordinatesXDByIndices(axes, indices00));
+		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c2 = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domPersons, domClasse);
+		c2.addCoordinate(new CoordinatesXDByIndices(axes, indices01));
 		cubes.add(c1);
 		cubes.add(c2);
 		
 		List<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>> cubesResults = new ArrayList<>();
-		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c3 = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domCaches, domClasse, new CoordinatesXDByIndices(axes, indices20));
+		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c3 = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domCaches, domClasse);
 		cubesResults.add(c3);
 		
 		Strategy s =  new Strategy(new History(), cubesResults);
@@ -140,7 +140,7 @@ public class StrategiesTest extends TestCase {
 		List<Axe<AxeValue>> axes = new ArrayList<>();
 		axes.add(axeLine);
 		axes.add(axeCol);
-		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c1 = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domPersons, domCaches, new CoordinatesXDByIndices(axes, new int[] {0, 0}));
+		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c1 = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domPersons, domCaches);
 		
 		c1.setValue(ArrayLogigramValue.OK, ASMA, BRANCHES);
 		
@@ -177,7 +177,7 @@ public void testStrategyFillLine() {
 		List<Axe<AxeValue>> axes = new ArrayList<>();
 		axes.add(axeLine);
 		axes.add(axeCol);
-		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c1 = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domPersons, domCaches, new CoordinatesXDByIndices(axes, new int[] {0, 0}));
+		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c1 = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domPersons, domCaches);
 		
 		c1.setValue(ArrayLogigramValue.OK, ASMA, BRANCHES);
 		
@@ -215,7 +215,7 @@ public void testStrategyFillIfAllNByCol() {
 	List<Axe<AxeValue>> axes = new ArrayList<>();
 	axes.add(axeLine);
 	axes.add(axeCol);
-	ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c1 = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domPersons, domCaches, new CoordinatesXDByIndices(axes, new int[] {0, 0}));
+	ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c1 = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domPersons, domCaches);
 	
 	c1.setValue(ArrayLogigramValue.NEG, ASMA, FEUILLES);
 	c1.setValue(ArrayLogigramValue.NEG, ASMA, MUR);
@@ -252,7 +252,7 @@ public void testStrategyFillIfMaxOkByLineByCountN() {
 	List<Axe<AxeValue>> axes = new ArrayList<>();
 	axes.add(axeLine);
 	axes.add(axeCol);
-	ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c1 = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domPersons, domCaches, new CoordinatesXDByIndices(axes, new int[] {0, 0}));
+	ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c1 = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domPersons, domCaches);
 
     //  playerH playerJ player1 guiltyCards 
     //Poignard EMPTY NEG NEG EMPTY 
@@ -322,7 +322,7 @@ public void testStrategyFillIfMaxOkByLineByCountN2() {
 	List<Axe<AxeValue>> axes = new ArrayList<>();
 	axes.add(axeLine);
 	axes.add(axeCol);
-	ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c1 = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domPersons, domCaches, new CoordinatesXDByIndices(axes, new int[] {0, 0}));
+	ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c1 = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domPersons, domCaches);
 
 //	playerH playerJ player1 guiltyCards 
 //	Mlle Rose EMPTY EMPTY NEG EMPTY 

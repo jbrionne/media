@@ -24,20 +24,13 @@ public class MedResolutionAllPlayers extends AxeOrd<AxeValue>  {
 		}
 		allCards.add(new AxeValue(guiltyCards));
 		
-		AxeInt axeLine = new AxeInt<>("worldLine", 1);
-		AxeInt axeCol = new AxeInt<>("worldCol", 1);
-		List<Axe<AxeValue>> axes = new ArrayList<>();
-		axes.add(axeLine);
-		axes.add(axeCol);
-		int[] indices = new int[] { 0, 0 };
-		
-		this.add(new AxeValue(new ArrayXDWithEmptyValueGenericImpl(ArrayLogigramValue.class, new CoordinatesXDByIndices(axes, indices), ArrayLogigramValue.EMPTY,
+		this.add(new AxeValue(new ArrayXDWithEmptyValueGenericImpl(ArrayLogigramValue.class, ArrayLogigramValue.EMPTY,
 				 persons, allCards)));
 		
-		this.add(new AxeValue(new ArrayXDWithEmptyValueGenericImpl(ArrayLogigramValue.class, new CoordinatesXDByIndices(axes, indices), ArrayLogigramValue.EMPTY,
+		this.add(new AxeValue(new ArrayXDWithEmptyValueGenericImpl(ArrayLogigramValue.class, ArrayLogigramValue.EMPTY,
 				 weapons, allCards)));
 		
-		this.add(new AxeValue(new ArrayXDWithEmptyValueGenericImpl(ArrayLogigramValue.class, new CoordinatesXDByIndices(axes, indices), ArrayLogigramValue.EMPTY,
+		this.add(new AxeValue(new ArrayXDWithEmptyValueGenericImpl(ArrayLogigramValue.class, ArrayLogigramValue.EMPTY,
 				 rooms, allCards)));
 	}
 	

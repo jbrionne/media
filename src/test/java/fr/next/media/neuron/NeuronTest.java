@@ -25,12 +25,6 @@ public class NeuronTest extends TestCase {
 		for (int i = 0; i < 10; i++) {
 			domNeurone.add(new AxeValue<Integer>(i));
 		}
-		AxeInt axeLine = new AxeInt<>("worldLine", 1);
-		AxeInt axeCol = new AxeInt<>("worldCol", 1);
-		List<Axe<AxeValue>> axes = new ArrayList<>();
-		axes.add(axeLine);
-		axes.add(axeCol);
-		int[] indices = new int[] { 0, 0 };
 
 		float pulseIntensity = 1f;
 		float noPulseIntensity = 0f;
@@ -42,8 +36,7 @@ public class NeuronTest extends TestCase {
 			System.out.println("Basic");
 
 			ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>> array = (ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>>) ArrayFactory
-					.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeurone, domNeurone,
-							new CoordinatesXDByIndices(axes, indices));
+					.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeurone, domNeurone);
 
 			// 0 --- 1 --- 3 --- 5
 			// \-- 2 --- 4 --/
@@ -67,8 +60,7 @@ public class NeuronTest extends TestCase {
 		}
 
 		ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>> andBooleanArray = (ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>>) ArrayFactory
-				.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeurone, domNeurone,
-						new CoordinatesXDByIndices(axes, indices));
+				.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeurone, domNeurone);
 		{
 			System.out.println("Boolean And");
 			// learning
@@ -148,8 +140,7 @@ public class NeuronTest extends TestCase {
 		}
 
 		ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>> orBooleanArray = (ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>>) ArrayFactory
-				.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeurone, domNeurone,
-						new CoordinatesXDByIndices(axes, indices));
+				.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeurone, domNeurone);
 		{
 			System.out.println("Boolean Or");
 			// learning
@@ -230,8 +221,7 @@ public class NeuronTest extends TestCase {
 			System.out.println("Boolean Not");
 			// learning
 			ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>> notBooleanArray = (ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>>) ArrayFactory
-					.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeurone, domNeurone,
-							new CoordinatesXDByIndices(axes, indices));
+					.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeurone, domNeurone);
 			// 0 --- 1
 
 			// NOT true -> false
@@ -276,8 +266,7 @@ public class NeuronTest extends TestCase {
 			System.out.println("Boolean Xor");
 			// learning
 			ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>> xorBooleanArray = (ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>>) ArrayFactory
-					.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeurone, domNeurone,
-							new CoordinatesXDByIndices(axes, indices));
+					.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeurone, domNeurone);
 			// 0 --- 2 --- 4
 			// 1 --- 3 --/
 
@@ -357,8 +346,7 @@ public class NeuronTest extends TestCase {
 				System.out.println("Boolean Xor false && false, compute or && and");
 
 				ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>> xorExclusionBooleanArray = (ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>>) ArrayFactory
-						.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeurone, domNeurone,
-								new CoordinatesXDByIndices(axes, indices));
+						.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeurone, domNeurone);
 				xorExclusionBooleanArray.setValue(-2f, 0, 2);
 				xorExclusionBooleanArray.setValue(1.1f, 1, 2);
 
@@ -406,8 +394,7 @@ public class NeuronTest extends TestCase {
 				System.out.println("Boolean Xor false && true, compute or && and");
 
 				ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>> xorExclusionBooleanArray = (ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>>) ArrayFactory
-						.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeurone, domNeurone,
-								new CoordinatesXDByIndices(axes, indices));
+						.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeurone, domNeurone);
 				xorExclusionBooleanArray.setValue(-2f, 0, 2);
 				xorExclusionBooleanArray.setValue(1.1f, 1, 2);
 
@@ -455,8 +442,7 @@ public class NeuronTest extends TestCase {
 			{
 
 				ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>> globalBooleanArray = (ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>>) ArrayFactory
-						.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeurone, domNeurone,
-								new CoordinatesXDByIndices(axes, indices));
+						.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeurone, domNeurone);
 				// or
 				globalBooleanArray.setValue(1.1f, 0, 2);
 				globalBooleanArray.setValue(1.1f, 1, 2);
@@ -558,8 +544,7 @@ public class NeuronTest extends TestCase {
 			Activation activ = a -> a >= 3.5f;
 
 			ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>> array = (ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>>) ArrayFactory
-					.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeuroneLayer1, domNeuroneLayer1,
-							new CoordinatesXDByIndices(axes, indicesLayer1));
+					.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeuroneLayer1, domNeuroneLayer1);
 
 			// 0 1 2 3
 			// 4 5 6 7
@@ -634,8 +619,7 @@ public class NeuronTest extends TestCase {
 			Activation activ = a -> a >= 3.5f;
 
 			ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>> array = (ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>>) ArrayFactory
-					.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeuroneLayer2, domNeuroneLayer2,
-							new CoordinatesXDByIndices(axes, indicesLayer2));
+					.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeuroneLayer2, domNeuroneLayer2);
 			// 16 17 18 19
 			// 20 21 22 23
 			// 24 25 26 27
@@ -675,8 +659,7 @@ public class NeuronTest extends TestCase {
 			Activation activ = a -> a >= -2.5f;
 
 			ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>> array = (ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>>) ArrayFactory
-					.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeuroneLayer4, domNeuroneLayer4,
-							new CoordinatesXDByIndices(axes, indicesLayer4));
+					.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeuroneLayer4, domNeuroneLayer4);
 			// 32 33 34
 			// 35 36 37
 			// 38 39 40
@@ -726,23 +709,25 @@ public class NeuronTest extends TestCase {
 		}
 		AxeInt axeLine = new AxeInt<>("worldLine", 1);
 		AxeInt axeCol = new AxeInt<>("worldCol", 1);
-		List<Axe<AxeValue>> axes = new ArrayList<>();
-		axes.add(axeLine);
-		axes.add(axeCol);
 		int[] indices = new int[] { 0, 0 };
+		ArrayXDOrd axes = new MapXDWithEmptyValueGenericImpl<>(Integer.class, 0, axeLine, axeCol);
+		
+		
 		NeuronExecutor<String> nexec = new NeuronExecutor<>();
 		float noPulseIntensity = 0f;
 		float pulseIntensity = 1f;
 		Agregation agre = (a, b, c) -> (a * b) + c;
 		Activation activ = a -> a >= pulseIntensity;
 		
-		MedAndBoolean and = new MedAndBoolean(Float.class, new CoordinatesXDByIndices(axes, indices),"", domNeurone, domNeurone);
-		MedOrBoolean or = new MedOrBoolean(Float.class, new CoordinatesXDByIndices(axes, indices),"", domNeurone, domNeurone);
-		MedXorExcludeBoolean xorEx = new MedXorExcludeBoolean(Float.class, new CoordinatesXDByIndices(axes, indices),"", domNeurone, domNeurone);
-		
+		MedAndBoolean and = new MedAndBoolean(Float.class,"", domNeurone, domNeurone);
+		and.addCoordinate(new CoordinatesXDByIndices(axes, indices));
+		MedOrBoolean or = new MedOrBoolean(Float.class,"", domNeurone, domNeurone);
+		or.addCoordinate(new CoordinatesXDByIndices(axes, indices));
+		MedXorExcludeBoolean xorEx = new MedXorExcludeBoolean(Float.class,"", domNeurone, domNeurone);
+		xorEx.addCoordinate(new CoordinatesXDByIndices(axes, indices));
 		ArrayXDOrd<Float, String, Axe<AxeValue<String>>> array = (ArrayXDOrd<Float, String, Axe<AxeValue<String>>>) ArrayFactory
-				.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeurone, domNeurone,
-						new CoordinatesXDByIndices(axes, indices));
+				.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeurone, domNeurone);
+		array.addCoordinate(new CoordinatesXDByIndices(axes, indices));
 		array.setValue(1f, "and", "xorEx");
 		array.setValue(1f, "or", "xorEx");
 		

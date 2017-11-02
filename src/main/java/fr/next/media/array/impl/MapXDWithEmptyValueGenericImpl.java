@@ -1,6 +1,7 @@
 package fr.next.media.array.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,18 +22,17 @@ public class MapXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal
 
 	private G[] domains;
 
-	private CoordinatesXDByIndices coordinates;
+	private List<CoordinatesXDByIndices> coordinates = new ArrayList<>();
 
 	private Class<T> clazz;
 	
 	private T emptyVal;
 
 	@SuppressWarnings("unchecked")
-	public MapXDWithEmptyValueGenericImpl(Class<T> clazz, CoordinatesXDByIndices coordinates, T emptyVal,
+	public MapXDWithEmptyValueGenericImpl(Class<T> clazz, T emptyVal,
 			G... domains) {
 		this.clazz = clazz;
 		this.domains = domains;
-		this.coordinates = coordinates;
 		this.emptyVal = emptyVal;
 		cases = new HashMap<>();
 	}
@@ -112,9 +112,24 @@ public class MapXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal
 	}
 
 	@Override
-	public CoordinatesXDByIndices getCoordinates() {
-		return coordinates;
+	public CoordinatesXDByIndices getCoordinates(ArrayXDOrd<T, K, G> axes) {
+		for(CoordinatesXDByIndices c : coordinates) {
+			boolean found = false;
+			for(int i = 0; i < c.getAxesSize(); i++) {
+				for(G a : axes.getAxes()) {
+					if(c.getAxe(i).equals(a)) {
+						found = true;
+						break;
+					}
+				}
+			}
+			if(found) {
+				return c;
+			}
+		}
+		throw new AssertionError("No coordinates were found");
 	}
+
 
 	@Override
 	public List<T> getValuesForAnAxe(int indexAxe, int indexToFind) {
@@ -223,7 +238,8 @@ public class MapXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal
 	}
 	
 	@Override
-	public T getValueFromUpperAxeCoord(K... upperAxeIndices) {
+	public T getValueFromUpperAxeCoord(ArrayXDOrd<T, K, G> axes, K... upperAxeIndices) {
+		CoordinatesXDByIndices coordinates = getCoordinates(axes);
 		if(coordinates.getAxesSize() < domains.length) {
 			throw new AssertionError("Not compatible axes : upper reference should have at least the same number of axes");
 		}
@@ -250,5 +266,23 @@ public class MapXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal
 			}
 		}
 		return getValueByIndices(indices);
+	}
+	
+	@Override
+	public void addCoordinate(CoordinatesXDByIndices coordinates) {
+		this.coordinates.add(coordinates);
+	}
+	
+	@Override
+	public List<G> getAxes() {
+		return Arrays.asList(domains);
+	}
+	
+	@Override
+	public CoordinatesXDByIndices getCoordinates() {
+		if(coordinates.size() == 1) {
+			return coordinates.get(0);
+		}
+		throw new AssertionError("Multiple upper coordinates, use getCoordinates(axes)");
 	}
 }
