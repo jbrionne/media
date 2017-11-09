@@ -50,8 +50,8 @@ public class Strategy {
 						match = false;
 						break;
 					}
-					casesInContext.add(new Case(cCC, cC.get(k), cCC.getCoordinates().getIndex(0) + j, cCC.getCoordinates().getIndex(1) +k));
-					casesInContext.add(new Case(cEC, c.get(k), cEC.getCoordinates().getIndex(0) + i, cEC.getCoordinates().getIndex(1) +k));
+					casesInContext.add(new Case(cCC, cC.get(k), (int) cCC.getCoordinates().getPosition(0) + j, (int) cCC.getCoordinates().getPosition(1) +k));
+					casesInContext.add(new Case(cEC, c.get(k), (int) cEC.getCoordinates().getPosition(0) + i, (int) cEC.getCoordinates().getPosition(1) +k));
 				}
 				if (match) {
 					ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> cECl = getArray2D(cEC.getAxe(0), cCC.getAxe(0));
@@ -120,8 +120,8 @@ public class Strategy {
 						match = false;
 						break;
 					}
-					casesInContext.add(new Case(cCC, cC.get(k), cCC.getCoordinates().getIndex(0) + k, cCC.getCoordinates().getIndex(1) + j));
-					casesInContext.add(new Case(cEC, c.get(k), cEC.getCoordinates().getIndex(0) + k, cEC.getCoordinates().getIndex(1) + i));
+					casesInContext.add(new Case(cCC, cC.get(k), (int) cCC.getCoordinates().getPosition(0) + k, (int) cCC.getCoordinates().getPosition(1) + j));
+					casesInContext.add(new Case(cEC, c.get(k), (int) cEC.getCoordinates().getPosition(0) + k, (int) cEC.getCoordinates().getPosition(1) + i));
 				}
 				if (match) {
 					ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> cECl = getArray2D(cEC.getAxe(1), cCC.getAxe(1));
@@ -340,8 +340,8 @@ public class Strategy {
 					for (int k = 0; k < c.getAxe(1).getElements().size(); k++) {
 						if (c.getValueByIndices(i, k).equals(ArrayLogigramValue.NEG) && c.getValueByIndices(j, k).equals(ArrayLogigramValue.NEG)) {
 							count++;
-							casesInContext.add(new Case(c, c.getValuesForAnAxe(0, i).get(k), c.getCoordinates().getIndex(0) + i, c.getCoordinates().getIndex(1) + k));
-							casesInContext.add(new Case(c, c.getValuesForAnAxe(0, j).get(k), c.getCoordinates().getIndex(0) + j, c.getCoordinates().getIndex(1) + k));
+							casesInContext.add(new Case(c, c.getValuesForAnAxe(0, i).get(k), (int) c.getCoordinates().getPosition(0) + i, (int) c.getCoordinates().getPosition(1) + k));
+							casesInContext.add(new Case(c, c.getValuesForAnAxe(0, j).get(k), (int) c.getCoordinates().getPosition(0) + j, (int) c.getCoordinates().getPosition(1) + k));
 							
 						} else if (c.getValueByIndices(i, k).equals(ArrayLogigramValue.EMPTY) && c.getValueByIndices(j, k).equals(ArrayLogigramValue.EMPTY)) {
 							emptyCol.add(k);
@@ -416,8 +416,8 @@ public class Strategy {
 					for (int k = 0; k < c.getAxe(0).getElements().size(); k++) {
 						if (c.getValueByIndices(k, i).equals(ArrayLogigramValue.NEG) && c.getValueByIndices(k, j).equals(ArrayLogigramValue.NEG)) {
 							count++;
-							casesInContext.add(new Case(c, c.getValuesForAnAxe(1, i).get(k), c.getCoordinates().getIndex(0) + k, c.getCoordinates().getIndex(1) +i));
-							casesInContext.add(new Case(c, c.getValuesForAnAxe(1, j).get(k), c.getCoordinates().getIndex(0) + k, c.getCoordinates().getIndex(1) + j));
+							casesInContext.add(new Case(c, c.getValuesForAnAxe(1, i).get(k), (int) c.getCoordinates().getPosition(0) + k, (int) c.getCoordinates().getPosition(1) +i));
+							casesInContext.add(new Case(c, c.getValuesForAnAxe(1, j).get(k), (int) c.getCoordinates().getPosition(0) + k, (int) c.getCoordinates().getPosition(1) + j));
 						} else if (c.getValueByIndices(k, i).equals(ArrayLogigramValue.EMPTY) && c.getValueByIndices(k, j).equals(ArrayLogigramValue.EMPTY)) {
 							emptyCol.add(k);
 						} else {

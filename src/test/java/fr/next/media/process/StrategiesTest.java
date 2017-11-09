@@ -6,9 +6,11 @@ import java.util.List;
 
 import fr.next.media.array.ArrayXDOrd;
 import fr.next.media.array.Axe;
+import fr.next.media.array.AxeInt;
 import fr.next.media.array.AxeOrd;
 import fr.next.media.array.AxeValue;
 import fr.next.media.array.CoordinatesXDByIndices;
+import fr.next.media.array.impl.Array2DMatrix3fImpl;
 import fr.next.media.array.impl.ArrayFactory;
 import fr.next.media.array.impl.MapXDWithEmptyValueGenericImpl;
 import fr.next.media.array.impl.logigram.ArrayLogigramValue;
@@ -72,8 +74,14 @@ public class StrategiesTest extends TestCase {
 		Axe axeCol = new AxeOrd<>("worldCol");
 		
 		ArrayXDOrd axes = new MapXDWithEmptyValueGenericImpl<>(Integer.class, 0, axeLine, axeCol);
-		int[] indices00 = new int[] {0, 0};
-		int[] indices01 = new int[] {0, 1};
+		AxeInt xLoc = new AxeInt("x", 3);
+		AxeInt yLoc = new AxeInt("y", 3);
+		ArrayXDOrd indices00 = new Array2DMatrix3fImpl<>(xLoc, yLoc);
+		indices00.setValue(0f, 0, 0);
+		indices00.setValue(0f, 0, 1);
+		ArrayXDOrd indices01 = new Array2DMatrix3fImpl<>(xLoc, yLoc);
+		indices01.setValue(0f, 0, 0);
+		indices01.setValue(1f, 0, 1);
 		List<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>> cubes = new ArrayList<>();
 		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c1 = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domPersons, domCaches);
 		c1.addCoordinate(new CoordinatesXDByIndices(axes, indices00));

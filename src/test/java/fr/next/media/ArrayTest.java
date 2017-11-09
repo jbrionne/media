@@ -9,6 +9,7 @@ import fr.next.media.array.AxeInt;
 import fr.next.media.array.AxeOrd;
 import fr.next.media.array.AxeValue;
 import fr.next.media.array.CoordinatesXDByIndices;
+import fr.next.media.array.impl.Array2DMatrix3fImpl;
 import fr.next.media.array.impl.ArrayFactory;
 import fr.next.media.array.impl.MapXDWithEmptyValueGenericImpl;
 import fr.next.media.array.impl.logigram.ArrayLogigramValue;
@@ -342,17 +343,23 @@ public class ArrayTest extends TestCase {
 		yLoc2.add(new AxeValue<Integer>(2));
 		yLoc2.add(new AxeValue<Integer>(3));
 
-		int[] indicesLoc1 = new int[] { 0, 0 };
+		AxeInt xLoc = new AxeInt("x", 3);
+		AxeInt yLoc = new AxeInt("y", 3);
 		ArrayXDOrd worldAxes = new MapXDWithEmptyValueGenericImpl<>(Integer.class, 0, x, y);
 		ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>> arrayLoc1 = (ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>>) ArrayFactory
 				.newInstanceArray2DFloat(xLoc1, yLoc1);
+		ArrayXDOrd indicesLoc1 = new Array2DMatrix3fImpl<>(xLoc, yLoc);
+		indicesLoc1.setValue(0f, 0, 0);
+		indicesLoc1.setValue(0f, 0, 1);
 		arrayLoc1.addCoordinate(new CoordinatesXDByIndices(worldAxes, indicesLoc1));
 		arrayLoc1.setValue(1.0f, 0, 0);
 		arrayLoc1.setValue(2.0f, 0, 1);
 		arrayLoc1.setValue(3.0f, 1, 0);
 		arrayLoc1.setValue(4.0f, 1, 1);
 		
-		int[] indicesLoc2 = new int[] { 2, 2 };
+		ArrayXDOrd indicesLoc2 = new Array2DMatrix3fImpl<>(xLoc, yLoc);
+		indicesLoc2.setValue(2f, 0, 0);
+		indicesLoc2.setValue(2f, 0, 1);
 		ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>> arrayLoc2 = (ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>>) ArrayFactory
 				.newInstanceArray2DFloat(xLoc2, yLoc2);
 		arrayLoc2.addCoordinate(
@@ -379,11 +386,26 @@ public class ArrayTest extends TestCase {
 		assertEquals(9f, arrayLoc2.getValueFromUpperAxeCoord(worldAxes, 3, 3));
 		
 		
+		worldAxes.mergeChildren();
+		
+		assertEquals(4f, worldAxes.getValue(1, 1));
+		assertEquals(9f, worldAxes.getValue(3, 3));
+		
+		
+		
+		
+		
 		//TODO
-		//TODO
+		
 		//Un repère A qui contient un repère B qui lui-même contient deux repères C et D
 		// Si B change alors les coordonnées de C et D change dans le repère A !!
-
+		//On doit rechercher la coordonnée aussi dans les parents et faire la transformation pour chaque étape
+		
+		//TODO
+		//Un axe en relation avec un autre axe. Exemple Axe x1 avec unité à 1, Axe x2 avec unité à 2.
+		//soit x1 * 2 = x2
+		//Autre cas des rotations + echelle des axes..matrices.
+		
 	}
 
 }

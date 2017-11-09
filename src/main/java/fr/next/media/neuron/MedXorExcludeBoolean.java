@@ -10,8 +10,8 @@ public class MedXorExcludeBoolean extends MapXDWithEmptyValueGenericImpl {
 
 	public MedXorExcludeBoolean(Class clazz, Object emptyVal, Axe... domains) {
 		super(clazz, emptyVal, domains);
-		this.setValue(-2f, "6", "8");
-		this.setValue(1.1f, "7", "8");
+		this.setValue(-2f, 0, 2);
+		this.setValue(1.1f, 1, 2);
 	}
 
 }

@@ -1,5 +1,6 @@
 package fr.next.media.array.impl;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,6 +10,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
 
 import fr.next.media.array.ArrayXDOrd;
 import fr.next.media.array.Axe;
@@ -23,7 +25,8 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> implemen
 	private G domainLine;
 	private G domainCol;
 
-	private List<CoordinatesXDByIndices> coordinates = new ArrayList<>();
+	private List<CoordinatesXDByIndices<Float, K, G>> coordinates = new ArrayList<>();
+	private List<CoordinatesXDByIndices<Float, K, G>> childCoordinates = new ArrayList<>();
 
 	@SuppressWarnings("unchecked")
 	public Array2DMatrix4fImpl(G domainLine2, G domainCol2) {
@@ -94,7 +97,7 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> implemen
 		cases.get(val);
 		Float[] f = new Float[4];
 		int j = 0;
-		for(int i = indexAxeLine * 4; i < indexAxeLine * 4 + 4; i++ ) {
+		for (int i = indexAxeLine * 4; i < indexAxeLine * 4 + 4; i++) {
 			f[j] = val[i];
 			j++;
 		}
@@ -106,7 +109,7 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> implemen
 		cases.get(val);
 		Float[] f = new Float[4];
 		int j = 0;
-		for(int i = indexAxeCol; i < 4 * 4; i = i + 4 ) {
+		for (int i = indexAxeCol; i < 4 * 4; i = i + 4) {
 			f[j] = val[i];
 			j++;
 		}
@@ -125,24 +128,39 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> implemen
 	}
 
 	@Override
-	public CoordinatesXDByIndices getCoordinates(ArrayXDOrd<Float, K, G> axes) {
-		for(CoordinatesXDByIndices c : coordinates) {
+	public List<Pair<List<K>, Float>> getAllWithKey() {
+		List<Pair<List<K>, Float>> pair = new ArrayList<>();
+		for (int i = 0; i < 4; i++) {
+			K x = domainLine.getElements().get(i).getValue();
+			for (int j = 0; j < 4; j++) {
+				K y = domainCol.getElements().get(j).getValue();
+				List<K> keys = new ArrayList<>();
+				keys.add(x);
+				keys.add(y);
+				pair.add(new ImmutablePair<List<K>, Float>(keys, cases.get(i, j)));
+			}
+		}
+		return pair;
+	}
+
+	@Override
+	public CoordinatesXDByIndices<Float, K, G> getCoordinates(ArrayXDOrd<Float, K, G> axes) {
+		for (CoordinatesXDByIndices<Float, K, G> c : coordinates) {
 			boolean found = false;
-			for(int i = 0; i < c.getAxesSize(); i++) {
-				for(G a : axes.getAxes()) {
-					if(c.getAxe(i).equals(a)) {
+			for (int i = 0; i < c.getAxesSize(); i++) {
+				for (G a : axes.getAxes()) {
+					if (c.getAxe(i).equals(a)) {
 						found = true;
 						break;
 					}
 				}
 			}
-			if(found) {
+			if (found) {
 				return c;
 			}
 		}
 		throw new AssertionError("No coordinates were found");
 	}
-
 
 	@Override
 	public G getAxe(int index) {
@@ -152,11 +170,10 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> implemen
 			return domainCol;
 		}
 	}
-	
-	
+
 	@Override
 	public void setTranslation(Class<Float> clazzT, Float... values) {
-		if(values.length != 3) {
+		if (values.length != 3) {
 			throw new AssertionError();
 		}
 		this.cases.setTranslation(values[0], values[1], values[2]);
@@ -164,27 +181,27 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> implemen
 
 	@Override
 	public void setRotationQuaternion(Class<Float> clazzT, Float w, Float... values) {
-		if(values.length != 3) {
+		if (values.length != 3) {
 			throw new AssertionError();
 		}
 		this.cases.setRotationQuaternion(new Quaternion(values[0], values[1], values[2], w));
-		
+
 	}
 
 	@Override
 	public void setScale(Class<Float> clazzT, Float... values) {
-		if(values.length != 3) {
+		if (values.length != 3) {
 			throw new AssertionError();
 		}
 		this.cases.setTranslation(values[0], values[1], values[2]);
 	}
-	
+
 	@Override
 	public List<Pair<K, Float>> getPairForAnAxe(int indexAxe, int indexToFind) {
 		List<Pair<K, Float>> pair = new ArrayList<>();
 		List<Float> values = null;
 		G domains = null;
-		if(indexAxe == 0) {
+		if (indexAxe == 0) {
 			values = Arrays.asList(getLine(indexToFind));
 			domains = domainLine;
 		} else {
@@ -192,17 +209,17 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> implemen
 			domains = domainCol;
 		}
 		int index = 0;
-		for(Float c : values) {
-			K d =  domains.getElements().get(index).getValue();
+		for (Float c : values) {
+			K d = domains.getElements().get(index).getValue();
 			pair.add(new ImmutablePair<K, Float>(d, c));
 			index++;
 		}
 		return pair;
 	}
-	
+
 	@Override
-	public CoordinatesXDByIndices getCoordinates() {
-		if(coordinates.size() == 1) {
+	public CoordinatesXDByIndices<Float, K, G> getCoordinates() {
+		if (coordinates.size() == 1) {
 			return coordinates.get(0);
 		}
 		throw new AssertionError("Multiple upper coordinates, use getCoordinates(axes)");
@@ -210,51 +227,58 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> implemen
 
 	@Override
 	public Float getValueFromUpperAxeCoord(ArrayXDOrd<Float, K, G> axes, K... upperAxeIndices) {
-		CoordinatesXDByIndices coordinates = getCoordinates(axes);
+		CoordinatesXDByIndices<Float, K, G> coordinates = getCoordinates(axes);
 		if (coordinates.getAxesSize() < 2) {
 			throw new AssertionError(
 					"Not compatible axes : upper reference should have at least the same number of axes");
 		}
-		Object valueAxeLine = null;
-		Object valueAxeCol = null;
 		for (int i = 0; i < coordinates.getAxesSize(); i++) {
 			boolean found = false;
 			if (domainLine.getName().equals(coordinates.getAxe(i).getName())) {
 				found = true;
-				if(upperAxeIndices[i] instanceof CoordOperation) {
-					valueAxeLine = ((CoordOperation<K>) upperAxeIndices[i])
-						.sub((K) coordinates.getAxe(i).getElements().get(coordinates.getIndex(i)));
-				} else if(upperAxeIndices[i] instanceof Integer) {
-					valueAxeLine = (Integer) upperAxeIndices[i] - (Integer) coordinates.getAxe(i).getElements().get(coordinates.getIndex(i)).getValue();
-						
-				}
 			} else if (domainCol.getName().equals(coordinates.getAxe(i).getName())) {
 				found = true;
-				if(upperAxeIndices[i] instanceof CoordOperation) {
-					valueAxeCol = ((CoordOperation<K>) upperAxeIndices[i])
-						.sub((K) coordinates.getAxe(i).getElements().get(coordinates.getIndex(i)));
-				} else if(upperAxeIndices[i] instanceof Integer) {
-					valueAxeCol = (Integer) upperAxeIndices[i] - (Integer) coordinates.getAxe(i).getElements().get(coordinates.getIndex(i)).getValue();
-				}
 			}
 			if (!found) {
 				throw new AssertionError("Not compatible axes : unable to find " + coordinates.getAxe(i).getName());
 			}
 		}
-		return getValue((K) valueAxeLine, (K) valueAxeCol);
+		return getValue(coordinates.transform(upperAxeIndices));
 	}
-	
+
 	@Override
-	public void addCoordinate(CoordinatesXDByIndices coordinates) {
+	public void addCoordinate(CoordinatesXDByIndices<Float, K, G> coordinates) {
 		this.coordinates.add(coordinates);
+		coordinates.getAxes().addChildCoordinate(new CoordinatesXDByIndices<>(this, coordinates.getTransform()));
 	}
-	
+
 	@Override
 	public List<G> getAxes() {
 		List<G> a = new ArrayList<>();
 		a.add(domainLine);
 		a.add(domainCol);
 		return a;
+	}
+
+	public List<CoordinatesXDByIndices<Float, K, G>> getChildCoordinates() {
+		return childCoordinates;
+	}
+
+	@Override
+	public void addChildCoordinate(CoordinatesXDByIndices<Float, K, G> coordinates) {
+		this.childCoordinates.add(coordinates);
+	}
+
+	@Override
+	public void mergeChildren() {
+		for(CoordinatesXDByIndices<Float, K, G> c : childCoordinates) {
+			c.getAxes().mergeChildren();
+			List<Pair<List<K>,Float>> val = c.getAxes().getAllWithKey();
+			for(Pair<List<K>,Float> p : val) {
+				K[] m = p.getKey().toArray((K[])Array.newInstance(p.getKey().get(0).getClass(), p.getKey().size()));
+				setValue(p.getValue(), c.transformInv(m));
+			}
+		}
 	}
 
 }

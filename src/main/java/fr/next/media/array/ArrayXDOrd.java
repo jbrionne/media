@@ -17,17 +17,23 @@ public interface ArrayXDOrd<T, K, G extends Axe<? extends AxeVal<K>>> extends Se
 	
 	T getValueFromUpperAxeCoord(ArrayXDOrd<T, K, G> axes, K... upperAxeIndices);
 		
-	CoordinatesXDByIndices getCoordinates(ArrayXDOrd<T, K, G> axes);
+	CoordinatesXDByIndices<T, K, G> getCoordinates(ArrayXDOrd<T, K, G> axes);
 	
-	CoordinatesXDByIndices getCoordinates();
+	CoordinatesXDByIndices<T, K, G> getCoordinates();
 	
-	void addCoordinate(CoordinatesXDByIndices coordinates);
-
+	void addCoordinate(CoordinatesXDByIndices<T, K, G> coordinates);
+	
+	void addChildCoordinate(CoordinatesXDByIndices<T, K, G> coordinates);
+	
+	List<CoordinatesXDByIndices<T, K, G>>  getChildCoordinates();
+		
 	G getAxe(int index);
 	
 	List<G> getAxes();
 	
 	List<T> getAll();
+	
+	List<Pair<List<K>,T>> getAllWithKey();
 	
 	List<T> getValuesForAnAxe(int indexAxe, int indexToFind);
 	
@@ -38,5 +44,7 @@ public interface ArrayXDOrd<T, K, G extends Axe<? extends AxeVal<K>>> extends Se
 	void setRotationQuaternion(Class<T> clazzT, T w, T... values);
 			
 	void setScale(Class<T> clazzT, T... values);
+	
+	void mergeChildren();
 	
 }

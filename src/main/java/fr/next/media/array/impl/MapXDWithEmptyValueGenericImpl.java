@@ -1,5 +1,6 @@
 package fr.next.media.array.impl;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,7 +23,8 @@ public class MapXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal
 
 	private G[] domains;
 
-	private List<CoordinatesXDByIndices> coordinates = new ArrayList<>();
+	private List<CoordinatesXDByIndices<T, K, G>> coordinates = new ArrayList<>();
+	private List<CoordinatesXDByIndices<T, K, G>> childCoordinates = new ArrayList<>();
 
 	private Class<T> clazz;
 	
@@ -47,11 +49,12 @@ public class MapXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal
 		}
 		setValueInternal(value, indices);
 	}
-
+	
 	private T getValueInternal(int... indices) {
 		Map currentMap = cases;
+		int j = 0;
 		for(int i : indices) {
-			if(i == indices.length - 1) {
+			if(j == indices.length - 1) {
 				return (T)  currentMap.get(i);
 			} else {
 				Object  m = currentMap.get(i);
@@ -61,6 +64,7 @@ public class MapXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal
 				   currentMap = (Map) m;
 				}
 			}
+			j++;
 		}
 		throw new AssertionError("no value for map");
 	}
@@ -112,8 +116,8 @@ public class MapXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal
 	}
 
 	@Override
-	public CoordinatesXDByIndices getCoordinates(ArrayXDOrd<T, K, G> axes) {
-		for(CoordinatesXDByIndices c : coordinates) {
+	public CoordinatesXDByIndices<T, K, G> getCoordinates(ArrayXDOrd<T, K, G> axes) {
+		for(CoordinatesXDByIndices<T, K, G> c : coordinates) {
 			boolean found = false;
 			for(int i = 0; i < c.getAxesSize(); i++) {
 				for(G a : axes.getAxes()) {
@@ -145,6 +149,16 @@ public class MapXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal
 		rec(all, cases, 0);
 		return all;
 	}
+	
+	
+	@Override
+	public List<Pair<List<K>, T>> getAllWithKey() {
+		List<Pair<List<K>, T>> pair = new ArrayList<>();
+		List<K> keys = new ArrayList<>();
+		recWithKeys(pair, keys, cases, 0);
+		return pair;
+	}
+	
 	
 	private void recWithIndex(List<T> all, Map o, int[] indices, int index, int indexAxe, int indexToFind) {
 	    for(Object eo : o.entrySet()) {
@@ -213,6 +227,27 @@ public class MapXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal
 	      }
 	}
 	
+	private void recWithKeys(List<Pair<List<K>, T>> all, List<K> keys, Map o, int index) {
+		 for(Object eo : o.entrySet()) {
+		    	Entry e = (Entry) eo;
+		    	Object i = e.getValue();
+		    	K m = domains[index].getElements().get((int) e.getKey()).getValue();
+				keys.add(m);
+		    	if (index  == domains.length - 2) {
+					Map ii = (Map) i;
+					for (int x = 0; x < ii.size(); x++) {
+						Object z = ii.get(x);
+						if (z != null) {
+							all.add(new ImmutablePair<List<K>, T>(new ArrayList<>(keys), (T) z));
+						}
+					}
+				} else {
+					int dim = index + 1;
+					recWithKeys(all, new ArrayList<>(keys), (Map) i, dim);
+				}
+		      }
+	}
+	
 	
 	@Override
 	public void setTranslation(Class<T> clazzT, T... values) {
@@ -239,24 +274,17 @@ public class MapXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal
 	
 	@Override
 	public T getValueFromUpperAxeCoord(ArrayXDOrd<T, K, G> axes, K... upperAxeIndices) {
-		CoordinatesXDByIndices coordinates = getCoordinates(axes);
+		CoordinatesXDByIndices<T, K, G> coordinates = getCoordinates(axes);
 		if(coordinates.getAxesSize() < domains.length) {
 			throw new AssertionError("Not compatible axes : upper reference should have at least the same number of axes");
 		}
 		
-		int[] indices = new int[domains.length];
 		for(int i = 0; i < coordinates.getAxesSize(); i++) {
 			boolean found = false;
 			int j = 0;
 			for (G d : domains) {
 				if(d.getName().equals(coordinates.getAxe(i).getName())) {
 					found = true;
-					if(upperAxeIndices[i] instanceof CoordOperation) {
-						indices[j] = Axe.findIndex(((CoordOperation<K>) upperAxeIndices[i])
-								.sub((K) coordinates.getAxe(i).getElements().get(coordinates.getIndex(i))), d);
-					} else if(upperAxeIndices[i] instanceof Integer) {
-						indices[j] = Axe.findIndex((Integer) upperAxeIndices[i] - (Integer) coordinates.getAxe(i).getElements().get(coordinates.getIndex(i)).getValue(), d);
-					}
 					break;
 				}
 				j++;
@@ -265,12 +293,13 @@ public class MapXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal
 				throw new AssertionError("Not compatible axes : unable to find " + coordinates.getAxe(i).getName());
 			}
 		}
-		return getValueByIndices(indices);
+		return getValue(coordinates.transform(upperAxeIndices));
 	}
 	
 	@Override
-	public void addCoordinate(CoordinatesXDByIndices coordinates) {
+	public void addCoordinate(CoordinatesXDByIndices<T, K, G> coordinates) {
 		this.coordinates.add(coordinates);
+		coordinates.getAxes().addChildCoordinate(new CoordinatesXDByIndices<>(this, coordinates.getTransform()));
 	}
 	
 	@Override
@@ -279,10 +308,31 @@ public class MapXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal
 	}
 	
 	@Override
-	public CoordinatesXDByIndices getCoordinates() {
+	public CoordinatesXDByIndices<T, K, G> getCoordinates() {
 		if(coordinates.size() == 1) {
 			return coordinates.get(0);
 		}
 		throw new AssertionError("Multiple upper coordinates, use getCoordinates(axes)");
+	}
+
+	public List<CoordinatesXDByIndices<T, K, G>> getChildCoordinates() {
+		return childCoordinates;
+	}
+	
+	@Override
+	public void addChildCoordinate(CoordinatesXDByIndices<T, K, G> coordinates) {
+		this.childCoordinates.add(coordinates);
+	}
+
+	@Override
+	public void mergeChildren() {
+		for(CoordinatesXDByIndices<T, K, G> c : childCoordinates) {
+			c.getAxes().mergeChildren();
+			List<Pair<List<K>,T>> val = c.getAxes().getAllWithKey();
+			for(Pair<List<K>,T> p : val) {
+				K[] m = p.getKey().toArray((K[])Array.newInstance(p.getKey().get(0).getClass(), p.getKey().size()));
+				setValue(p.getValue(), c.transformInv(m));
+			}
+		}
 	}
 }

@@ -3,6 +3,7 @@ package fr.next.media.array.impl;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -20,8 +21,9 @@ public class Array1DWithEmptyGenericImpl<T, K, G extends Axe<? extends AxeVal<K>
 
 	private G domainLine;
 
-	private List<CoordinatesXDByIndices> coordinates = new ArrayList<>();
-	
+	private List<CoordinatesXDByIndices<T, K, G>> coordinates = new ArrayList<>();
+	private List<CoordinatesXDByIndices<T, K, G>> childCoordinates = new ArrayList<>();
+
 	private T emptyVal;
 
 	@SuppressWarnings("unchecked")
@@ -90,8 +92,8 @@ public class Array1DWithEmptyGenericImpl<T, K, G extends Axe<? extends AxeVal<K>
 	}
 
 	@Override
-	public CoordinatesXDByIndices getCoordinates(ArrayXDOrd<T, K, G> axes) {
-		for(CoordinatesXDByIndices c : coordinates) {
+	public CoordinatesXDByIndices<T, K, G> getCoordinates(ArrayXDOrd<T, K, G> axes) {
+		for(CoordinatesXDByIndices<T, K, G> c : coordinates) {
 			boolean found = false;
 			for(int i = 0; i < c.getAxesSize(); i++) {
 				for(G a : axes.getAxes()) {
@@ -109,7 +111,7 @@ public class Array1DWithEmptyGenericImpl<T, K, G extends Axe<? extends AxeVal<K>
 	}
 	
 	@Override
-	public CoordinatesXDByIndices getCoordinates() {
+	public CoordinatesXDByIndices<T, K, G> getCoordinates() {
 		if(coordinates.size() == 1) {
 			return coordinates.get(0);
 		}
@@ -151,7 +153,7 @@ public class Array1DWithEmptyGenericImpl<T, K, G extends Axe<? extends AxeVal<K>
 	
 	@Override
 	public T getValueFromUpperAxeCoord(ArrayXDOrd<T, K, G> axes, K... upperAxeIndices) {
-		CoordinatesXDByIndices coordinates = getCoordinates(axes);
+		CoordinatesXDByIndices<T, K, G> coordinates = getCoordinates(axes);
 		if (coordinates.getAxesSize() < 1) {
 			throw new AssertionError(
 					"Not compatible axes : upper reference should have at least the same number of axes");
@@ -161,23 +163,18 @@ public class Array1DWithEmptyGenericImpl<T, K, G extends Axe<? extends AxeVal<K>
 			boolean found = false;
 			if (domainLine.getName().equals(coordinates.getAxe(i).getName())) {
 				found = true;
-				if(upperAxeIndices[i] instanceof CoordOperation) {
-					valueAxeLine = ((CoordOperation<K>) upperAxeIndices[i])
-						.sub((K) coordinates.getAxe(i).getElements().get(coordinates.getIndex(i)));
-				} else if(upperAxeIndices[i] instanceof Integer) {
-					valueAxeLine = (Integer) upperAxeIndices[i] - (Integer) coordinates.getAxe(i).getElements().get(coordinates.getIndex(i)).getValue();
-				}
 			} 
 			if (!found) {
 				throw new AssertionError("Not compatible axes : unable to find " + coordinates.getAxe(i).getName());
 			}
 		}
-		return getValue((K) valueAxeLine);
+		return getValue(coordinates.transform(upperAxeIndices));
 	}
 	
 	@Override
-	public void addCoordinate(CoordinatesXDByIndices coordinates) {
+	public void addCoordinate(CoordinatesXDByIndices<T, K, G> coordinates) {
 		this.coordinates.add(coordinates);
+		coordinates.getAxes().addChildCoordinate(new CoordinatesXDByIndices<>(this, coordinates.getTransform()));
 	}
 	
 	@Override
@@ -185,6 +182,39 @@ public class Array1DWithEmptyGenericImpl<T, K, G extends Axe<? extends AxeVal<K>
 		List<G> a = new ArrayList<>();
 		a.add(domainLine);
 		return a;
+	}
+
+	public List<CoordinatesXDByIndices<T, K, G>> getChildCoordinates() {
+		return childCoordinates;
+	}
+	
+	@Override
+	public void addChildCoordinate(CoordinatesXDByIndices<T, K, G> coordinates) {
+		this.childCoordinates.add(coordinates);
+	}
+
+	@Override
+	public void mergeChildren() {
+		for(CoordinatesXDByIndices<T, K, G> c : childCoordinates) {
+			c.getAxes().mergeChildren();
+			List<Pair<List<K>,T>> val = c.getAxes().getAllWithKey();
+			for(Pair<List<K>,T> p : val) {
+				K[] m = p.getKey().toArray((K[])Array.newInstance(p.getKey().get(0).getClass(), p.getKey().size()));
+				setValue(p.getValue(), c.transformInv(m));
+			}
+		}
+	}
+	
+	@Override
+	public List<Pair<List<K>, T>> getAllWithKey() {
+		List<Pair<List<K>, T>> pair = new ArrayList<>();
+		int index = 0;
+		for(T c : cases) {
+			K d =  domainLine.getElements().get(index).getValue();
+			pair.add(new ImmutablePair<List<K>, T>(Collections.singletonList(d), c));
+			index++;
+		}
+		return pair;
 	}
 
 }

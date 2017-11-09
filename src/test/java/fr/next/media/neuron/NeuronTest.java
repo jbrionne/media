@@ -11,6 +11,7 @@ import fr.next.media.array.AxeInt;
 import fr.next.media.array.AxeOrd;
 import fr.next.media.array.AxeValue;
 import fr.next.media.array.CoordinatesXDByIndices;
+import fr.next.media.array.impl.Array2DMatrix3fImpl;
 import fr.next.media.array.impl.ArrayFactory;
 import fr.next.media.array.impl.MapXDWithEmptyValueGenericImpl;
 import junit.framework.TestCase;
@@ -703,74 +704,93 @@ public class NeuronTest extends TestCase {
 	
 	public void testMedFunction() {
 		
-		Axe<AxeValue<String>> domNeurone = new AxeOrd<AxeValue<String>>("x");
+		Axe<AxeValue<Integer>> domNeuroneX = new AxeOrd<AxeValue<Integer>>("x");
 		for (int i = 0; i < 10; i++) {
-			domNeurone.add(new AxeValue<String>("" + i));
+			domNeuroneX.add(new AxeValue<Integer>(i));
 		}
-		AxeInt axeLine = new AxeInt<>("worldLine", 1);
-		AxeInt axeCol = new AxeInt<>("worldCol", 1);
-		int[] indices = new int[] { 0, 0 };
-		ArrayXDOrd axes = new MapXDWithEmptyValueGenericImpl<>(Integer.class, 0, axeLine, axeCol);
-		
-		
-		NeuronExecutor<String> nexec = new NeuronExecutor<>();
+		Axe<AxeValue<Integer>> domNeuroneY = new AxeOrd<AxeValue<Integer>>("y");
+		for (int i = 0; i < 10; i++) {
+			domNeuroneY.add(new AxeValue<Integer>(i));
+		}
+		ArrayXDOrd axes = new MapXDWithEmptyValueGenericImpl<>(Integer.class, 0, domNeuroneX, domNeuroneY);
+		NeuronExecutor<Integer> nexec = new NeuronExecutor<>();
 		float noPulseIntensity = 0f;
 		float pulseIntensity = 1f;
 		Agregation agre = (a, b, c) -> (a * b) + c;
 		Activation activ = a -> a >= pulseIntensity;
 		
-		MedAndBoolean and = new MedAndBoolean(Float.class,"", domNeurone, domNeurone);
-		and.addCoordinate(new CoordinatesXDByIndices(axes, indices));
-		MedOrBoolean or = new MedOrBoolean(Float.class,"", domNeurone, domNeurone);
-		or.addCoordinate(new CoordinatesXDByIndices(axes, indices));
-		MedXorExcludeBoolean xorEx = new MedXorExcludeBoolean(Float.class,"", domNeurone, domNeurone);
-		xorEx.addCoordinate(new CoordinatesXDByIndices(axes, indices));
-		ArrayXDOrd<Float, String, Axe<AxeValue<String>>> array = (ArrayXDOrd<Float, String, Axe<AxeValue<String>>>) ArrayFactory
-				.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeurone, domNeurone);
-		array.addCoordinate(new CoordinatesXDByIndices(axes, indices));
-		array.setValue(1f, "and", "xorEx");
-		array.setValue(1f, "or", "xorEx");
+		AxeInt xLoc = new AxeInt("x", 3);
+		AxeInt yLoc = new AxeInt("y", 3);
+		ArrayXDOrd indices1 = new Array2DMatrix3fImpl<>(xLoc, yLoc);
+		indices1.setValue(0f, 0, 0);
+		indices1.setValue(0f, 0, 1);
+		ArrayXDOrd indices2 = new Array2DMatrix3fImpl<>(xLoc, yLoc);
+		indices2.setValue(3f, 0, 0);
+		indices2.setValue(3f, 0, 1);
+		ArrayXDOrd indices3 = new Array2DMatrix3fImpl<>(xLoc, yLoc);
+		indices3.setValue(6f, 0, 0);
+		indices3.setValue(6f, 0, 1);
+		MedAndBoolean and = new MedAndBoolean(Float.class,"", domNeuroneX, domNeuroneY);
+		and.addCoordinate(new CoordinatesXDByIndices(axes, indices1));
+		MedOrBoolean or = new MedOrBoolean(Float.class,"", domNeuroneX, domNeuroneY);
+		or.addCoordinate(new CoordinatesXDByIndices(axes, indices2));
+		MedXorExcludeBoolean xorEx = new MedXorExcludeBoolean(Float.class,"", domNeuroneX, domNeuroneY);
+		xorEx.addCoordinate(new CoordinatesXDByIndices(axes, indices3));
+		
+		
+		System.out.println(and.getValueFromUpperAxeCoord(axes, 0, 2));
+		System.out.println(and.getValueFromUpperAxeCoord(axes, 1, 2));
+		
+		System.out.println(or.getValueFromUpperAxeCoord(axes, 3, 5));
+		System.out.println(or.getValueFromUpperAxeCoord(axes, 4, 5));
+		
+		System.out.println(xorEx.getValueFromUpperAxeCoord(axes, 6, 8));
+		System.out.println(xorEx.getValueFromUpperAxeCoord(axes, 7, 8));
+		
+//		array.addCoordinate(new CoordinatesXDByIndices(axes, indices));
+//		array.setValue(1f, "and", "xorEx");
+//		array.setValue(1f, "or", "xorEx");
 		
 		//TODO !!
-		Map<String, Float> step0And = new HashMap<>();
-		step0And.put("and0", noPulseIntensity);
-		step0And.put("and1", pulseIntensity);
+//		Map<String, Float> step0And = new HashMap<>();
+//		step0And.put("and0", noPulseIntensity);
+//		step0And.put("and1", pulseIntensity);
 		
 		
-		Map<String, Float> step0 = new HashMap<>();
-		step0.put("0", noPulseIntensity);
-		step0.put("1", pulseIntensity);
+		Map<Integer, Float> step0 = new HashMap<>();
+		step0.put(0, noPulseIntensity);
+		step0.put(1, pulseIntensity);
 
 		// change reference
-		Map<String, Float> newStepOr0 = new HashMap<>();
-		newStepOr0.put("0", step0.get("0"));
-		newStepOr0.put("1", step0.get("1"));
+		Map<Integer, Float> newStepOr0 = new HashMap<>();
+		newStepOr0.put(0, step0.get(0));
+		newStepOr0.put(1, step0.get(1));
 
-		List<Map<String, Float>> stepsOr = new ArrayList<>();
+		List<Map<Integer, Float>> stepsOr = new ArrayList<>();
 		nexec.simul(stepsOr, or, newStepOr0, agre, activ, false);
-		Map<String, Float> lastStepOr = stepsOr.get(stepsOr.size() - 1);
+		Map<Integer, Float> lastStepOr = stepsOr.get(stepsOr.size() - 1);
 
 		// change reference
-		Map<String, Float> newStepAnd0 = new HashMap<>();
-		newStepAnd0.put("3", step0.get("0"));
-		newStepAnd0.put("4", step0.get("1"));
+		Map<Integer, Float> newStepAnd0 = new HashMap<>();
+		newStepAnd0.put(0, step0.get(0));
+		newStepAnd0.put(1, step0.get(1));
 
-		List<Map<String, Float>> stepsAnd = new ArrayList<>();
+		List<Map<Integer, Float>> stepsAnd = new ArrayList<>();
 		nexec.simul(stepsAnd, and, newStepAnd0, agre, activ, false);
-		Map<String, Float> lastStepAnd = stepsAnd.get(stepsAnd.size() - 1);
+		Map<Integer, Float> lastStepAnd = stepsAnd.get(stepsAnd.size() - 1);
 
 		// change reference
-		Map<String, Float> newLastSteps = new HashMap<>();
-		newLastSteps.put("6", lastStepAnd.get("5") != null ? lastStepAnd.get("5") : 0);
-		newLastSteps.put("7", lastStepOr.get("2") != null ? lastStepOr.get("2") : 0);
+		Map<Integer, Float> newLastSteps = new HashMap<>();
+		newLastSteps.put(0, lastStepAnd.get(2) != null ? lastStepAnd.get(2) : 0);
+		newLastSteps.put(1, lastStepOr.get(2) != null ? lastStepOr.get(2) : 0);
 		
-		List<Map<String, Float>> stepsFinal = new ArrayList<>();
+		List<Map<Integer, Float>> stepsFinal = new ArrayList<>();
 		nexec.simul(stepsFinal, xorEx, newLastSteps, agre, activ, false);
 
-		Map<String, Float> lastStep = stepsFinal.get(stepsFinal.size() - 1);
+		Map<Integer, Float> lastStep = stepsFinal.get(stepsFinal.size() - 1);
 		System.out.println("activate " + lastStep.toString());
 
-		assertActivated("8", lastStep, activ);
+		assertActivated(2, lastStep, activ);
 	
 	}
 

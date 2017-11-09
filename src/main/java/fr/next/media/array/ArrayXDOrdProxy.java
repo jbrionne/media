@@ -134,4 +134,24 @@ public class ArrayXDOrdProxy<T, K, G extends Axe<? extends AxeVal<K>>> implement
 		return this.base.getCoordinates();
 	}
 
+	@Override
+	public List<CoordinatesXDByIndices<T, K, G>> getChildCoordinates() {
+		return this.base.getChildCoordinates();
+	}
+
+	@Override
+	public void addChildCoordinate(CoordinatesXDByIndices<T, K, G> coordinates) {
+		this.base.addChildCoordinate(coordinates);
+	}
+
+	@Override
+	public void mergeChildren() {
+		this.base.mergeChildren();
+	}
+
+	@Override
+	public List<Pair<List<K>, T>> getAllWithKey() {
+		return this.base.getAllWithKey();
+	}
+
 }

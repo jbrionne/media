@@ -2,6 +2,7 @@ package fr.next.media.array;
 
 public interface CoordOperation<K> {
 
-	K add(K b);
-	K sub(K b);
+	//should be an reference XArrayOrd..(rotation, translation, scale..)
+	K[] transform(K[] b);
+	
 }

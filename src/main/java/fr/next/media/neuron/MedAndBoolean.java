@@ -10,8 +10,8 @@ public class MedAndBoolean extends MapXDWithEmptyValueGenericImpl {
 
 	public MedAndBoolean(Class clazz, Object emptyVal, Axe... domains) {
 		super(clazz, emptyVal, domains);
-		this.setValue(0.6f, "3", "5");
-		this.setValue(0.6f, "4", "5");
+		this.setValue(0.6f, 0, 2);
+		this.setValue(0.6f, 1, 2);
 	}
 	
 	

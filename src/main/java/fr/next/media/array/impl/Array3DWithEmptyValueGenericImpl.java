@@ -22,8 +22,9 @@ public class Array3DWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeV
 	private G domainCol;
 	private G domainZ;
 	
-	private List<CoordinatesXDByIndices> coordinates = new ArrayList<>();
-	
+	private List<CoordinatesXDByIndices<T, K, G>> coordinates = new ArrayList<>();
+	private List<CoordinatesXDByIndices<T, K, G>> childCoordinates = new ArrayList<>();
+
 	private T emptyVal;
 	
 	private Class<T> clazz;
@@ -158,6 +159,34 @@ public class Array3DWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeV
 	}
 	
 	@Override
+	public List<Pair<List<K>, T>> getAllWithKey() {
+		List<Pair<List<K>, T>> pair = new ArrayList<>();
+		int i = 0;
+		for(T[][] a : cases) {
+			int j = 0;
+			K x = domainLine.getElements().get(i).getValue();
+			for(T[] b : a) {
+					K y = domainCol.getElements().get(j).getValue();
+					int m = 0;
+					for(T k : b) {
+						K z = domainZ.getElements().get(m).getValue();
+						if (k != null) {
+							List<K> keys = new ArrayList<>();
+							keys.add(x);
+							keys.add(y);
+							keys.add(z);
+							pair.add(new ImmutablePair<List<K>, T>(keys, k));
+						}
+						m++;
+					}
+				j++;
+			}
+			i++;
+		}
+		return pair;
+	}
+	
+	@Override
 	public G getAxe(int index) {
 		if(index == 0) {
 			return domainLine;
@@ -169,8 +198,8 @@ public class Array3DWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeV
 	}
 
 	@Override
-	public CoordinatesXDByIndices getCoordinates(ArrayXDOrd<T, K, G> axes) {
-		for(CoordinatesXDByIndices c : coordinates) {
+	public CoordinatesXDByIndices<T, K, G> getCoordinates(ArrayXDOrd<T, K, G> axes) {
+		for(CoordinatesXDByIndices<T, K, G> c : coordinates) {
 			boolean found = false;
 			for(int i = 0; i < c.getAxesSize(); i++) {
 				for(G a : axes.getAxes()) {
@@ -189,7 +218,7 @@ public class Array3DWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeV
 
 	
 	@Override
-	public CoordinatesXDByIndices getCoordinates() {
+	public CoordinatesXDByIndices<T, K, G> getCoordinates() {
 		if(coordinates.size() == 1) {
 			return coordinates.get(0);
 		}
@@ -242,52 +271,31 @@ public class Array3DWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeV
 
 	@Override
 	public T getValueFromUpperAxeCoord(ArrayXDOrd<T, K, G> axes, K... upperAxeIndices) {
-		CoordinatesXDByIndices coordinates = getCoordinates(axes);
+		CoordinatesXDByIndices<T, K, G> coordinates = getCoordinates(axes);
 		if (coordinates.getAxesSize() < 3) {
 			throw new AssertionError(
 					"Not compatible axes : upper reference should have at least the same number of axes");
 		}
-		Object valueAxeLine = null;
-		Object valueAxeCol = null;
-		Object valueAxeZ = null;
 		for (int i = 0; i < coordinates.getAxesSize(); i++) {
 			boolean found = false;
 			if (domainLine.getName().equals(coordinates.getAxe(i).getName())) {
 				found = true;
-				if(upperAxeIndices[i] instanceof CoordOperation) {
-					valueAxeLine = ((CoordOperation<K>) upperAxeIndices[i])
-						.sub((K) coordinates.getAxe(i).getElements().get(coordinates.getIndex(i)));
-				} else if(upperAxeIndices[i] instanceof Integer) {
-					valueAxeLine = (Integer) upperAxeIndices[i] - (Integer) coordinates.getAxe(i).getElements().get(coordinates.getIndex(i)).getValue();
-						
-				}
 			} else if (domainCol.getName().equals(coordinates.getAxe(i).getName())) {
 				found = true;
-				if(upperAxeIndices[i] instanceof CoordOperation) {
-					valueAxeCol = ((CoordOperation<K>) upperAxeIndices[i])
-						.sub((K) coordinates.getAxe(i).getElements().get(coordinates.getIndex(i)));
-				} else if(upperAxeIndices[i] instanceof Integer) {
-					valueAxeCol = (Integer) upperAxeIndices[i] - (Integer) coordinates.getAxe(i).getElements().get(coordinates.getIndex(i)).getValue();
-				}
 			} else if (domainZ.getName().equals(coordinates.getAxe(i).getName())) {
 				found = true;
-				if(upperAxeIndices[i] instanceof CoordOperation) {
-					valueAxeZ = ((CoordOperation<K>) upperAxeIndices[i])
-						.sub((K) coordinates.getAxe(i).getElements().get(coordinates.getIndex(i)));
-				} else if(upperAxeIndices[i] instanceof Integer) {
-					valueAxeZ = (Integer) upperAxeIndices[i] - (Integer) coordinates.getAxe(i).getElements().get(coordinates.getIndex(i)).getValue();
-				}
 			}
 			if (!found) {
 				throw new AssertionError("Not compatible axes : unable to find " + coordinates.getAxe(i).getName());
 			}
 		}
-		return getValue((K) valueAxeLine, (K) valueAxeCol, (K) valueAxeZ);
+		return getValue(coordinates.transform(upperAxeIndices));
 	}
 	
 	@Override
-	public void addCoordinate(CoordinatesXDByIndices coordinates) {
+	public void addCoordinate(CoordinatesXDByIndices<T, K, G> coordinates) {
 		this.coordinates.add(coordinates);
+		coordinates.getAxes().addChildCoordinate(new CoordinatesXDByIndices<>(this, coordinates.getTransform()));
 	}
 	
 	@Override
@@ -297,5 +305,26 @@ public class Array3DWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeV
 		a.add(domainCol);
 		a.add(domainZ);
 		return a;
+	}
+
+	public List<CoordinatesXDByIndices<T, K, G>> getChildCoordinates() {
+		return childCoordinates;
+	}
+	
+	@Override
+	public void addChildCoordinate(CoordinatesXDByIndices<T, K, G> coordinates) {
+		this.childCoordinates.add(coordinates);
+	}
+
+	@Override
+	public void mergeChildren() {
+		for(CoordinatesXDByIndices<T, K, G> c : childCoordinates) {
+			c.getAxes().mergeChildren();
+			List<Pair<List<K>,T>> val = c.getAxes().getAllWithKey();
+			for(Pair<List<K>,T> p : val) {
+				K[] m = p.getKey().toArray((K[])Array.newInstance(p.getKey().get(0).getClass(), p.getKey().size()));
+				setValue(p.getValue(), c.transformInv(m));
+			}
+		}
 	}
 }

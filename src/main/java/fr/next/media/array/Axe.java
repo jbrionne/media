@@ -31,6 +31,9 @@ public interface Axe<T extends AxeVal> extends Serializable {
 
 	public static int findIndex(Object elementVal, Axe<? extends AxeVal> domainLine) {
 		int index = 0;
+		if(domainLine instanceof AxeInt) {
+			return (int) elementVal;
+		}
 		for (AxeVal s : domainLine.getElements()) {
 			if (s.getValue().equals(elementVal)) {
 				return index;

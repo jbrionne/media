@@ -9,6 +9,7 @@ import fr.next.media.array.Axe;
 import fr.next.media.array.AxeInt;
 import fr.next.media.array.AxeValue;
 import fr.next.media.array.CoordinatesXDByIndices;
+import fr.next.media.array.impl.Array2DMatrix3fImpl;
 import fr.next.media.array.impl.ArrayFactory;
 import fr.next.media.array.impl.MapXDWithEmptyValueGenericImpl;
 import fr.next.media.array.impl.logigram.ArrayLogigramValue;
@@ -44,26 +45,32 @@ public class Array2DWorld {
 		axeCol = new AxeInt<>("worldCol", indexColSize);
 		
 		ArrayXDOrd axes = new MapXDWithEmptyValueGenericImpl<>(Integer.class, 0, axeLine, axeCol);
-		int[] indices = new int[] { 0, 0 };
+		ArrayXDOrd indices = new Array2DMatrix3fImpl<>(new AxeInt("x", 3), new AxeInt("y", 3));
+		indices.setValue(0f, 0, 0);
+		indices.setValue(0f, 0, 1);
 		arrays2D = (ArrayXDOrd<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValueForWorld(axeLine, axeCol);
 		arrays2D.addCoordinate(new CoordinatesXDByIndices(axes, indices));
-		int indexColO = 0;
+		float indexColO = 0;
 		for (int i = 1; i < domains.size(); i++) {
-			int[] indices2 = new int[] { 0, indexColO};
 			ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> array = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(d0, domains.get(i));
+			ArrayXDOrd indices2 = new Array2DMatrix3fImpl<>(new AxeInt("x", 3), new AxeInt("y", 3));
+			indices2.setValue(0f, 0, 0);
+			indices2.setValue(indexColO, 0, 1);
 			array.addCoordinate(new CoordinatesXDByIndices(axes, indices2));
-			arrays2D.setValueByIndices(array, 0, indexColO);
+			arrays2D.setValueByIndices(array, 0, (int) indexColO);
 			indexColO += domains.get(i).getElements().size();
 		}
 
-		int indexLine = d0.getElements().size();
-		int indexCol = 0;
+		float indexLine = d0.getElements().size();
+		float indexCol = 0;
 		for (int i = domains.size() - 1; i > 0; i--) {
 			for (int j = 1; j < i; j++) {
-				int[] indices2 = new int[] { indexLine, indexCol};
 				ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> array2D = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domains.get(i), domains.get(j));
+				ArrayXDOrd indices2 = new Array2DMatrix3fImpl<>(new AxeInt("x", 3), new AxeInt("y", 3));
+				indices2.setValue(indexLine, 0, 0);
+				indices2.setValue(indexCol, 0, 1);
 				array2D.addCoordinate(new CoordinatesXDByIndices(axes, indices2));
-				arrays2D.setValueByIndices(array2D, indexLine, indexCol);
+				arrays2D.setValueByIndices(array2D, (int) indexLine, (int) indexCol);
 				indexCol += domains.get(j).getElements().size();
 			}
 			indexLine += domains.get(i).getElements().size();
