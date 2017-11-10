@@ -14,14 +14,11 @@ import fr.next.media.array.AxeVal;
 import fr.next.media.array.CoordOperation;
 import fr.next.media.array.CoordinatesXDByIndices;
 
-public class ArrayXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> implements ArrayXDOrd<T, K, G> {
+public class ArrayXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> extends AbstractArrayXDOrd<T, K, G> implements ArrayXDOrd<T, K, G> {
 
 	private Object cases;
 
 	private G[] domains;
-
-	private List<CoordinatesXDByIndices<T, K, G>> coordinates = new ArrayList<>();
-	private List<CoordinatesXDByIndices<T, K, G>> childCoordinates = new ArrayList<>();
 
 	private Class<T> clazz;
 
@@ -131,26 +128,6 @@ public class ArrayXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeV
 	}
 
 	@Override
-	public CoordinatesXDByIndices<T, K, G> getCoordinates(ArrayXDOrd<T, K, G> axes) {
-		for(CoordinatesXDByIndices<T, K, G> c : coordinates) {
-			boolean found = false;
-			for(int i = 0; i < c.getAxesSize(); i++) {
-				for(G a : axes.getAxes()) {
-					if(c.getAxe(i).equals(a)) {
-						found = true;
-						break;
-					}
-				}
-			}
-			if(found) {
-				return c;
-			}
-		}
-		throw new AssertionError("No coordinates were found");
-	}
-
-
-	@Override
 	public List<T> getValuesForAnAxe(int indexAxe, int indexToFind) {
 		List<T> all = new ArrayList<>();
 		int[] indices = new int[domains.length];
@@ -238,12 +215,16 @@ public class ArrayXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeV
 		for (int k = 0; k < Array.getLength(o); k++) {
 			Object i = Array.get(o, k);
 			K m = domains[index].getElements().get(k).getValue();
-			keys.add(m);
+			List newIndexKey = new ArrayList<>(keys);
+			newIndexKey.add(m);
 			if (index  == domains.length - 2) {
 				for (int x = 0; x < Array.getLength(i); x++) {
 					Object z = Array.get(i, x);
+					List newKey = new ArrayList<>(newIndexKey);
+					K mx = domains[index].getElements().get(x).getValue();
+					newKey.add(mx);
 					if (z != null) {
-						all.add(new ImmutablePair<List<K>, T>(new ArrayList<>(keys), (T) z));
+						all.add(new ImmutablePair<List<K>, T>(new ArrayList<>(newKey), (T) z));
 					}
 				}
 			} else {
@@ -251,21 +232,6 @@ public class ArrayXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeV
 				recWithKeys(all, new ArrayList<>(keys), i, dim);
 			}
 		}
-	}
-	
-	@Override
-	public void setTranslation(Class<T> clazzT, T... values) {
-		throw new IllegalMethod();
-	}
-
-	@Override
-	public void setRotationQuaternion(Class<T> clazzT, T w, T... values) {
-		throw new IllegalMethod();
-	}
-
-	@Override
-	public void setScale(Class<T> clazzT, T... values) {
-		throw new IllegalMethod();
 	}
 	
 	@Override
@@ -302,42 +268,7 @@ public class ArrayXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeV
 	}
 	
 	@Override
-	public CoordinatesXDByIndices<T, K, G> getCoordinates() {
-		if(coordinates.size() == 1) {
-			return coordinates.get(0);
-		}
-		throw new AssertionError("No or Multiple upper coordinates, use getCoordinates(axes) size=" + coordinates.size());
-	}
-	
-	@Override
-	public void addCoordinate(CoordinatesXDByIndices<T, K, G> coordinates) {
-		this.coordinates.add(coordinates);
-		coordinates.getAxes().addChildCoordinate(new CoordinatesXDByIndices<>(this, coordinates.getTransform()));
-	}
-	
-	@Override
 	public List<G> getAxes() {
 		return Arrays.asList(domains);
-	}
-
-	public List<CoordinatesXDByIndices<T, K, G>> getChildCoordinates() {
-		return childCoordinates;
-	}
-	
-	@Override
-	public void addChildCoordinate(CoordinatesXDByIndices<T, K, G> coordinates) {
-		this.childCoordinates.add(coordinates);
-	}
-
-	@Override
-	public void mergeChildren() {
-		for(CoordinatesXDByIndices<T, K, G> c : childCoordinates) {
-			c.getAxes().mergeChildren();
-			List<Pair<List<K>,T>> val = c.getAxes().getAllWithKey();
-			for(Pair<List<K>,T> p : val) {
-				K[] m = p.getKey().toArray((K[])Array.newInstance(p.getKey().get(0).getClass(), p.getKey().size()));
-				setValue(p.getValue(), c.transformInv(m));
-			}
-		}
 	}
 }

@@ -145,13 +145,18 @@ public class ArrayXDOrdProxy<T, K, G extends Axe<? extends AxeVal<K>>> implement
 	}
 
 	@Override
-	public void mergeChildren() {
-		this.base.mergeChildren();
+	public void merge() {
+		this.base.merge();
 	}
 
 	@Override
 	public List<Pair<List<K>, T>> getAllWithKey() {
 		return this.base.getAllWithKey();
+	}
+
+	@Override
+	public void mergeOnlyFirstLevel() {
+		this.base.mergeOnlyFirstLevel();
 	}
 
 }

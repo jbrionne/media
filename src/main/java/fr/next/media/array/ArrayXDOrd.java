@@ -23,6 +23,10 @@ public interface ArrayXDOrd<T, K, G extends Axe<? extends AxeVal<K>>> extends Se
 	
 	void addCoordinate(CoordinatesXDByIndices<T, K, G> coordinates);
 	
+	/**
+	 * Do not use directly. Not add the coordinates in the parent.
+	 * @param coordinates
+	 */
 	void addChildCoordinate(CoordinatesXDByIndices<T, K, G> coordinates);
 	
 	List<CoordinatesXDByIndices<T, K, G>>  getChildCoordinates();
@@ -33,7 +37,7 @@ public interface ArrayXDOrd<T, K, G extends Axe<? extends AxeVal<K>>> extends Se
 	
 	List<T> getAll();
 	
-	List<Pair<List<K>,T>> getAllWithKey();
+	List<Pair<List<K>, T>> getAllWithKey();
 	
 	List<T> getValuesForAnAxe(int indexAxe, int indexToFind);
 	
@@ -45,6 +49,8 @@ public interface ArrayXDOrd<T, K, G extends Axe<? extends AxeVal<K>>> extends Se
 			
 	void setScale(Class<T> clazzT, T... values);
 	
-	void mergeChildren();
+	void merge();
+	
+	void mergeOnlyFirstLevel();
 	
 }

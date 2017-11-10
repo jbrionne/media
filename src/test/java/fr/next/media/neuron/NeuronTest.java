@@ -791,6 +791,107 @@ public class NeuronTest extends TestCase {
 		System.out.println("activate " + lastStep.toString());
 
 		assertActivated(2, lastStep, activ);
+		
+//		input {0=0.0, 1=1.0}
+//		prog [(2,1.1)]
+//		new 2 0.0
+//		prog [(2,1.1)]
+//		1.1 1.0 2 1.1
+//		input {2=1.0}
+//		prog []
+//		input {0=0.0, 1=1.0}
+//		prog [(2,0.6)]
+//		new 2 0.0
+//		prog [(2,0.6)]
+//		0.6 1.0 2 0.6
+//		input {0=0.0, 1=1.0}
+//		prog [(2,-2.0)]
+//		new 2 0.0
+//		prog [(2,1.1)]
+//		1.1 1.0 2 1.1
+//		input {2=1.0}
+//		prog []
+//		activate {2=1.0}
+	
+	}
+	
+	public void testMedFunctionWithMerge() {
+		
+		Axe<AxeValue<Integer>> domNeuroneX = new AxeOrd<AxeValue<Integer>>("x");
+		for (int i = 0; i < 10; i++) {
+			domNeuroneX.add(new AxeValue<Integer>(i));
+		}
+		Axe<AxeValue<Integer>> domNeuroneY = new AxeOrd<AxeValue<Integer>>("y");
+		for (int i = 0; i < 10; i++) {
+			domNeuroneY.add(new AxeValue<Integer>(i));
+		}
+		ArrayXDOrd axes = new MapXDWithEmptyValueGenericImpl<>(Float.class, 0f, domNeuroneX, domNeuroneY);
+		NeuronExecutor<Integer> nexec = new NeuronExecutor<>();
+		float noPulseIntensity = 0f;
+		float pulseIntensity = 1f;
+		Agregation agre = (a, b, c) -> (a * b) + c;
+		Activation activ = a -> a >= pulseIntensity;
+		
+		AxeInt xLoc = new AxeInt("x", 3);
+		AxeInt yLoc = new AxeInt("y", 3);
+		ArrayXDOrd indices1 = new Array2DMatrix3fImpl<>(xLoc, yLoc);
+		indices1.setValue(0f, 0, 0);
+		indices1.setValue(0f, 0, 1);
+		ArrayXDOrd indices2 = new Array2DMatrix3fImpl<>(xLoc, yLoc);
+		indices2.setValue(3f, 0, 0);
+		indices2.setValue(3f, 0, 1);
+		ArrayXDOrd indices3 = new Array2DMatrix3fImpl<>(xLoc, yLoc);
+		indices3.setValue(6f, 0, 0);
+		indices3.setValue(6f, 0, 1);
+		MedAndBoolean and = new MedAndBoolean(Float.class,"", domNeuroneX, domNeuroneY);
+		and.addCoordinate(new CoordinatesXDByIndices(axes, indices1));
+		MedOrBoolean or = new MedOrBoolean(Float.class,"", domNeuroneX, domNeuroneY);
+		or.addCoordinate(new CoordinatesXDByIndices(axes, indices2));
+		MedXorExcludeBoolean xorEx = new MedXorExcludeBoolean(Float.class,"", domNeuroneX, domNeuroneY);
+		xorEx.addCoordinate(new CoordinatesXDByIndices(axes, indices3));
+		
+		
+		System.out.println(and.getValueFromUpperAxeCoord(axes, 0, 2));
+		System.out.println(and.getValueFromUpperAxeCoord(axes, 1, 2));
+		
+		System.out.println(or.getValueFromUpperAxeCoord(axes, 3, 5));
+		System.out.println(or.getValueFromUpperAxeCoord(axes, 4, 5));
+		
+		System.out.println(xorEx.getValueFromUpperAxeCoord(axes, 6, 8));
+		System.out.println(xorEx.getValueFromUpperAxeCoord(axes, 7, 8));
+		
+		System.out.println("merge");
+		axes.merge();
+		
+		System.out.println(axes.getValue(0, 2));
+		System.out.println(axes.getValue(1, 2));
+		
+		System.out.println(axes.getValue(3, 5));
+		System.out.println(axes.getValue(4, 5));
+		
+		System.out.println(axes.getValue(6, 8));
+		System.out.println(axes.getValue(7, 8));
+	
+		
+		
+		Map<Integer, Float> step0 = new HashMap<>();
+		step0.put(0, noPulseIntensity);
+		step0.put(1, pulseIntensity);
+
+
+		List<Map<Integer, Float>> stepsFinal = new ArrayList<>();
+		nexec.simul(stepsFinal, axes, step0, agre, activ, false);
+		Map<Integer, Float> lastStep = stepsFinal.get(stepsFinal.size() - 1);
+		System.out.println("activate " + lastStep.toString());
+		
+//		input {0=0.0, 1=1.0}
+//		prog [(2,0.6)]
+//		new 2 0.0
+//		prog [(2,0.6)]
+//		0.6 1.0 2 0.6
+//		activate {0=0.0, 1=1.0}
+
+		assertActivated(2, lastStep, activ);
 	
 	}
 

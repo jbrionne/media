@@ -18,15 +18,12 @@ import fr.next.media.array.AxeVal;
 import fr.next.media.array.CoordOperation;
 import fr.next.media.array.CoordinatesXDByIndices;
 
-public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> implements ArrayXDOrd<Float, K, G> {
+public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> extends AbstractArrayXDOrd<Float, K, G> implements ArrayXDOrd<Float, K, G> {
 
 	private Matrix4f cases;
 
 	private G domainLine;
 	private G domainCol;
-
-	private List<CoordinatesXDByIndices<Float, K, G>> coordinates = new ArrayList<>();
-	private List<CoordinatesXDByIndices<Float, K, G>> childCoordinates = new ArrayList<>();
 
 	@SuppressWarnings("unchecked")
 	public Array2DMatrix4fImpl(G domainLine2, G domainCol2) {
@@ -144,25 +141,6 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> implemen
 	}
 
 	@Override
-	public CoordinatesXDByIndices<Float, K, G> getCoordinates(ArrayXDOrd<Float, K, G> axes) {
-		for (CoordinatesXDByIndices<Float, K, G> c : coordinates) {
-			boolean found = false;
-			for (int i = 0; i < c.getAxesSize(); i++) {
-				for (G a : axes.getAxes()) {
-					if (c.getAxe(i).equals(a)) {
-						found = true;
-						break;
-					}
-				}
-			}
-			if (found) {
-				return c;
-			}
-		}
-		throw new AssertionError("No coordinates were found");
-	}
-
-	@Override
 	public G getAxe(int index) {
 		if (index == 0) {
 			return domainLine;
@@ -218,14 +196,6 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> implemen
 	}
 
 	@Override
-	public CoordinatesXDByIndices<Float, K, G> getCoordinates() {
-		if (coordinates.size() == 1) {
-			return coordinates.get(0);
-		}
-		throw new AssertionError("Multiple upper coordinates, use getCoordinates(axes)");
-	}
-
-	@Override
 	public Float getValueFromUpperAxeCoord(ArrayXDOrd<Float, K, G> axes, K... upperAxeIndices) {
 		CoordinatesXDByIndices<Float, K, G> coordinates = getCoordinates(axes);
 		if (coordinates.getAxesSize() < 2) {
@@ -247,38 +217,10 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> implemen
 	}
 
 	@Override
-	public void addCoordinate(CoordinatesXDByIndices<Float, K, G> coordinates) {
-		this.coordinates.add(coordinates);
-		coordinates.getAxes().addChildCoordinate(new CoordinatesXDByIndices<>(this, coordinates.getTransform()));
-	}
-
-	@Override
 	public List<G> getAxes() {
 		List<G> a = new ArrayList<>();
 		a.add(domainLine);
 		a.add(domainCol);
 		return a;
 	}
-
-	public List<CoordinatesXDByIndices<Float, K, G>> getChildCoordinates() {
-		return childCoordinates;
-	}
-
-	@Override
-	public void addChildCoordinate(CoordinatesXDByIndices<Float, K, G> coordinates) {
-		this.childCoordinates.add(coordinates);
-	}
-
-	@Override
-	public void mergeChildren() {
-		for(CoordinatesXDByIndices<Float, K, G> c : childCoordinates) {
-			c.getAxes().mergeChildren();
-			List<Pair<List<K>,Float>> val = c.getAxes().getAllWithKey();
-			for(Pair<List<K>,Float> p : val) {
-				K[] m = p.getKey().toArray((K[])Array.newInstance(p.getKey().get(0).getClass(), p.getKey().size()));
-				setValue(p.getValue(), c.transformInv(m));
-			}
-		}
-	}
-
 }

@@ -386,7 +386,7 @@ public class ArrayTest extends TestCase {
 		assertEquals(9f, arrayLoc2.getValueFromUpperAxeCoord(worldAxes, 3, 3));
 		
 		
-		worldAxes.mergeChildren();
+		worldAxes.merge();
 		
 		assertEquals(4f, worldAxes.getValue(1, 1));
 		assertEquals(9f, worldAxes.getValue(3, 3));

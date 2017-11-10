@@ -16,7 +16,7 @@ import fr.next.media.array.AxeVal;
 import fr.next.media.array.CoordOperation;
 import fr.next.media.array.CoordinatesXDByIndices;
 
-public class Array3DGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> implements ArrayXDOrd<T, K, G>  {
+public class Array3DGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> extends AbstractArrayXDOrd<T, K, G> implements ArrayXDOrd<T, K, G> {
 
 	private T[][][] cases;
 
@@ -24,11 +24,7 @@ public class Array3DGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> implem
 	private G domainCol;
 	private G domainZ;
 
-	private List<CoordinatesXDByIndices<T, K, G>> coordinates = new ArrayList<>();
-	private List<CoordinatesXDByIndices<T, K, G>> childCoordinates = new ArrayList<>();
-
 	private Class<T> clazz;
-	
 	
 	@SuppressWarnings("unchecked")
 	public Array3DGenericImpl(Class<T> clazz, G domainLine2, G domainCol2, G domainZ2) {
@@ -135,32 +131,6 @@ public class Array3DGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> implem
 		return pair;
 	}
 	
-	@Override
-	public CoordinatesXDByIndices<T, K, G> getCoordinates(ArrayXDOrd<T, K, G> axes) {
-		for(CoordinatesXDByIndices<T, K, G> c : coordinates) {
-			boolean found = false;
-			for(int i = 0; i < c.getAxesSize(); i++) {
-				for(G a : axes.getAxes()) {
-					if(c.getAxe(i).equals(a)) {
-						found = true;
-						break;
-					}
-				}
-			}
-			if(found) {
-				return c;
-			}
-		}
-		throw new AssertionError("No coordinates were found");
-	}
-
-	@Override
-	public CoordinatesXDByIndices<T, K, G> getCoordinates() {
-		if(coordinates.size() == 1) {
-			return coordinates.get(0);
-		}
-		throw new AssertionError("Multiple upper coordinates, use getCoordinates(axes)");
-	}
 
 	@Override
 	public List<T> getValuesForAnAxe(int indexAxe, int indexToFind) {
@@ -218,21 +188,6 @@ public class Array3DGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> implem
 	
 	
 	@Override
-	public void setTranslation(Class<T> clazzT, T... values) {
-		throw new IllegalMethod();
-	}
-
-	@Override
-	public void setRotationQuaternion(Class<T> clazzT, T w, T... values) {
-		throw new IllegalMethod();
-	}
-
-	@Override
-	public void setScale(Class<T> clazzT, T... values) {
-		throw new IllegalMethod();
-	}
-	
-	@Override
 	public List<Pair<K, T>> getPairForAnAxe(int indexAxe, int indexToFind) {
 		List<Pair<K, T>> pair = new ArrayList<>();
 		List<T> response = null;
@@ -285,39 +240,12 @@ public class Array3DGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> implem
 	}
 	
 	@Override
-	public void addCoordinate(CoordinatesXDByIndices<T, K, G> coordinates) {
-		this.coordinates.add(coordinates);
-		coordinates.getAxes().addChildCoordinate(new CoordinatesXDByIndices<>(this, coordinates.getTransform()));
-	}
-	
-	@Override
 	public List<G> getAxes() {
 		List<G> a = new ArrayList<>();
 		a.add(domainLine);
 		a.add(domainCol);
 		a.add(domainZ);
 		return a;
-	}
-
-	public List<CoordinatesXDByIndices<T, K, G>> getChildCoordinates() {
-		return childCoordinates;
-	}
-	
-	@Override
-	public void addChildCoordinate(CoordinatesXDByIndices<T, K, G> coordinates) {
-		this.childCoordinates.add(coordinates);
-	}
-
-	@Override
-	public void mergeChildren() {
-		for(CoordinatesXDByIndices<T, K, G> c : childCoordinates) {
-			c.getAxes().mergeChildren();
-			List<Pair<List<K>,T>> val = c.getAxes().getAllWithKey();
-			for(Pair<List<K>,T> p : val) {
-				K[] m = p.getKey().toArray((K[])Array.newInstance(p.getKey().get(0).getClass(), p.getKey().size()));
-				setValue(p.getValue(), c.transformInv(m));
-			}
-		}
 	}
 
 }
