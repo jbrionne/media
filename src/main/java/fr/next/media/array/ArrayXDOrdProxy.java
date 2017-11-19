@@ -159,4 +159,49 @@ public class ArrayXDOrdProxy<T, K, G extends Axe<? extends AxeVal<K>>> implement
 		this.base.mergeOnlyFirstLevel();
 	}
 
+	@Override
+	public void setValueByIndices(T value, CoordinatesXDByIndices<T, K, G> coord) {
+		int[] newIndicesValue = new int[coord.getPositionList().size()];
+		for(int i = 0; i < newIndicesOrder.length; i++) {
+			newIndicesValue[newIndicesOrder[i]] = (int) coord.getPositionList().get(i).intValue();
+		}
+		this.base.setValueByIndices(value, newIndicesValue);
+	}
+
+	@Override
+	public T getValueByIndices(CoordinatesXDByIndices<T, K, G> coord) {
+		int[] newIndicesValue = new int[coord.getPositionList().size()];
+		for(int i = 0; i < newIndicesOrder.length; i++) {
+			newIndicesValue[newIndicesOrder[i]] = (int) coord.getPositionList().get(i).intValue();
+		}
+		return this.base.getValueByIndices(newIndicesValue);
+	}
+
+	@Override
+	public T getValueWithInclusionOfArrayChilds(K... indices) {
+		K[] newIndicesValue = (K[]) Array.newInstance(clazz, indices.length);
+		for(int i = 0; i < newIndicesOrder.length; i++) {
+			newIndicesValue[newIndicesOrder[i]] = indices[i];
+		}
+		return this.base.getValueWithInclusionOfArrayChilds(newIndicesValue);
+	}
+
+	@Override
+	public T getValueWithInclusionOfArrayChildsByIndices(int... indices) {
+		int[] newIndicesValue = new int[indices.length];
+		for(int i = 0; i < newIndicesOrder.length; i++) {
+			newIndicesValue[newIndicesOrder[i]] = indices[i];
+		}
+		return this.base.getValueWithInclusionOfArrayChildsByIndices(newIndicesValue);
+	}
+
+	@Override
+	public int[] valuesToIndices(K... indices) {
+		K[] newIndicesValue = (K[]) Array.newInstance(clazz, indices.length);
+		for(int i = 0; i < newIndicesOrder.length; i++) {
+			newIndicesValue[newIndicesOrder[i]] = indices[i];
+		}
+		return this.base.valuesToIndices(newIndicesValue);
+	}
+
 }

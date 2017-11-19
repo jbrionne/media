@@ -120,8 +120,8 @@ public class CluedoMain {
 
 		MedType type = new MedType("type", new MedString("IA"), new MedString("Humain"));
 
-		MedPlayer helene = new MedPlayer("playerH", new MedString("Hélène"), type.getHuman(), olive, oliveDest);
-		MedPlayer jerome = new MedPlayer("playerJ", new MedString("Jérome"), type.getHuman(), perv, pervDest);
+		MedPlayer helene = new MedPlayer("playerH", new MedString("Hélène"), type.getHuman(), perv, pervDest);
+		MedPlayer jerome = new MedPlayer("playerJ", new MedString("Jérome"), type.getHuman(), violet, violetDest);
 		MedPlayer player1 = new MedPlayer("player1", new MedString("player1"), type.getIa(), colM, colMDest);
 
 		MedPlayer guiltyCards = new MedPlayer("guiltyCards", new MedString("guiltyCards"), null, null, null);

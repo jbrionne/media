@@ -10,10 +10,41 @@ public class CoordinatesXDByIndices<T, K, G> implements Serializable {
 	
 	private ArrayXDOrd transform;
 	
-	public CoordinatesXDByIndices(ArrayXDOrd axes, ArrayXDOrd transform) {
+	public CoordinatesXDByIndices(ArrayXDOrd axes, ArrayXDOrd transformIndices) {
 		super();
 		this.axes = axes;
-		this.transform = transform;
+		this.transform = transformIndices;
+	}
+	
+	
+	public T getValueByIndices() {
+		int[] newIndicesValue = new int[this.getPositionList().size()];
+		for(int i = 0; i < this.getPositionList().size(); i++) {
+			newIndicesValue[i] = this.getPositionList().get(i).intValue();
+		}
+		return (T) this.getAxes().getValueByIndices(newIndicesValue);
+	}
+	
+	public T getValueWithInclusionOfArrayChildsByIndices() {
+		int[] newIndicesValue = new int[this.getPositionList().size()];
+		for(int i = 0; i < this.getPositionList().size(); i++) {
+			newIndicesValue[i] = this.getPositionList().get(i).intValue();
+		}
+		return (T) this.getAxes().getValueWithInclusionOfArrayChildsByIndices(newIndicesValue);
+	}
+	
+	
+	
+	public List<Float>  getPositionList() {
+		return transform.getValuesForAnAxe(0, 0);
+	}
+	
+	public List<Float>  getRotationList() {
+		return transform.getValuesForAnAxe(1, 0);
+	}
+	
+	public List<Float>  getScaleList() {
+		return transform.getValuesForAnAxe(2, 0);
 	}
 	
 	public float getPosition(int index) {

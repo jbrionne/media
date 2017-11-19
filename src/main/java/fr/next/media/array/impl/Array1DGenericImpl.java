@@ -14,7 +14,7 @@ import fr.next.media.array.Axe;
 import fr.next.media.array.AxeVal;
 import fr.next.media.array.CoordinatesXDByIndices;
 
-public class Array1DGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> extends AbstractArrayXDOrd<T, K, G>  implements ArrayXDOrd<T, K, G> {
+public class Array1DGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> extends AbstractArrayXDOrdDomains<T, K, G>  implements ArrayXDOrd<T, K, G> {
 
 	private T[] cases;
 
@@ -23,6 +23,8 @@ public class Array1DGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> extend
 	@SuppressWarnings("unchecked")
 	Array1DGenericImpl(Class<T> clazz, G domainLine2) {
 		this.domainLine = domainLine2;
+		this.domains = (G[]) Array.newInstance(domainLine2.getClass(), 1);
+		domains[0] = domainLine;
 		cases = (T[]) Array.newInstance(clazz, domainLine2.getElements().size());
 	}
  
@@ -65,18 +67,6 @@ public class Array1DGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> extend
 	}
 
 	@Override
-	public G getAxe(int index) {
-		return domainLine;
-	}
-	
-	@Override
-	public List<G> getAxes() {
-		List<G> a = new ArrayList<>();
-		a.add(domainLine);
-		return a;
-	}
-
-	@Override
 	public List<T> getAll() {
 		List<T> all = new ArrayList<>();
 		for (T k : cases) {
@@ -105,27 +95,6 @@ public class Array1DGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> extend
 		}
 		return pair;
 	}
-
-	@Override
-	public T getValueFromUpperAxeCoord(ArrayXDOrd<T, K, G> axes, K... upperAxeIndices) {
-		CoordinatesXDByIndices<T, K, G>  coordinates = getCoordinates(axes);
-		if (coordinates.getAxesSize() < 1) {
-			throw new AssertionError(
-					"Not compatible axes : upper reference should have at least the same number of axes");
-		}
-		for (int i = 0; i < coordinates.getAxesSize(); i++) {
-			boolean found = false;
-			if (domainLine.getName().equals(coordinates.getAxe(i).getName())) {
-				found = true;
-			} 
-			if (!found) {
-				throw new AssertionError("Not compatible axes : unable to find " + coordinates.getAxe(i).getName());
-			}
-		}
-		
-		return getValue(coordinates.transform(upperAxeIndices));
-	}
-
 
 	@Override
 	public List<Pair<List<K>, T>> getAllWithKey() {

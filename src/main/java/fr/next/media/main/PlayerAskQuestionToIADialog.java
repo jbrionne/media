@@ -81,7 +81,7 @@ public class PlayerAskQuestionToIADialog extends JDialog {
 				}
 
 				for (AxeValue<MedWeapon> r : weapons.getElements()) {
-					if (String.valueOf(r.getValue().getWeaponName()).equals((String) roomsCombo.getSelectedItem())) {
+					if (String.valueOf(r.getValue().getWeaponName()).equals((String) weaponsCombo.getSelectedItem())) {
 						selectedWeapon = r.getValue();
 						break;
 					}

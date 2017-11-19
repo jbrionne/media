@@ -738,6 +738,7 @@ public class NeuronTest extends TestCase {
 		xorEx.addCoordinate(new CoordinatesXDByIndices(axes, indices3));
 		
 		
+		
 		System.out.println(and.getValueFromUpperAxeCoord(axes, 0, 2));
 		System.out.println(and.getValueFromUpperAxeCoord(axes, 1, 2));
 		
@@ -746,16 +747,6 @@ public class NeuronTest extends TestCase {
 		
 		System.out.println(xorEx.getValueFromUpperAxeCoord(axes, 6, 8));
 		System.out.println(xorEx.getValueFromUpperAxeCoord(axes, 7, 8));
-		
-//		array.addCoordinate(new CoordinatesXDByIndices(axes, indices));
-//		array.setValue(1f, "and", "xorEx");
-//		array.setValue(1f, "or", "xorEx");
-		
-		//TODO !!
-//		Map<String, Float> step0And = new HashMap<>();
-//		step0And.put("and0", noPulseIntensity);
-//		step0And.put("and1", pulseIntensity);
-		
 		
 		Map<Integer, Float> step0 = new HashMap<>();
 		step0.put(0, noPulseIntensity);
@@ -792,27 +783,6 @@ public class NeuronTest extends TestCase {
 
 		assertActivated(2, lastStep, activ);
 		
-//		input {0=0.0, 1=1.0}
-//		prog [(2,1.1)]
-//		new 2 0.0
-//		prog [(2,1.1)]
-//		1.1 1.0 2 1.1
-//		input {2=1.0}
-//		prog []
-//		input {0=0.0, 1=1.0}
-//		prog [(2,0.6)]
-//		new 2 0.0
-//		prog [(2,0.6)]
-//		0.6 1.0 2 0.6
-//		input {0=0.0, 1=1.0}
-//		prog [(2,-2.0)]
-//		new 2 0.0
-//		prog [(2,1.1)]
-//		1.1 1.0 2 1.1
-//		input {2=1.0}
-//		prog []
-//		activate {2=1.0}
-	
 	}
 	
 	public void testMedFunctionWithMerge() {
@@ -826,72 +796,133 @@ public class NeuronTest extends TestCase {
 			domNeuroneY.add(new AxeValue<Integer>(i));
 		}
 		ArrayXDOrd axes = new MapXDWithEmptyValueGenericImpl<>(Float.class, 0f, domNeuroneX, domNeuroneY);
-		NeuronExecutor<Integer> nexec = new NeuronExecutor<>();
+		NeuronExecutor<CoordinatesXDByIndices> nexec = new NeuronExecutor<>();
 		float noPulseIntensity = 0f;
 		float pulseIntensity = 1f;
 		Agregation agre = (a, b, c) -> (a * b) + c;
 		Activation activ = a -> a >= pulseIntensity;
 		
-		AxeInt xLoc = new AxeInt("x", 3);
-		AxeInt yLoc = new AxeInt("y", 3);
-		ArrayXDOrd indices1 = new Array2DMatrix3fImpl<>(xLoc, yLoc);
-		indices1.setValue(0f, 0, 0);
-		indices1.setValue(0f, 0, 1);
-		ArrayXDOrd indices2 = new Array2DMatrix3fImpl<>(xLoc, yLoc);
-		indices2.setValue(3f, 0, 0);
-		indices2.setValue(3f, 0, 1);
-		ArrayXDOrd indices3 = new Array2DMatrix3fImpl<>(xLoc, yLoc);
-		indices3.setValue(6f, 0, 0);
-		indices3.setValue(6f, 0, 1);
 		MedAndBoolean and = new MedAndBoolean(Float.class,"", domNeuroneX, domNeuroneY);
-		and.addCoordinate(new CoordinatesXDByIndices(axes, indices1));
 		MedOrBoolean or = new MedOrBoolean(Float.class,"", domNeuroneX, domNeuroneY);
-		or.addCoordinate(new CoordinatesXDByIndices(axes, indices2));
 		MedXorExcludeBoolean xorEx = new MedXorExcludeBoolean(Float.class,"", domNeuroneX, domNeuroneY);
-		xorEx.addCoordinate(new CoordinatesXDByIndices(axes, indices3));
 		
-		
-		System.out.println(and.getValueFromUpperAxeCoord(axes, 0, 2));
-		System.out.println(and.getValueFromUpperAxeCoord(axes, 1, 2));
-		
-		System.out.println(or.getValueFromUpperAxeCoord(axes, 3, 5));
-		System.out.println(or.getValueFromUpperAxeCoord(axes, 4, 5));
-		
-		System.out.println(xorEx.getValueFromUpperAxeCoord(axes, 6, 8));
-		System.out.println(xorEx.getValueFromUpperAxeCoord(axes, 7, 8));
-		
-		System.out.println("merge");
-		axes.merge();
-		
-		System.out.println(axes.getValue(0, 2));
-		System.out.println(axes.getValue(1, 2));
-		
-		System.out.println(axes.getValue(3, 5));
-		System.out.println(axes.getValue(4, 5));
-		
-		System.out.println(axes.getValue(6, 8));
-		System.out.println(axes.getValue(7, 8));
+//		Axe<AxeValue<Integer>> andEntries = new AxeOrd<AxeValue<Integer>>("a");
+//		andEntries.add(new AxeValue<Integer>(0));
+//		andEntries.add(new AxeValue<Integer>(1));
+//		Axe<AxeValue<Integer>> andOutputs = new AxeOrd<AxeValue<Integer>>("b");
+//		andOutputs.add(new AxeValue<Integer>(2));
+//		MedNode andNode = new MedNode("andNode", andEntries, andOutputs, and);
+//		
+//		Axe<AxeValue<Integer>> orEntries = new AxeOrd<AxeValue<Integer>>("c");
+//		orEntries.add(new AxeValue<Integer>(0));
+//		orEntries.add(new AxeValue<Integer>(1));
+//		Axe<AxeValue<Integer>> orOutputs = new AxeOrd<AxeValue<Integer>>("d");
+//		orOutputs.add(new AxeValue<Integer>(2));
+//		MedNode orNode = new MedNode("orNode", orEntries, orOutputs, or);
+//	
+//		Axe<AxeValue<Integer>> xorExEntries = new AxeOrd<AxeValue<Integer>>("e");
+//		xorExEntries.add(new AxeValue<Integer>(0));
+//		xorExEntries.add(new AxeValue<Integer>(1));
+//		Axe<AxeValue<Integer>> xorExOutputs = new AxeOrd<AxeValue<Integer>>("f");
+//		xorExOutputs.add(new AxeValue<Integer>(2));
+//		MedNode xorExNode = new MedNode("xorExNode", xorExEntries, xorExOutputs, xorEx);
 	
 		
+//		ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>> glueArray = (ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>>) ArrayFactory
+//				.newInstanceArrayLogigramValueMapX2IntegerWithFloat(domNeuroneX, domNeuroneY);
+//		glueArray.setValue(1f, andNode.getOutputs().getElements().get(0).getValue(),  xorExNode.getEntries().getElements().get(0).getValue());
+//		glueArray.setValue(1f, andNode.getOutputs().getElements().get(0).getValue(),  xorExNode.getEntries().getElements().get(1).getValue());
 		
-		Map<Integer, Float> step0 = new HashMap<>();
-		step0.put(0, noPulseIntensity);
-		step0.put(1, pulseIntensity);
+		ArrayXDOrd indicesAnd0 = new Array2DMatrix3fImpl<>(domNeuroneX, domNeuroneY);
+		indicesAnd0.setValue(0f, 0, 0);
+		CoordinatesXDByIndices coordAnd0 = new CoordinatesXDByIndices(and, indicesAnd0);
+	
+		ArrayXDOrd indicesAnd1 = new Array2DMatrix3fImpl<>(domNeuroneX, domNeuroneY);
+		indicesAnd1.setValue(0f, 1, 1);
+		CoordinatesXDByIndices coordAnd1 = new CoordinatesXDByIndices(and, indicesAnd1);
+	
+		ArrayXDOrd indicesAnd2 = new Array2DMatrix3fImpl<>(domNeuroneX, domNeuroneY);
+		indicesAnd2.setValue(0f, 2, 2);
+		CoordinatesXDByIndices coordAnd2 = new CoordinatesXDByIndices(and, indicesAnd2);
+	
+		//idem Or
+		
+		ArrayXDOrd indicesOr0 = new Array2DMatrix3fImpl<>(domNeuroneX, domNeuroneY);
+		indicesOr0.setValue(0f, 0, 0);
+		CoordinatesXDByIndices coordOr0 = new CoordinatesXDByIndices(or, indicesOr0);
+	
+		ArrayXDOrd indicesOr1 = new Array2DMatrix3fImpl<>(domNeuroneX, domNeuroneY);
+		indicesOr1.setValue(0f, 1, 1);
+		CoordinatesXDByIndices coordOr1 = new CoordinatesXDByIndices(or, indicesOr1);
+	
+		ArrayXDOrd indicesOr2 = new Array2DMatrix3fImpl<>(domNeuroneX, domNeuroneY);
+		indicesOr2.setValue(0f, 2, 2);
+		CoordinatesXDByIndices coordOr2 = new CoordinatesXDByIndices(or, indicesOr2);
+		
+		//idem Ex
+		
+		ArrayXDOrd indicesXorEx0 = new Array2DMatrix3fImpl<>(domNeuroneX, domNeuroneY);
+		indicesXorEx0.setValue(0f, 0, 0);
+		CoordinatesXDByIndices coordXorEx0 = new CoordinatesXDByIndices(xorEx, indicesXorEx0);
+	
+		ArrayXDOrd indicesXorEx1 = new Array2DMatrix3fImpl<>(domNeuroneX, domNeuroneY);
+		indicesXorEx1.setValue(0f, 1, 1);
+		CoordinatesXDByIndices coordXorEx1 = new CoordinatesXDByIndices(xorEx, indicesXorEx1);
+	
+		ArrayXDOrd indicesXorEx2 = new Array2DMatrix3fImpl<>(domNeuroneX, domNeuroneY);
+		indicesXorEx2.setValue(0f, 2, 2);
+		CoordinatesXDByIndices coordXorEx2 = new CoordinatesXDByIndices(xorEx, indicesXorEx2);
+	
+		
+		Axe<AxeValue<CoordinatesXDByIndices>> coordX = new AxeOrd<AxeValue<CoordinatesXDByIndices>>("coordX");
+		coordX.add(new AxeValue<CoordinatesXDByIndices>(coordAnd0));
+		coordX.add(new AxeValue<CoordinatesXDByIndices>(coordAnd1));
+		coordX.add(new AxeValue<CoordinatesXDByIndices>(coordAnd2));
+		coordX.add(new AxeValue<CoordinatesXDByIndices>(coordOr0));
+		coordX.add(new AxeValue<CoordinatesXDByIndices>(coordOr1));
+		coordX.add(new AxeValue<CoordinatesXDByIndices>(coordOr2));
+		coordX.add(new AxeValue<CoordinatesXDByIndices>(coordXorEx0));
+		coordX.add(new AxeValue<CoordinatesXDByIndices>(coordXorEx1));
+		coordX.add(new AxeValue<CoordinatesXDByIndices>(coordXorEx2));
+		Axe<AxeValue<CoordinatesXDByIndices>> coordY = new AxeOrd<AxeValue<CoordinatesXDByIndices>>("coordY");
+		coordY.add(new AxeValue<CoordinatesXDByIndices>(coordAnd0));
+		coordY.add(new AxeValue<CoordinatesXDByIndices>(coordAnd1));
+		coordY.add(new AxeValue<CoordinatesXDByIndices>(coordAnd2));
+		coordY.add(new AxeValue<CoordinatesXDByIndices>(coordOr0));
+		coordY.add(new AxeValue<CoordinatesXDByIndices>(coordOr1));
+		coordY.add(new AxeValue<CoordinatesXDByIndices>(coordOr2));
+		coordY.add(new AxeValue<CoordinatesXDByIndices>(coordXorEx0));
+		coordY.add(new AxeValue<CoordinatesXDByIndices>(coordXorEx1));
+		coordY.add(new AxeValue<CoordinatesXDByIndices>(coordXorEx2));
+		
+		ArrayXDOrd<Float, CoordinatesXDByIndices, Axe<AxeValue<CoordinatesXDByIndices>>> glueArray = (ArrayXDOrd<Float, CoordinatesXDByIndices, Axe<AxeValue<CoordinatesXDByIndices>>>) ArrayFactory
+				.newInstanceArrayLogigramValueMapX2IntegerWithFloat(coordX, coordY);
+		glueArray.setValue(1f, coordAnd2,  coordXorEx0);
+		glueArray.setValue(1f, coordOr2,  coordXorEx1);
+		
+//		Axe<AxeValue<Integer>> allEntries = new AxeOrd<AxeValue<Integer>>("e");
+//		allEntries.add(new AxeValue<Integer>(0));
+//		allEntries.add(new AxeValue<Integer>(1));
+//		Axe<AxeValue<Integer>> allOutputs = new AxeOrd<AxeValue<Integer>>("f");
+//		allOutputs.add(new AxeValue<Integer>(2));
+//		MedNode allNode = new MedNode("allNode", allEntries, allOutputs, all);
+//	
+		
+		
+		
+		Map<CoordinatesXDByIndices, Float> step0 = new HashMap<>();
+		step0.put(coordAnd0, noPulseIntensity);
+		step0.put(coordAnd1, pulseIntensity);
+		step0.put(coordOr0, noPulseIntensity);
+		step0.put(coordOr1, pulseIntensity);
 
-
-		List<Map<Integer, Float>> stepsFinal = new ArrayList<>();
-		nexec.simul(stepsFinal, axes, step0, agre, activ, false);
-		Map<Integer, Float> lastStep = stepsFinal.get(stepsFinal.size() - 1);
+		List<Map<CoordinatesXDByIndices, Float>> stepsFinal = new ArrayList<>();
+		nexec.simul(stepsFinal, glueArray, step0, agre, activ, false);
+		Map<CoordinatesXDByIndices, Float> lastStep = stepsFinal.get(stepsFinal.size() - 1);
 		System.out.println("activate " + lastStep.toString());
 		
-//		input {0=0.0, 1=1.0}
-//		prog [(2,0.6)]
-//		new 2 0.0
-//		prog [(2,0.6)]
-//		0.6 1.0 2 0.6
-//		activate {0=0.0, 1=1.0}
-
-		assertActivated(2, lastStep, activ);
+		
+		
 	
 	}
 

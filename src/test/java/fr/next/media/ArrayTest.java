@@ -1,7 +1,10 @@
 package fr.next.media;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import com.jme3.math.FastMath;
 
 import fr.next.media.array.ArrayXDOrd;
 import fr.next.media.array.Axe;
@@ -362,8 +365,8 @@ public class ArrayTest extends TestCase {
 		indicesLoc2.setValue(2f, 0, 1);
 		ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>> arrayLoc2 = (ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>>) ArrayFactory
 				.newInstanceArray2DFloat(xLoc2, yLoc2);
-		arrayLoc2.addCoordinate(
-						new CoordinatesXDByIndices(worldAxes, indicesLoc2));
+		CoordinatesXDByIndices coord2 = new CoordinatesXDByIndices(worldAxes, indicesLoc2);
+		arrayLoc2.addCoordinate(coord2);
 		arrayLoc2.setValue(5.0f, 0, 0);
 		arrayLoc2.setValue(6.0f, 0, 1);
 		arrayLoc2.setValue(7.0f, 0, 2);
@@ -382,9 +385,13 @@ public class ArrayTest extends TestCase {
 		//3      8f  9f   10f
 		//4      11f 12f  13f
 		assertEquals(4f, arrayLoc1.getValueFromUpperAxeCoord(worldAxes, 1, 1));
-		
 		assertEquals(9f, arrayLoc2.getValueFromUpperAxeCoord(worldAxes, 3, 3));
 		
+//		assertEquals(4f, worldAxes.getValueWithInclusionOfArrayChilds(1, 1));
+//		assertEquals(9f, worldAxes.getValueWithInclusionOfArrayChilds(3, 3));
+//		
+//		assertEquals(0f, coord2.getValueByIndices());
+//		assertEquals(5f, coord2.getValueWithInclusionOfArrayChildsByIndices());
 		
 		worldAxes.merge();
 		
@@ -392,6 +399,8 @@ public class ArrayTest extends TestCase {
 		assertEquals(9f, worldAxes.getValue(3, 3));
 		
 		
+		List l = coord2.getPositionList();
+		System.out.println("position : " + Arrays.toString(l.toArray()));
 		
 		
 		
@@ -407,5 +416,54 @@ public class ArrayTest extends TestCase {
 		//Autre cas des rotations + echelle des axes..matrices.
 		
 	}
+	
+	
+//	public void testInverseAxeByRotation() {
+//		Axe<AxeValue<Integer>> x = new AxeOrd<>("x");
+//		x.add(new AxeValue<Integer>(0));
+//		x.add(new AxeValue<Integer>(1));
+//		x.add(new AxeValue<Integer>(2));
+//		x.add(new AxeValue<Integer>(3));
+//		x.add(new AxeValue<Integer>(4));
+//		x.add(new AxeValue<Integer>(5));
+//		x.add(new AxeValue<Integer>(6));
+//		x.add(new AxeValue<Integer>(7));
+//
+//		Axe<AxeValue<Integer>> y = new AxeOrd<>("y");
+//		y.add(new AxeValue<Integer>(0));
+//		y.add(new AxeValue<Integer>(1));
+//		y.add(new AxeValue<Integer>(2));
+//		y.add(new AxeValue<Integer>(3));
+//		y.add(new AxeValue<Integer>(4));
+//		y.add(new AxeValue<Integer>(5));
+//		y.add(new AxeValue<Integer>(6));
+//		y.add(new AxeValue<Integer>(7));
+//		
+//		AxeInt xLoc = new AxeInt("x", 0);
+//		AxeInt yLoc = new AxeInt("y", 0);
+//		ArrayXDOrd mirorAxes = new MapXDWithEmptyValueGenericImpl<>(Integer.class, 0, x, y);
+//		
+//		ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>> array = (ArrayXDOrd<Float, Integer, Axe<AxeValue<Integer>>>) ArrayFactory
+//				.newInstanceArray2DFloat(xLoc, yLoc);
+//		
+//		ArrayXDOrd indicesLoc1 = new Array2DMatrix3fImpl<>(xLoc, yLoc);
+//		//same origin
+//		indicesLoc1.setValue(0f, 0, 0);
+//		indicesLoc1.setValue(0f, 0, 0);
+//		//rotation of axe in order to have x = y and y = x
+//		indicesLoc1.setValue(-90f * FastMath.DEG_TO_RAD, 0, 0);
+//		indicesLoc1.setValue(+90f * FastMath.DEG_TO_RAD, 1, 0);
+//		
+//		array.addCoordinate(new CoordinatesXDByIndices(mirorAxes, indicesLoc1));
+//		
+//		array.setValue(1.0f, 0, 0);
+//		array.setValue(2.0f, 0, 1);
+//		array.setValue(3.0f, 1, 0);
+//		array.setValue(4.0f, 1, 1);
+//		
+//		assertEquals(2f, array.getValueFromUpperAxeCoord(mirorAxes, 1, 0));
+//		assertEquals(3f, array.getValueFromUpperAxeCoord(mirorAxes, 0, 1));
+//		
+//	}
 
 }

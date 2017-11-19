@@ -14,7 +14,7 @@ import fr.next.media.array.AxeVal;
 import fr.next.media.array.CoordOperation;
 import fr.next.media.array.CoordinatesXDByIndices;
 
-public class Array2DWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> extends AbstractArrayXDOrd<T, K, G> implements ArrayXDOrd<T, K, G> {
+public class Array2DWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> extends AbstractArrayXDOrdDomains<T, K, G> implements ArrayXDOrd<T, K, G> {
 
 	private T[][] cases;
 
@@ -29,6 +29,9 @@ public class Array2DWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeV
 	Array2DWithEmptyValueGenericImpl(Class<T> clazz, G domainLine2, G domainCol2, T emptyVal) {
 		this.domainLine = domainLine2;
 		this.domainCol = domainCol2;
+		this.domains = (G[]) Array.newInstance(domainLine2.getClass(), 2);
+		domains[0] = domainLine;
+		domains[1] = domainCol;
 		this.emptyVal = emptyVal;
 		this.clazz = clazz;
 		cases = (T[][]) Array.newInstance(clazz, domainLine2.size(), domainCol2.size());
@@ -88,15 +91,6 @@ public class Array2DWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeV
 		return cases[indexLine][indexCol];
 	}
 
-	@Override
-	public G getAxe(int index) {
-		if(index == 0) {
-			return domainLine;
-		} else {
-			return domainCol;
-		}
-	}
-	
 	@Override
 	public List<T> getValuesForAnAxe(int indexAxe, int indexToFind) {
 		if(indexAxe == 0) {
@@ -176,32 +170,4 @@ public class Array2DWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeV
 		return pair;
 	}
 	
-	@Override
-	public T getValueFromUpperAxeCoord(ArrayXDOrd<T, K, G> axes, K... upperAxeIndices) {
-		CoordinatesXDByIndices<T, K, G> coordinates = getCoordinates(axes);
-		if (coordinates.getAxesSize() < 2) {
-			throw new AssertionError(
-					"Not compatible axes : upper reference should have at least the same number of axes");
-		}
-		for (int i = 0; i < coordinates.getAxesSize(); i++) {
-			boolean found = false;
-			if (domainLine.getName().equals(coordinates.getAxe(i).getName())) {
-				found = true;
-			} else if (domainCol.getName().equals(coordinates.getAxe(i).getName())) {
-				found = true;
-			}
-			if (!found) {
-				throw new AssertionError("Not compatible axes : unable to find " + coordinates.getAxe(i).getName());
-			}
-		}
-		return getValue(coordinates.transform(upperAxeIndices));
-	}
-	
-	@Override
-	public List<G> getAxes() {
-		List<G> a = new ArrayList<>();
-		a.add(domainLine);
-		a.add(domainCol);
-		return a;
-	}
 }

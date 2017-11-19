@@ -18,7 +18,7 @@ import fr.next.media.array.AxeVal;
 import fr.next.media.array.CoordOperation;
 import fr.next.media.array.CoordinatesXDByIndices;
 
-public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> extends AbstractArrayXDOrd<Float, K, G> implements ArrayXDOrd<Float, K, G> {
+public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> extends AbstractArrayXDOrdDomains<Float, K, G> implements ArrayXDOrd<Float, K, G> {
 
 	private Matrix4f cases;
 
@@ -29,7 +29,9 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> extends 
 	public Array2DMatrix4fImpl(G domainLine2, G domainCol2) {
 		this.domainLine = domainLine2;
 		this.domainCol = domainCol2;
-
+		this.domains = (G[]) Array.newInstance(domainLine2.getClass(), 2);
+		domains[0] = domainLine;
+		domains[1] = domainCol;
 		cases = new Matrix4f();
 	}
 
@@ -141,15 +143,6 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> extends 
 	}
 
 	@Override
-	public G getAxe(int index) {
-		if (index == 0) {
-			return domainLine;
-		} else {
-			return domainCol;
-		}
-	}
-
-	@Override
 	public void setTranslation(Class<Float> clazzT, Float... values) {
 		if (values.length != 3) {
 			throw new AssertionError();
@@ -195,32 +188,4 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> extends 
 		return pair;
 	}
 
-	@Override
-	public Float getValueFromUpperAxeCoord(ArrayXDOrd<Float, K, G> axes, K... upperAxeIndices) {
-		CoordinatesXDByIndices<Float, K, G> coordinates = getCoordinates(axes);
-		if (coordinates.getAxesSize() < 2) {
-			throw new AssertionError(
-					"Not compatible axes : upper reference should have at least the same number of axes");
-		}
-		for (int i = 0; i < coordinates.getAxesSize(); i++) {
-			boolean found = false;
-			if (domainLine.getName().equals(coordinates.getAxe(i).getName())) {
-				found = true;
-			} else if (domainCol.getName().equals(coordinates.getAxe(i).getName())) {
-				found = true;
-			}
-			if (!found) {
-				throw new AssertionError("Not compatible axes : unable to find " + coordinates.getAxe(i).getName());
-			}
-		}
-		return getValue(coordinates.transform(upperAxeIndices));
-	}
-
-	@Override
-	public List<G> getAxes() {
-		List<G> a = new ArrayList<>();
-		a.add(domainLine);
-		a.add(domainCol);
-		return a;
-	}
 }

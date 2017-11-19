@@ -1,5 +1,6 @@
 package fr.next.media.neuron;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import fr.next.media.array.ArrayXDOrd;
 import fr.next.media.array.Axe;
 import fr.next.media.array.AxeValue;
+import fr.next.media.array.CoordinatesXDByIndices;
 
 public class NeuronExecutor<T> {
 
@@ -29,6 +31,35 @@ public class NeuronExecutor<T> {
 		super();
 		this.excitationValue = excitationValue;
 		this.noExcitationValue = noExcitationValue;
+	}
+	
+	public void simulFromUpperAxes(List<Map<CoordinatesXDByIndices, Float>> steps, ArrayXDOrd<Float, CoordinatesXDByIndices, Axe<AxeValue<CoordinatesXDByIndices>>> array,
+			Map<CoordinatesXDByIndices, Float> currentStep, Agregation c, Activation a, boolean negativeIfUnderThreshold) {
+		System.out.println("coord input " + currentStep.toString());
+		Map<T, Float> nextStep = new HashMap<>();
+		Map<ArrayXDOrd, Map<T, Float>> stepsByArray  = new HashMap<>();
+		for (Entry<CoordinatesXDByIndices, Float> p : currentStep.entrySet()) {
+			Float excitationVal = p.getValue();
+			
+			List<Float> position = p.getKey().getPositionList();
+			int[] positionCoord = new int[position.size()];
+			for(int i = 0; i < position.size(); i++) {
+				//Warning !!
+				//recursively !!!
+				positionCoord[i] = position.get(i).intValue();
+			}
+			Float val = (Float) p.getKey().getAxes().getValueByIndices(positionCoord);
+			
+//			p.getKey().getPosition(index)
+//			getValue(coordinates.transform(upperAxeIndices));
+			//TODO
+			//p.getKey().transform(b);
+		}
+		List<Map<T, Float>> localSteps = new ArrayList<>();
+		for(Entry<ArrayXDOrd, Map<T, Float>> e : stepsByArray.entrySet()) {
+			simul(localSteps, e.getKey(), e.getValue(), c, a, negativeIfUnderThreshold);
+		//TODO
+		}
 	}
 
 	public void simul(List<Map<T, Float>> steps, ArrayXDOrd<Float, T, Axe<AxeValue<T>>> array,

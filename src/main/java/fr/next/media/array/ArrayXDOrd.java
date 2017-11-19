@@ -9,11 +9,19 @@ public interface ArrayXDOrd<T, K, G extends Axe<? extends AxeVal<K>>> extends Se
 
 	void setValue(T value, K... indices);
 	
+	void setValueByIndices(T value, CoordinatesXDByIndices<T, K, G> coord);
+	
 	void setValueByIndices(T value, int... indices);
 	
 	T getValueByIndices(int... indices);
 	
+	T getValueWithInclusionOfArrayChilds(K... indices);
+	
+	T getValueWithInclusionOfArrayChildsByIndices(int... indices);
+	
 	T getValue(K... indices);
+	
+	T getValueByIndices(CoordinatesXDByIndices<T, K, G> coord);
 	
 	T getValueFromUpperAxeCoord(ArrayXDOrd<T, K, G> axes, K... upperAxeIndices);
 		
@@ -52,5 +60,7 @@ public interface ArrayXDOrd<T, K, G extends Axe<? extends AxeVal<K>>> extends Se
 	void merge();
 	
 	void mergeOnlyFirstLevel();
+	
+	int[] valuesToIndices(K... values);
 	
 }

@@ -16,11 +16,9 @@ import fr.next.media.array.Axe;
 import fr.next.media.array.AxeVal;
 import fr.next.media.array.CoordinatesXDByIndices;
 
-public class MapXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> extends AbstractArrayXDOrd<T, K, G> implements ArrayXDOrd<T, K, G> {
+public class MapXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> extends AbstractArrayXDOrdDomains<T, K, G> implements ArrayXDOrd<T, K, G> {
 
 	private Map cases;
-
-	private G[] domains;
 
 	private Class<T> clazz;
 	
@@ -106,10 +104,7 @@ public class MapXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal
 		return getValueInternal(indices);
 	}
 
-	@Override
-	public G getAxe(int index) {
-		return domains[index];
-	}
+	
 
 
 
@@ -240,33 +235,7 @@ public class MapXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal
 		return all;
 	}
 	
-	@Override
-	public T getValueFromUpperAxeCoord(ArrayXDOrd<T, K, G> axes, K... upperAxeIndices) {
-		CoordinatesXDByIndices<T, K, G> coordinates = getCoordinates(axes);
-		if(coordinates.getAxesSize() < domains.length) {
-			throw new AssertionError("Not compatible axes : upper reference should have at least the same number of axes");
-		}
-		
-		for(int i = 0; i < coordinates.getAxesSize(); i++) {
-			boolean found = false;
-			int j = 0;
-			for (G d : domains) {
-				if(d.getName().equals(coordinates.getAxe(i).getName())) {
-					found = true;
-					break;
-				}
-				j++;
-			}
-			if(!found) {
-				throw new AssertionError("Not compatible axes : unable to find " + coordinates.getAxe(i).getName());
-			}
-		}
-		return getValue(coordinates.transform(upperAxeIndices));
-	}
 	
-	@Override
-	public List<G> getAxes() {
-		return Arrays.asList(domains);
-	}
+	
 	
 }
