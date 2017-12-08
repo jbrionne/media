@@ -739,14 +739,14 @@ public class NeuronTest extends TestCase {
 		
 		
 		
-		System.out.println(and.getValueFromUpperAxeCoord(axes, 0, 2));
-		System.out.println(and.getValueFromUpperAxeCoord(axes, 1, 2));
+		System.out.println(and.getValueFromUpperAxeCoordByIndices(axes, 0f, 2f));
+		System.out.println(and.getValueFromUpperAxeCoordByIndices(axes, 1f, 2f));
 		
-		System.out.println(or.getValueFromUpperAxeCoord(axes, 3, 5));
-		System.out.println(or.getValueFromUpperAxeCoord(axes, 4, 5));
+		System.out.println(or.getValueFromUpperAxeCoordByIndices(axes, 3f, 5f));
+		System.out.println(or.getValueFromUpperAxeCoordByIndices(axes, 4f, 5f));
 		
-		System.out.println(xorEx.getValueFromUpperAxeCoord(axes, 6, 8));
-		System.out.println(xorEx.getValueFromUpperAxeCoord(axes, 7, 8));
+		System.out.println(xorEx.getValueFromUpperAxeCoordByIndices(axes, 6f, 8f));
+		System.out.println(xorEx.getValueFromUpperAxeCoordByIndices(axes, 7f, 8f));
 		
 		Map<Integer, Float> step0 = new HashMap<>();
 		step0.put(0, noPulseIntensity);
@@ -908,8 +908,6 @@ public class NeuronTest extends TestCase {
 //		MedNode allNode = new MedNode("allNode", allEntries, allOutputs, all);
 //	
 		
-		
-		
 		Map<CoordinatesXDByIndices, Float> step0 = new HashMap<>();
 		step0.put(coordAnd0, noPulseIntensity);
 		step0.put(coordAnd1, pulseIntensity);
@@ -920,9 +918,6 @@ public class NeuronTest extends TestCase {
 		nexec.simul(stepsFinal, glueArray, step0, agre, activ, false);
 		Map<CoordinatesXDByIndices, Float> lastStep = stepsFinal.get(stepsFinal.size() - 1);
 		System.out.println("activate " + lastStep.toString());
-		
-		
-		
 	
 	}
 

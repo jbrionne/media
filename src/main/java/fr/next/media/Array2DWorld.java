@@ -10,6 +10,7 @@ import fr.next.media.array.AxeInt;
 import fr.next.media.array.AxeValue;
 import fr.next.media.array.CoordinatesXDByIndices;
 import fr.next.media.array.impl.Array2DMatrix3fImpl;
+import fr.next.media.array.impl.Array2DMatrix4fImpl;
 import fr.next.media.array.impl.ArrayFactory;
 import fr.next.media.array.impl.MapXDWithEmptyValueGenericImpl;
 import fr.next.media.array.impl.logigram.ArrayLogigramValue;
@@ -87,7 +88,7 @@ public class Array2DWorld {
 		}
 		return null;
 	}
-
+	
 	public List<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>> findAllArrays2DWithDomainInCol(Axe<AxeValue<String>> domainName) {
 		List<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>> arrays2DWithDomainInCol = new ArrayList<>();
 		for (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> a : arrays2D.getAll()) {
@@ -95,6 +96,7 @@ public class Array2DWorld {
 				arrays2DWithDomainInCol.add(a);
 			}
 			if (a.getAxe(0).equals(domainName)) {
+				
 				arrays2DWithDomainInCol.add(new ArrayXDOrdProxy<ArrayLogigramValue, String, Axe<AxeValue<String>>>(a, new int [] {1, 0}, String.class));
 			}
 		}

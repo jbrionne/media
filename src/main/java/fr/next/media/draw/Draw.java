@@ -119,7 +119,7 @@ public class Draw {
 			inline(((AxeValue) arrays2D.getAxe(0).getElements().get(i)).getValue().toString());
 			inline(" ");
 			for (int j = 0; j < arrays2D.getAxe(1).size(); j++) {
-				inline(arrays2D.getValueByIndices(i, j).toString());
+				inline(arrays2D.getValueByIndices((float) i, (float) j).toString());
 				inline(" ");
 			}
 			inlineln();

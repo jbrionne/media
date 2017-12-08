@@ -313,6 +313,24 @@ public class Space extends SimpleApplication implements PhysicsCollisionListener
 		Transform tr = t.getLocalTransform();
 		Matrix4f m = toMatrix(tr);
 		Matrix4f res = m.mult(toMatrix(trV));
+		
+//		m :
+//		Matrix4f
+//		[
+//		 1.0  0.0  0.0  1.0 
+//		 0.0  1.0  0.0  0.0 
+//		 0.0  0.0  1.0  0.0 
+//		 0.0  0.0  0.0  1.0 
+//		]
+//		toMatrix(trV)	
+//		Matrix4f
+//		[
+//		 0.0  -1.0  0.0  0.0 
+//		 1.0  0.0  0.0  0.0 
+//		 0.0  0.0  1.0  0.0 
+//		 0.0  0.0  0.0  1.0 
+//		]
+				
 		t.setLocalTransform(toTransform(res));
 		return res;
 	}

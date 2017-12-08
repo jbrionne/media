@@ -28,8 +28,8 @@ public class ArrayXDOrdProxy<T, K, G extends Axe<? extends AxeVal<K>>> implement
 	}
 
 	@Override
-	public void setValueByIndices(T value, int... indices) {
-		int[] newIndicesValue = new int[indices.length];
+	public void setValueByIndices(T value, float... indices) {
+		float[] newIndicesValue = new float[indices.length];
 		for(int i = 0; i < newIndicesOrder.length; i++) {
 			newIndicesValue[newIndicesOrder[i]] = indices[i];
 		}
@@ -37,8 +37,8 @@ public class ArrayXDOrdProxy<T, K, G extends Axe<? extends AxeVal<K>>> implement
 	}
 
 	@Override
-	public T getValueByIndices(int... indices) {
-		int[] newIndicesValue = new int[indices.length];
+	public T getValueByIndices(float... indices) {
+		float[] newIndicesValue = new float[indices.length];
 		for(int i = 0; i < newIndicesOrder.length; i++) {
 			newIndicesValue[newIndicesOrder[i]] = indices[i];
 		}
@@ -58,6 +58,11 @@ public class ArrayXDOrdProxy<T, K, G extends Axe<? extends AxeVal<K>>> implement
 	public CoordinatesXDByIndices getCoordinates(ArrayXDOrd<T, K, G> axes){
 		return this.base.getCoordinates(axes);
 	}
+	
+	@Override
+	public CoordinatesXDByIndices getChildCoordinates(ArrayXDOrd<T, K, G> axes){
+		return this.base.getChildCoordinates(axes);
+	}
 
 	@Override
 	public G getAxe(int index) {
@@ -65,7 +70,7 @@ public class ArrayXDOrdProxy<T, K, G extends Axe<? extends AxeVal<K>>> implement
 	}
 	
 	@Override
-	public List<T> getValuesForAnAxe(int indexAxe, int indexToFind) {
+	public List<T> getValuesForAnAxe(int indexAxe, float indexToFind) {
 		return this.base.getValuesForAnAxe(newIndicesOrder[indexAxe], indexToFind);
 	}
 
@@ -75,44 +80,15 @@ public class ArrayXDOrdProxy<T, K, G extends Axe<? extends AxeVal<K>>> implement
 	}
 
 	
-	@Override
-	public void setTranslation(Class<T> clazzT, T... values) {
-		T[] newIndicesValue = (T[]) Array.newInstance(clazzT, values.length);
-		for(int i = 0; i < newIndicesOrder.length; i++) {
-			newIndicesValue[newIndicesOrder[i]] = values[i];
-		}
-		this.base.setTranslation(clazzT, newIndicesValue);
-	}
 
 	@Override
-	public void setRotationQuaternion(Class<T> clazzT, T w, T... values) {
-		if(values.length != 3) {
-			throw new AssertionError();
-		}
-		T[] newIndicesValue = (T[]) Array.newInstance(clazzT, values.length);
-		for(int i = 0; i < newIndicesOrder.length; i++) {
-			newIndicesValue[newIndicesOrder[i]] = values[i];
-		}
-		this.base.setRotationQuaternion(clazzT, w, newIndicesValue);
-	}
-
-	@Override
-	public void setScale(Class<T> clazzT, T... values) {
-		T[] newIndicesValue = (T[]) Array.newInstance(clazzT, values.length);
-		for(int i = 0; i < newIndicesOrder.length; i++) {
-			newIndicesValue[newIndicesOrder[i]] = values[i];
-		}
-		this.base.setScale(clazzT, newIndicesValue);
-	}
-
-	@Override
-	public List<Pair<K, T>> getPairForAnAxe(int indexAxe, int indexToFind) {
+	public List<Pair<K, T>> getPairForAnAxe(int indexAxe, float indexToFind) {
 		return this.base.getPairForAnAxe(newIndicesOrder[indexAxe], indexToFind);
 	}
 
 	@Override
-	public T getValueFromUpperAxeCoord(ArrayXDOrd<T, K, G> axes, K... upperAxeIndices){
-		return this.base.getValueFromUpperAxeCoord(axes, upperAxeIndices);
+	public T getValueFromUpperAxeCoordByIndices(ArrayXDOrd<T, K, G> axes, float... upperAxeIndices){
+		return this.base.getValueFromUpperAxeCoordByIndices(axes, upperAxeIndices);
 	}
 
 	@Override
@@ -161,7 +137,7 @@ public class ArrayXDOrdProxy<T, K, G extends Axe<? extends AxeVal<K>>> implement
 
 	@Override
 	public void setValueByIndices(T value, CoordinatesXDByIndices<T, K, G> coord) {
-		int[] newIndicesValue = new int[coord.getPositionList().size()];
+		float[] newIndicesValue = new float[coord.getPositionList().size() - 1];
 		for(int i = 0; i < newIndicesOrder.length; i++) {
 			newIndicesValue[newIndicesOrder[i]] = (int) coord.getPositionList().get(i).intValue();
 		}
@@ -170,9 +146,9 @@ public class ArrayXDOrdProxy<T, K, G extends Axe<? extends AxeVal<K>>> implement
 
 	@Override
 	public T getValueByIndices(CoordinatesXDByIndices<T, K, G> coord) {
-		int[] newIndicesValue = new int[coord.getPositionList().size()];
+		float[] newIndicesValue = new float[coord.getPositionList().size() - 1];
 		for(int i = 0; i < newIndicesOrder.length; i++) {
-			newIndicesValue[newIndicesOrder[i]] = (int) coord.getPositionList().get(i).intValue();
+			newIndicesValue[newIndicesOrder[i]] = coord.getPositionList().get(i).floatValue();
 		}
 		return this.base.getValueByIndices(newIndicesValue);
 	}
@@ -187,8 +163,8 @@ public class ArrayXDOrdProxy<T, K, G extends Axe<? extends AxeVal<K>>> implement
 	}
 
 	@Override
-	public T getValueWithInclusionOfArrayChildsByIndices(int... indices) {
-		int[] newIndicesValue = new int[indices.length];
+	public T getValueWithInclusionOfArrayChildsByIndices(float... indices) {
+		float[] newIndicesValue = new float[indices.length];
 		for(int i = 0; i < newIndicesOrder.length; i++) {
 			newIndicesValue[newIndicesOrder[i]] = indices[i];
 		}
@@ -196,12 +172,41 @@ public class ArrayXDOrdProxy<T, K, G extends Axe<? extends AxeVal<K>>> implement
 	}
 
 	@Override
-	public int[] valuesToIndices(K... indices) {
-		K[] newIndicesValue = (K[]) Array.newInstance(clazz, indices.length);
+	public float[] valuesToIndices(K... axeValues) {
+		K[] newIndicesValue = (K[]) Array.newInstance(clazz, axeValues.length);
+		for(int i = 0; i < newIndicesOrder.length; i++) {
+			newIndicesValue[newIndicesOrder[i]] = axeValues[i];
+		}
+		return this.base.valuesToIndices(newIndicesValue);
+	}
+
+	@Override
+	public boolean isInBoundaries(K... axeValues) {
+		K[] newIndicesValue = (K[]) Array.newInstance(clazz, axeValues.length);
+		for(int i = 0; i < newIndicesOrder.length; i++) {
+			newIndicesValue[newIndicesOrder[i]] = axeValues[i];
+		}
+		return this.base.isInBoundaries(newIndicesValue);
+	}
+
+	@Override
+	public boolean isInBoundariesByIndices(float... indices) {
+		float[] newIndicesValue = new float[indices.length];
 		for(int i = 0; i < newIndicesOrder.length; i++) {
 			newIndicesValue[newIndicesOrder[i]] = indices[i];
 		}
-		return this.base.valuesToIndices(newIndicesValue);
+		return this.base.isInBoundariesByIndices(newIndicesValue);
+	}
+
+	@Override
+	public void setValuesForAnAxe(int indexAxe, T... values) {
+		 this.base.setValuesForAnAxe(newIndicesOrder[indexAxe], values);
+	}
+
+	@Override
+	public T getValueFromChildAxeCoordByIndices(ArrayXDOrd<T, K, G> axes, float... upperAxeIndices) {
+		return this.base.getValueFromChildAxeCoordByIndices(axes, upperAxeIndices);
+		
 	}
 
 }

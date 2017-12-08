@@ -76,6 +76,11 @@ public class ArrayFactory {
 			G domainCol) {
 		return new Array2DGenericImpl<>(Float.class, domainLine, domainCol);
 	}
+	
+	public static <K, G extends Axe<? extends AxeVal<K>>> ArrayXDOrd<?, K, G> newInstanceArray3DFloat(G domainLine,
+			G domainCol, G domainZ) {
+		return new ArrayXDGenericImpl<>(Float.class, domainLine, domainCol, domainZ);
+	}
 
 	public static <K, G extends Axe<? extends AxeVal<K>>> ArrayXDOrd<?, K, G> newInstanceString(G[] domainLettre) {
 		return new ArrayXDGenericImpl<>(String.class, domainLettre);

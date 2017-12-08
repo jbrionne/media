@@ -1,8 +1,6 @@
 package fr.next.media.array.impl;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,22 +12,18 @@ import org.apache.commons.lang3.tuple.Pair;
 import fr.next.media.array.ArrayXDOrd;
 import fr.next.media.array.Axe;
 import fr.next.media.array.AxeVal;
-import fr.next.media.array.CoordinatesXDByIndices;
 
-public class MapXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> extends AbstractArrayXDOrdDomains<T, K, G> implements ArrayXDOrd<T, K, G> {
+public class MapXDGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> extends AbstractArrayXDOrdDomains<T, K, G> implements ArrayXDOrd<T, K, G> {
 
 	private Map cases;
 
 	private Class<T> clazz;
 	
-	private T emptyVal;
-
 	@SuppressWarnings("unchecked")
-	public MapXDWithEmptyValueGenericImpl(Class<T> clazz, T emptyVal,
+	public MapXDGenericImpl(Class<T> clazz,
 			G... domains) {
 		this.clazz = clazz;
 		this.domains = domains;
-		this.emptyVal = emptyVal;
 		cases = new HashMap<>();
 	}
 
@@ -53,7 +47,7 @@ public class MapXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal
 			} else {
 				Object  m = currentMap.get(convertFloatToInt(i));
 				if(m == null) {
-					return emptyVal;
+					return null;
 				} else {
 				   currentMap = (Map) m;
 				}

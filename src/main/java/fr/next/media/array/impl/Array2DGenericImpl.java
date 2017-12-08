@@ -50,24 +50,24 @@ public class Array2DGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>>  exten
 	}
 
 	@Override
-	public void setValueByIndices(T value, int... indices) {
+	public void setValueByIndices(T value, float... indices) {
 		if (indices.length != 2) {
 			throw new AssertionError();
 		}
-		int indexAxeLine = indices[0];
-		int indexAxeCol = indices[1];
+		float indexAxeLine = indices[0];
+		float indexAxeCol = indices[1];
 
-		cases[indexAxeLine][indexAxeCol] = value;
+		cases[convertFloatToInt(indexAxeLine)][convertFloatToInt(indexAxeCol)] = value;
 	}
 
 	@Override
-	public T getValueByIndices(int... indices) {
+	public T getValueByIndices(float... indices) {
 		if (indices.length != 2) {
 			throw new AssertionError();
 		}
-		int indexAxeLine = indices[0];
-		int indexAxeCol = indices[1];
-		return cases[indexAxeLine][indexAxeCol];
+		float indexAxeLine = indices[0];
+		float indexAxeCol = indices[1];
+		return cases[convertFloatToInt(indexAxeLine)][convertFloatToInt(indexAxeCol)];
 	}
 
 	@Override
@@ -83,11 +83,18 @@ public class Array2DGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>>  exten
 	}
 
 	@Override
-	public List<T> getValuesForAnAxe(int indexAxe, int indexToFind) {
+	public List<T> getValuesForAnAxe(int indexAxe, float indexToFind) {
 		if (indexAxe == 0) {
-			return Arrays.asList(getLine(indexToFind));
+			return Arrays.asList(getLine(convertFloatToInt(indexToFind)));
 		} else {
-			return Arrays.asList(getCol(indexToFind));
+			return Arrays.asList(getCol(convertFloatToInt(indexToFind)));
+		}
+	}
+	
+	@Override
+	public void setValuesForAnAxe(int indexAxe, T... values) {
+		for(int i = 0; i < values.length; i++) {
+			cases[indexAxe][i] = values[i];
 		}
 	}
 
@@ -141,15 +148,15 @@ public class Array2DGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>>  exten
 
 
 	@Override
-	public List<Pair<K, T>> getPairForAnAxe(int indexAxe, int indexToFind) {
+	public List<Pair<K, T>> getPairForAnAxe(int indexAxe, float indexToFind) {
 		List<Pair<K, T>> pair = new ArrayList<>();
 		List<T> values = null;
 		G domains = null;
 		if (indexAxe == 0) {
-			values = Arrays.asList(getLine(indexToFind));
+			values = Arrays.asList(getLine(convertFloatToInt(indexToFind)));
 			domains = domainLine;
 		} else {
-			values = Arrays.asList(getCol(indexToFind));
+			values = Arrays.asList(getCol(convertFloatToInt(indexToFind)));
 			domains = domainCol;
 		}
 		int index = 0;

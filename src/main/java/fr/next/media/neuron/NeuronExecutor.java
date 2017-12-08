@@ -42,13 +42,13 @@ public class NeuronExecutor<T> {
 			Float excitationVal = p.getValue();
 			
 			List<Float> position = p.getKey().getPositionList();
-			int[] positionCoord = new int[position.size()];
-			for(int i = 0; i < position.size(); i++) {
+			float[] positionCoord = new float[position.size() - 1];
+			for(int i = 0; i < positionCoord.length; i++) {
 				//Warning !!
 				//recursively !!!
-				positionCoord[i] = position.get(i).intValue();
+				positionCoord[i] = position.get(i);
 			}
-			Float val = (Float) p.getKey().getAxes().getValueByIndices(positionCoord);
+			float val = (float) p.getKey().getAxes().getValueByIndices(positionCoord);
 			
 //			p.getKey().getPosition(index)
 //			getValue(coordinates.transform(upperAxeIndices));

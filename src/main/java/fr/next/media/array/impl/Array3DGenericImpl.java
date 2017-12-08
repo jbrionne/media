@@ -56,25 +56,25 @@ public class Array3DGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> extend
 	}
 
 	@Override
-	public void setValueByIndices(T value, int... indices) {
+	public void setValueByIndices(T value, float... indices) {
 		if(indices.length != 3) {
 			throw new AssertionError();
 		}
-		int indexAxeLine = indices[0];
-	    int indexAxeCol = indices[1];
-	    int indexAxeZ = indices[2];
-		cases[indexAxeLine][indexAxeCol][indexAxeZ] = value;
+		float indexAxeLine = indices[0];
+	    float indexAxeCol = indices[1];
+	    float indexAxeZ = indices[2];
+		cases[convertFloatToInt(indexAxeLine)][convertFloatToInt(indexAxeCol)][convertFloatToInt(indexAxeZ)] = value;
 	}
 
 	@Override
-	public T getValueByIndices(int... indices) {
+	public T getValueByIndices(float... indices) {
 		if(indices.length != 3) {
 			throw new AssertionError();
 		}
-		int indexAxeLine = indices[0];
-	    int indexAxeCol = indices[1];
-	    int indexAxeZ = indices[2];
-		return cases[indexAxeLine][indexAxeCol][indexAxeZ];
+		float indexAxeLine = indices[0];
+	    float indexAxeCol = indices[1];
+	    float indexAxeZ = indices[2];
+		return cases[convertFloatToInt(indexAxeLine)][convertFloatToInt(indexAxeCol)][convertFloatToInt(indexAxeZ)];
 	}
 
 	@Override
@@ -137,20 +137,25 @@ public class Array3DGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> extend
 	
 
 	@Override
-	public List<T> getValuesForAnAxe(int indexAxe, int indexToFind) {
+	public List<T> getValuesForAnAxe(int indexAxe, float indexToFind) {
 		T[][] values = null;
 		if (indexAxe == 0) {
-			values = getLine(indexToFind);
+			values = getLine(convertFloatToInt(indexToFind));
 		} else if (indexAxe == 1) {
-			values = getCol(indexToFind);
+			values = getCol(convertFloatToInt(indexToFind));
 		} else {
-			values = getZ(indexToFind);
+			values = getZ(convertFloatToInt(indexToFind));
 		}
 		List<T> response = new ArrayList<>();
 		for (T[] value : values) {
 			response.addAll(Arrays.asList(value));
 		}
 		return response;
+	}
+	
+	@Override
+	public void setValuesForAnAxe(int indexAxe, T... values) {
+		throw new UnsupportedOperationException();
 	}
 	
 	private T[][] getLine(int indexAxeLine) {
@@ -181,19 +186,19 @@ public class Array3DGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> extend
 	
 	
 	@Override
-	public List<Pair<K, T>> getPairForAnAxe(int indexAxe, int indexToFind) {
+	public List<Pair<K, T>> getPairForAnAxe(int indexAxe, float indexToFind) {
 		List<Pair<K, T>> pair = new ArrayList<>();
 		List<T> response = null;
 		T[][] values = null;
 		G domains = null;
 		if(indexAxe == 0) {
-			values = getLine(indexToFind);
+			values = getLine(convertFloatToInt(indexToFind));
 			domains = domainLine;
 		} else if(indexAxe == 1) {
-			values = getCol(indexToFind);
+			values = getCol(convertFloatToInt(indexToFind));
 			domains = domainCol;
 		} else {
-			values = getZ(indexToFind);
+			values = getZ(convertFloatToInt(indexToFind));
 			domains = domainZ;
 		}
 		response = new ArrayList<>();

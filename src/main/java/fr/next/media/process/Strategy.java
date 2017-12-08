@@ -50,8 +50,8 @@ public class Strategy {
 						match = false;
 						break;
 					}
-					casesInContext.add(new Case(cCC, cC.get(k), (int) cCC.getCoordinates().getPosition(0) + j, (int) cCC.getCoordinates().getPosition(1) +k));
-					casesInContext.add(new Case(cEC, c.get(k), (int) cEC.getCoordinates().getPosition(0) + i, (int) cEC.getCoordinates().getPosition(1) +k));
+					casesInContext.add(new Case(cCC, cC.get(k),  cCC.getCoordinates().getPosition(0).intValue() + j, cCC.getCoordinates().getPosition(1).intValue() +k));
+					casesInContext.add(new Case(cEC, c.get(k),  cEC.getCoordinates().getPosition(0).intValue() + i, cEC.getCoordinates().getPosition(1).intValue() +k));
 				}
 				if (match) {
 					ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> cECl = getArray2D(cEC.getAxe(0), cCC.getAxe(0));
@@ -62,12 +62,12 @@ public class Strategy {
 						indexLine = j;
 						indexCol = i;
 					}
-					if (cECl.getValueByIndices(indexLine, indexCol).equals(ArrayLogigramValue.EMPTY)) {
+					if (cECl.getValueByIndices((float) indexLine, (float) indexCol).equals(ArrayLogigramValue.EMPTY)) {
 						r.setFindNewCase(true);
 						cECl.setValueByIndices(ArrayLogigramValue.NEG, indexLine, indexCol);
 						addAction(r, "Exclusion de deux colonnes alors la case correspondante des deux éléments est N",
 								indexLine, indexCol, cECl, ArrayLogigramValue.NEG, casesInContext);
-					} else if (cECl.getValueByIndices(indexLine, indexCol).equals(ArrayLogigramValue.OK)) {
+					} else if (cECl.getValueByIndices((float) indexLine, (float) indexCol).equals(ArrayLogigramValue.OK)) {
 						throw new AssertionError();
 					}
 
@@ -120,8 +120,8 @@ public class Strategy {
 						match = false;
 						break;
 					}
-					casesInContext.add(new Case(cCC, cC.get(k), (int) cCC.getCoordinates().getPosition(0) + k, (int) cCC.getCoordinates().getPosition(1) + j));
-					casesInContext.add(new Case(cEC, c.get(k), (int) cEC.getCoordinates().getPosition(0) + k, (int) cEC.getCoordinates().getPosition(1) + i));
+					casesInContext.add(new Case(cCC, cC.get(k), cCC.getCoordinates().getPosition(0).intValue() + k, cCC.getCoordinates().getPosition(1).intValue() + j));
+					casesInContext.add(new Case(cEC, c.get(k), cEC.getCoordinates().getPosition(0).intValue() + k, cEC.getCoordinates().getPosition(1).intValue() + i));
 				}
 				if (match) {
 					ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> cECl = getArray2D(cEC.getAxe(1), cCC.getAxe(1));
@@ -132,12 +132,12 @@ public class Strategy {
 						indexLine = j;
 						indexCol = i;
 					}
-					if (cECl.getValueByIndices(indexLine, indexCol).equals(ArrayLogigramValue.EMPTY)) {
+					if (cECl.getValueByIndices((float) indexLine, (float) indexCol).equals(ArrayLogigramValue.EMPTY)) {
 						r.setFindNewCase(true);
 						cECl.setValueByIndices(ArrayLogigramValue.NEG, indexLine, indexCol);
 						addAction(r, "Exclusion de deux lignes alors la case correspondante des deux éléments est N",
 								indexLine, indexCol, cECl, ArrayLogigramValue.NEG, casesInContext);
-					} else if (cECl.getValueByIndices(indexLine, indexCol).equals(ArrayLogigramValue.OK)) {
+					} else if (cECl.getValueByIndices((float) indexLine, (float) indexCol).equals(ArrayLogigramValue.OK)) {
 						throw new AssertionError();
 					}
 				}
@@ -154,15 +154,15 @@ public class Strategy {
 		for (ArrayXDOrd c : arrays2D) {
 			for (int i = 0; i < c.getAxe(0).getElements().size(); i++) {
 				for (int k = 0; k < c.getAxe(1).getElements().size(); k++) {
-					if (c.getValueByIndices(i, k).equals(ArrayLogigramValue.OK)) {
+					if (c.getValueByIndices((float) i, (float) k).equals(ArrayLogigramValue.OK)) {
 						for (int n = 0; n < c.getAxe(1).getElements().size(); n++) {
 							if (n != k) {
-								if (c.getValueByIndices(i, n).equals(ArrayLogigramValue.EMPTY)) {
+								if (c.getValueByIndices((float) i, (float) n).equals(ArrayLogigramValue.EMPTY)) {
 									r.setFindNewCase(true);
 									addAction(r, "OK trouvé alors toute la colonne N", i, n, c, ArrayLogigramValue.NEG,
 											new ArrayList<>());
 									c.setValueByIndices(ArrayLogigramValue.NEG, i, n);
-								} else if (c.getValueByIndices(i, n).equals(ArrayLogigramValue.OK)) {
+								} else if (c.getValueByIndices((float) i, (float) n).equals(ArrayLogigramValue.OK)) {
 									Draw.draw(c);
 									throw new AssertionError("OK value for " + i + "," + n);
 								}
@@ -180,14 +180,14 @@ public class Strategy {
 		for (ArrayXDOrd c : arrays2D) {
 			for (int i = 0; i < c.getAxe(0).getElements().size(); i++) {
 				for (int k = 0; k < c.getAxe(1).getElements().size(); k++) {
-					if (c.getValueByIndices(i, k).equals(ArrayLogigramValue.OK)) {
+					if (c.getValueByIndices((float) i, (float) k).equals(ArrayLogigramValue.OK)) {
 						for (int m = 0; m < c.getAxe(0).getElements().size(); m++) {
 							if (m != i) {
-								if (c.getValueByIndices(m, k).equals(ArrayLogigramValue.EMPTY)) {
+								if (c.getValueByIndices((float) m, (float) k).equals(ArrayLogigramValue.EMPTY)) {
 									r.setFindNewCase(true);
 									addAction(r, "OK trouvé alors toute la ligne N", m, k, c, ArrayLogigramValue.NEG, new ArrayList<>());
 									c.setValueByIndices(ArrayLogigramValue.NEG, m, k);
-								} else if (c.getValueByIndices(m, k).equals(ArrayLogigramValue.OK)) {
+								} else if (c.getValueByIndices((float) m, (float) k).equals(ArrayLogigramValue.OK)) {
 									throw new AssertionError();
 								}
 							}
@@ -205,13 +205,13 @@ public class Strategy {
 			for (int i = 0; i < c.getAxe(0).getElements().size(); i++) {
 				int count = 0;
 				for (int k = 0; k < c.getAxe(1).getElements().size(); k++) {
-					if (c.getValueByIndices(i, k).equals(ArrayLogigramValue.OK)) {
+					if (c.getValueByIndices((float)i, (float)k).equals(ArrayLogigramValue.OK)) {
 						count++;
 					} 
 				}
 				if (lineMax[i] != -1 && count == lineMax[i]) {
 					for (int k = 0; k < c.getAxe(1).getElements().size(); k++) {
-						if (c.getValueByIndices(i, k).equals(ArrayLogigramValue.EMPTY)) {
+						if (c.getValueByIndices((float) i, (float) k).equals(ArrayLogigramValue.EMPTY)) {
 							r.setFindNewCase(true);
 							addAction(r, "O tous trouvés alors tous les autres vides sont N", i, k, c, ArrayLogigramValue.NEG,
 									new ArrayList<>());
@@ -230,13 +230,13 @@ public class Strategy {
 			for (int i = 0; i < c.getAxe(1).getElements().size(); i++) {
 				int count = 0;
 				for (int k = 0; k < c.getAxe(0).getElements().size(); k++) {
-					if (c.getValueByIndices(k, i).equals(ArrayLogigramValue.OK)) {
+					if (c.getValueByIndices((float)k, (float)i).equals(ArrayLogigramValue.OK)) {
 						count++;
 					} 
 				}
 				if (lineMax[i] != -1 && count == lineMax[i]) {
 					for (int k = 0; k < c.getAxe(0).getElements().size(); k++) {
-						if (c.getValueByIndices(k, i).equals(ArrayLogigramValue.EMPTY)) {
+						if (c.getValueByIndices((float)k, (float)i).equals(ArrayLogigramValue.EMPTY)) {
 							r.setFindNewCase(true);
 							addAction(r, "O tous trouvés alors tous les autres vides sont N", k, i, c, ArrayLogigramValue.NEG,
 									new ArrayList<>());
@@ -255,13 +255,13 @@ public class Strategy {
 			for (int i = 0; i < c.getAxe(1).getElements().size(); i++) {
 				int count = 0;
 				for (int k = 0; k < c.getAxe(0).getElements().size(); k++) {
-					if (c.getValueByIndices(k, i).equals(ArrayLogigramValue.NEG)) {
+					if (c.getValueByIndices((float)k, (float)i).equals(ArrayLogigramValue.NEG)) {
 						count++;
 					} 
 				}
 				if (lineMax[i] != -1 && count == (c.getAxe(0).getElements().size() - lineMax[i])) {
 					for (int k = 0; k < c.getAxe(0).getElements().size(); k++) {
-						if (c.getValueByIndices(k, i).equals(ArrayLogigramValue.EMPTY)) {
+						if (c.getValueByIndices((float)k, (float)i).equals(ArrayLogigramValue.EMPTY)) {
 							r.setFindNewCase(true);
 							addAction(r, "O tous trouvés alors tous les autres vides sont N", k, i, c, ArrayLogigramValue.NEG,
 									new ArrayList<>());
@@ -280,13 +280,13 @@ public class Strategy {
 			for (int i = 0; i < c.getAxe(0).getElements().size(); i++) {
 				int count = 0;
 				for (int k = 0; k < c.getAxe(1).getElements().size(); k++) {
-					if (c.getValueByIndices(i, k).equals(ArrayLogigramValue.NEG)) {
+					if (c.getValueByIndices((float)i, (float)k).equals(ArrayLogigramValue.NEG)) {
 						count++;
 					} 
 				}
 				if (lineMax[i] != -1 && count == (c.getAxe(1).getElements().size() - lineMax[i])) {
 					for (int k = 0; k < c.getAxe(1).getElements().size(); k++) {
-						if (c.getValueByIndices(i, k).equals(ArrayLogigramValue.EMPTY)) {
+						if (c.getValueByIndices((float)i, (float)k).equals(ArrayLogigramValue.EMPTY)) {
 							r.setFindNewCase(true);
 							addAction(r, "O tous trouvés alors tous les autres vides sont N", i, k, c, ArrayLogigramValue.NEG,
 									new ArrayList<>());
@@ -306,19 +306,19 @@ public class Strategy {
 				int count = 0;
 				int indexEmpty = -1;
 				for (int k = 0; k < c.getAxe(0).getElements().size(); k++) {
-					if (c.getValueByIndices(k, i).equals(ArrayLogigramValue.NEG)) {
+					if (c.getValueByIndices((float)k, (float)i).equals(ArrayLogigramValue.NEG)) {
 						count++;
 					} else {
 						indexEmpty = k;
 					}
 				}
 				if (count == c.getAxe(0).getElements().size() - 1) {
-					if (c.getValueByIndices(indexEmpty, i).equals(ArrayLogigramValue.EMPTY)) {
+					if (c.getValueByIndices((float)indexEmpty, (float)i).equals(ArrayLogigramValue.EMPTY)) {
 						r.setFindNewCase(true);
 						addAction(r, "Tous N sauf 1 VIDE (en ligne), alors ce dernier est OK", indexEmpty, i, c, ArrayLogigramValue.OK,
 								new ArrayList<>());
 						c.setValueByIndices(ArrayLogigramValue.OK, indexEmpty, i);
-					} else if (c.getValueByIndices(indexEmpty, i).equals(ArrayLogigramValue.NEG)) {
+					} else if (c.getValueByIndices((float)indexEmpty, (float)i).equals(ArrayLogigramValue.NEG)) {
 						throw new AssertionError();
 					}
 				}
@@ -338,12 +338,12 @@ public class Strategy {
 					boolean match = true;
 					List<Case> casesInContext = new ArrayList<>();
 					for (int k = 0; k < c.getAxe(1).getElements().size(); k++) {
-						if (c.getValueByIndices(i, k).equals(ArrayLogigramValue.NEG) && c.getValueByIndices(j, k).equals(ArrayLogigramValue.NEG)) {
+						if (c.getValueByIndices((float)i, (float)k).equals(ArrayLogigramValue.NEG) && c.getValueByIndices((float)j, (float)k).equals(ArrayLogigramValue.NEG)) {
 							count++;
-							casesInContext.add(new Case(c, c.getValuesForAnAxe(0, i).get(k), (int) c.getCoordinates().getPosition(0) + i, (int) c.getCoordinates().getPosition(1) + k));
-							casesInContext.add(new Case(c, c.getValuesForAnAxe(0, j).get(k), (int) c.getCoordinates().getPosition(0) + j, (int) c.getCoordinates().getPosition(1) + k));
+							casesInContext.add(new Case(c, c.getValuesForAnAxe(0, i).get(k), c.getCoordinates().getPosition(0).intValue() + i,  c.getCoordinates().getPosition(1).intValue() + k));
+							casesInContext.add(new Case(c, c.getValuesForAnAxe(0, j).get(k), c.getCoordinates().getPosition(0).intValue() + j,  c.getCoordinates().getPosition(1).intValue() + k));
 							
-						} else if (c.getValueByIndices(i, k).equals(ArrayLogigramValue.EMPTY) && c.getValueByIndices(j, k).equals(ArrayLogigramValue.EMPTY)) {
+						} else if (c.getValueByIndices((float)i, (float)k).equals(ArrayLogigramValue.EMPTY) && c.getValueByIndices((float)j, (float)k).equals(ArrayLogigramValue.EMPTY)) {
 							emptyCol.add(k);
 						} else {
 							match = false;
@@ -382,14 +382,14 @@ public class Strategy {
 						for (Integer col : linesMatching.get(0).getEmptyCol()) {
 							for (int f = 0; f < c.getAxe(0).getElements().size(); f++) {
 								if (f != i && !isIndexLine(linesMatching, f)) {
-									if (c.getValueByIndices(f, col).equals(ArrayLogigramValue.EMPTY)) {
+									if (c.getValueByIndices((float)f, (float)col).equals(ArrayLogigramValue.EMPTY)) {
 										c.setValueByIndices(ArrayLogigramValue.NEG, f, col);
 										r.setFindNewCase(true);
 										addAction(r, 
 												"Deux possibilités sur deux lignes alors exclusion des autres lignes du même array2D",
 												f, col, c, ArrayLogigramValue.NEG,
 												Arrays.asList(casesInContext.toArray(new Case[0])));
-									} else if (c.getValueByIndices(f, col).equals(ArrayLogigramValue.OK)) {
+									} else if (c.getValueByIndices((float)f, (float)col).equals(ArrayLogigramValue.OK)) {
 										throw new AssertionError();
 									}
 								}
@@ -414,11 +414,11 @@ public class Strategy {
 					boolean match = true;
 					List<Case> casesInContext = new ArrayList<>();
 					for (int k = 0; k < c.getAxe(0).getElements().size(); k++) {
-						if (c.getValueByIndices(k, i).equals(ArrayLogigramValue.NEG) && c.getValueByIndices(k, j).equals(ArrayLogigramValue.NEG)) {
+						if (c.getValueByIndices((float)k, (float)i).equals(ArrayLogigramValue.NEG) && c.getValueByIndices((float)k, (float)j).equals(ArrayLogigramValue.NEG)) {
 							count++;
-							casesInContext.add(new Case(c, c.getValuesForAnAxe(1, i).get(k), (int) c.getCoordinates().getPosition(0) + k, (int) c.getCoordinates().getPosition(1) +i));
-							casesInContext.add(new Case(c, c.getValuesForAnAxe(1, j).get(k), (int) c.getCoordinates().getPosition(0) + k, (int) c.getCoordinates().getPosition(1) + j));
-						} else if (c.getValueByIndices(k, i).equals(ArrayLogigramValue.EMPTY) && c.getValueByIndices(k, j).equals(ArrayLogigramValue.EMPTY)) {
+							casesInContext.add(new Case(c, c.getValuesForAnAxe(1, i).get(k), c.getCoordinates().getPosition(0).intValue() + k, c.getCoordinates().getPosition(1).intValue() +i));
+							casesInContext.add(new Case(c, c.getValuesForAnAxe(1, j).get(k), c.getCoordinates().getPosition(0).intValue() + k, c.getCoordinates().getPosition(1).intValue() + j));
+						} else if (c.getValueByIndices((float)k,(float) i).equals(ArrayLogigramValue.EMPTY) && c.getValueByIndices((float)k, (float)j).equals(ArrayLogigramValue.EMPTY)) {
 							emptyCol.add(k);
 						} else {
 							match = false;
@@ -457,14 +457,14 @@ public class Strategy {
 						for (Integer col : linesMatching.get(0).getEmptyCol()) {
 							for (int f = 0; f < c.getAxe(1).getElements().size(); f++) {
 								if (f != i && !isIndexLine(linesMatching, f)) {
-									if (c.getValueByIndices(col, f).equals(ArrayLogigramValue.EMPTY)) {
+									if (c.getValueByIndices((float)col, (float)f).equals(ArrayLogigramValue.EMPTY)) {
 										c.setValueByIndices(ArrayLogigramValue.NEG, col, f);
 										r.setFindNewCase(true);
 										addAction(r, 
 												"Deux possibilités sur deux colonnes alors exclusion des autres colonnes du même array2D",
 												col, f, c, ArrayLogigramValue.NEG,
 												Arrays.asList(casesInContext.toArray(new Case[0])));
-									} else if (c.getValueByIndices(col, f).equals(ArrayLogigramValue.OK)) {
+									} else if (c.getValueByIndices((float)col, (float)f).equals(ArrayLogigramValue.OK)) {
 										throw new AssertionError();
 									}
 								}
@@ -485,19 +485,19 @@ public class Strategy {
 				int count = 0;
 				int indexEmpty = -1;
 				for (int k = 0; k < c.getAxe(1).getElements().size(); k++) {
-					if (c.getValueByIndices(i, k).equals(ArrayLogigramValue.NEG)) {
+					if (c.getValueByIndices((float)i, (float)k).equals(ArrayLogigramValue.NEG)) {
 						count++;
 					} else {
 						indexEmpty = k;
 					}
 				}
 				if (count == c.getAxe(1).getElements().size() - 1) {
-					if (c.getValueByIndices(i, indexEmpty).equals(ArrayLogigramValue.EMPTY)) {
+					if (c.getValueByIndices((float)i, (float)indexEmpty).equals(ArrayLogigramValue.EMPTY)) {
 						r.setFindNewCase(true);
 						addAction(r, "Tous N sauf 1 VIDE (en colonne), alors ce dernier est OK", i, indexEmpty, c, ArrayLogigramValue.OK,
 								new ArrayList<>());
 						c.setValueByIndices(ArrayLogigramValue.OK, i, indexEmpty);
-					} else if (c.getValueByIndices(i, indexEmpty).equals(ArrayLogigramValue.NEG)) {
+					} else if (c.getValueByIndices((float)i, (float)indexEmpty).equals(ArrayLogigramValue.NEG)) {
 						throw new AssertionError();
 					}
 				}

@@ -55,19 +55,8 @@ public class ArrayXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeV
 	}
 	
 	@Override
-	public int[] valuesToIndices(K... values) {
-		int[] indices = new int[values.length];
-		int i = 0;
-		for (G d : domains) {
-			indices[i] = Axe.findIndex(values[i], d);
-			i++;
-		}
-		return indices;
-	}
-
-	@Override
 	public void setValue(T value, K... values) {
-		int[] indices = new int[values.length];
+		float[] indices = new float[values.length];
 		int i = 0;
 		for (G d : domains) {
 			indices[i] = Axe.findIndex(values[i], d);
@@ -77,15 +66,15 @@ public class ArrayXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeV
 		setValueInternal(value, indices);
 	}
 
-	private T getValueInternal(int... indices) {
+	private T getValueInternal(float... indices) {
 		Object o = cases;
 		boolean monoDim = false;
 		int i = 0;
 		while (!monoDim) {
-			o = Array.get(o, indices[i]);
+			o = Array.get(o, convertFloatToInt(indices[i]));
 			if(i == domains.length - 2) {
 				monoDim = true;
-				o = ((T[]) o)[indices[i + 1]];
+				o = ((T[]) o)[convertFloatToInt(indices[i + 1])];
 			}
 			i++;
 		}
@@ -96,47 +85,52 @@ public class ArrayXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeV
 		}
 	}
 
-	private void setValueInternal(T value, int... indices) {
+	private void setValueInternal(T value, float... indices) {
 		Object o = cases;
 		boolean monoDim = false;
 		int i = 0;
 		while (!monoDim) {
-			o = Array.get(o, indices[i]);
+			o = Array.get(o, convertFloatToInt(indices[i]));
 			if(i == domains.length - 2) {
 				monoDim = true;
-				((T[]) o)[indices[i + 1]] = value;
+				((T[]) o)[convertFloatToInt(indices[i + 1])] = value;
 			}
 			i++;
 		}
 	}
 
 	@Override
-	public void setValueByIndices(T value, int... indices) {
+	public void setValueByIndices(T value, float... indices) {
 		setValueInternal(value, indices);
 	}
 
 	@Override
-	public T getValueByIndices(int... indices) {
+	public T getValueByIndices(float... indices) {
 		return getValueInternal(indices);
 	}
 
 	@Override
 	public T getValue(K... values) {
-		int[] indices = new int[values.length];
+		float[] indices = new float[values.length];
 		int i = 0;
 		for (G d : domains) {
-			indices[i] = Axe.findIndex(values[i], d);
+			indices[i] = (float) Axe.findIndex(values[i], d);
 			i++;
 		}
 		return getValueInternal(indices);
 	}
 
 	@Override
-	public List<T> getValuesForAnAxe(int indexAxe, int indexToFind) {
+	public List<T> getValuesForAnAxe(int indexAxe, float indexToFind) {
 		List<T> all = new ArrayList<>();
 		int[] indices = new int[domains.length];
-		recWithIndex(all, cases, indices, 0, indexAxe, indexToFind);
+		recWithIndex(all, cases, indices, 0, indexAxe, convertFloatToInt(indexToFind));
 		return all;
+	}
+	
+	@Override
+	public void setValuesForAnAxe(int indexAxe, T... values) {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -239,11 +233,11 @@ public class ArrayXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeV
 	}
 	
 	@Override
-	public List<Pair<K, T>> getPairForAnAxe(int indexAxe, int indexToFind) {
+	public List<Pair<K, T>> getPairForAnAxe(int indexAxe, float indexToFind) {
 		List<Pair<K, T>> all = new ArrayList<>();
 		Object o = cases;
 		int[] indices = new int[domains.length];
-		recWithIndexWithKey(all, o, indices, 0, indexAxe, indexToFind);
+		recWithIndexWithKey(all, o, indices, 0, indexAxe, convertFloatToInt(indexToFind));
 		return all;
 	}
 	

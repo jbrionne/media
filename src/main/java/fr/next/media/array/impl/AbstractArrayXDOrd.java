@@ -50,6 +50,26 @@ public abstract class AbstractArrayXDOrd<T, K, G extends Axe<? extends AxeVal<K>
 	public List<CoordinatesXDByIndices<T, K, G>> getChildCoordinates() {
 		return childCoordinates;
 	}
+	
+	@Override
+	public CoordinatesXDByIndices<T, K, G>  getChildCoordinates(ArrayXDOrd<T, K, G> axes) {
+		for(CoordinatesXDByIndices<T, K, G>  c : childCoordinates) {
+			boolean found = false;
+			for(int i = 0; i < c.getAxesSize(); i++) {
+				for(G a : axes.getAxes()) {
+					if(c.getAxe(i).equals(a)) {
+						found = true;
+						break;
+					}
+				}
+			}
+			if(found) {
+				return c;
+			}
+		}
+		throw new AssertionError("No coordinates were found");
+	}
+	
 
 	@Override
 	public void addChildCoordinate(CoordinatesXDByIndices<T, K, G> coordinates) {
@@ -88,8 +108,8 @@ public abstract class AbstractArrayXDOrd<T, K, G extends Axe<? extends AxeVal<K>
 		if(!coord.getAxes().equals(this)) {
 			throw new IllegalArgumentException("coordinate must be for this axe");
 		}
-		int[] newIndicesValue = new int[coord.getPositionList().size()];
-		for(int i = 0; i < coord.getPositionList().size(); i++) {
+		float[] newIndicesValue = new float[coord.getPositionList().size() - 1];
+		for(int i = 0; i < newIndicesValue.length; i++) {
 			newIndicesValue[i] = coord.getPositionList().get(i).intValue();
 		}
 		this.setValueByIndices(value, newIndicesValue);
@@ -100,42 +120,49 @@ public abstract class AbstractArrayXDOrd<T, K, G extends Axe<? extends AxeVal<K>
 		if(!coord.getAxes().equals(this)) {
 			throw new IllegalArgumentException("coordinate must be for this axe else use getValueFromUpperAxeCoord ");
 		}
-		int[] newIndicesValue = new int[coord.getPositionList().size()];
-		for(int i = 0;  i < coord.getPositionList().size(); i++) {
-			newIndicesValue[i] = (int) coord.getPositionList().get(i).intValue();
+		float[] newIndicesValue = new float[coord.getPositionList().size() - 1];
+		for(int i = 0;  i < newIndicesValue.length; i++) {
+			newIndicesValue[i] = coord.getPositionList().get(i).floatValue();
 		}
 		return this.getValueByIndices(newIndicesValue);
 	}
 	
 	@Override
-	public T getValueWithInclusionOfArrayChilds(K... indices) {
-		T val = getValue(indices);
-		if(val == null) {//val empty !
+	public T getValueWithInclusionOfArrayChilds(K... values) {
+		T val = getValue(values);
+		if(val == null) {//val empty ?!
+			float[] upperAxeIndices = valuesToIndices(values);
 			for(CoordinatesXDByIndices<T, K, G> coord : this.getChildCoordinates()) {
-				
+				float[] c = coord.transformByIndices(upperAxeIndices);
+				if(coord.getAxes().isInBoundariesByIndices(c)) {
+					T valChild = coord.getAxes().getValueByIndices(c);
+					if(valChild != null) {
+						return valChild;
+					}
+				}
 			}
 		}
-		return null; //TODO
+		return val;
 	}
 
 	@Override
-	public T getValueWithInclusionOfArrayChildsByIndices(int... indices) {
-		return null; //TODO
+	public T getValueWithInclusionOfArrayChildsByIndices(float... indices) {
+		T val = null;
+		if(isInBoundariesByIndices(indices)) {
+			val = getValueByIndices(indices);
+		}
+		if(val == null) {//val empty ?!
+			for(CoordinatesXDByIndices<T, K, G> coord : this.getChildCoordinates()) {
+				float[] c = coord.transformByIndices(indices);
+				if(coord.getAxes().isInBoundariesByIndices(c)) {
+					T valChild = coord.getAxes().getValueByIndices(c);
+					if(valChild != null) {
+						return valChild;
+					}
+				}
+			}
+		}
+		return val;
 	}
 	
-	@Override
-	public void setTranslation(Class<T> clazzT, T... values) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void setRotationQuaternion(Class<T> clazzT, T w, T... values) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void setScale(Class<T> clazzT, T... values) {
-		throw new UnsupportedOperationException();
-	}
-
 }

@@ -6,6 +6,9 @@ import java.util.List;
 
 @SuppressWarnings("rawtypes")
 public interface Axe<T extends AxeVal> extends Serializable {
+	
+	
+	public static final int NOT_FOUND_IN_AXE =  -1;
 
 	String getName();
 	
@@ -40,7 +43,7 @@ public interface Axe<T extends AxeVal> extends Serializable {
 			}
 			index++;
 		}
-		return -1;
+		return NOT_FOUND_IN_AXE;
 	}
 
 }

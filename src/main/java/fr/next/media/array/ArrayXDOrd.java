@@ -7,24 +7,28 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public interface ArrayXDOrd<T, K, G extends Axe<? extends AxeVal<K>>> extends Serializable  {
 
-	void setValue(T value, K... indices);
+	void setValue(T value, K... axeValues);
 	
 	void setValueByIndices(T value, CoordinatesXDByIndices<T, K, G> coord);
 	
-	void setValueByIndices(T value, int... indices);
+	void setValueByIndices(T value, float... indices);
 	
-	T getValueByIndices(int... indices);
+	void setValuesForAnAxe(int indexAxe, T... values);
 	
-	T getValueWithInclusionOfArrayChilds(K... indices);
+	T getValueByIndices(float... indices);
 	
-	T getValueWithInclusionOfArrayChildsByIndices(int... indices);
+	T getValueWithInclusionOfArrayChilds(K... axeValues);
 	
-	T getValue(K... indices);
+	T getValueWithInclusionOfArrayChildsByIndices(float... indices);
+	
+	T getValue(K... axeValues);
 	
 	T getValueByIndices(CoordinatesXDByIndices<T, K, G> coord);
 	
-	T getValueFromUpperAxeCoord(ArrayXDOrd<T, K, G> axes, K... upperAxeIndices);
-		
+	T getValueFromUpperAxeCoordByIndices(ArrayXDOrd<T, K, G> axes, float... upperAxeIndices);
+	
+	T getValueFromChildAxeCoordByIndices(ArrayXDOrd<T, K, G> axes, float... upperAxeIndices);
+	
 	CoordinatesXDByIndices<T, K, G> getCoordinates(ArrayXDOrd<T, K, G> axes);
 	
 	CoordinatesXDByIndices<T, K, G> getCoordinates();
@@ -37,9 +41,11 @@ public interface ArrayXDOrd<T, K, G extends Axe<? extends AxeVal<K>>> extends Se
 	 */
 	void addChildCoordinate(CoordinatesXDByIndices<T, K, G> coordinates);
 	
+	CoordinatesXDByIndices<T, K, G> getChildCoordinates(ArrayXDOrd<T, K, G> axes);
+	
 	List<CoordinatesXDByIndices<T, K, G>>  getChildCoordinates();
 		
-	G getAxe(int index);
+	G getAxe(int indexAxe);
 	
 	List<G> getAxes();
 	
@@ -47,20 +53,18 @@ public interface ArrayXDOrd<T, K, G extends Axe<? extends AxeVal<K>>> extends Se
 	
 	List<Pair<List<K>, T>> getAllWithKey();
 	
-	List<T> getValuesForAnAxe(int indexAxe, int indexToFind);
+	List<T> getValuesForAnAxe(int indexAxe, float indexToFind);
 	
-	List<Pair<K,T>> getPairForAnAxe(int indexAxe, int indexToFind);
-	
-	void setTranslation(Class<T> clazzT, T... values);
-	
-	void setRotationQuaternion(Class<T> clazzT, T w, T... values);
-			
-	void setScale(Class<T> clazzT, T... values);
+	List<Pair<K,T>> getPairForAnAxe(int indexAxe, float indexToFind);
 	
 	void merge();
 	
 	void mergeOnlyFirstLevel();
 	
-	int[] valuesToIndices(K... values);
+	float[] valuesToIndices(K... axeValues);
+	
+	boolean isInBoundaries(K... axeValues);
+	
+	boolean isInBoundariesByIndices(float... indices);
 	
 }

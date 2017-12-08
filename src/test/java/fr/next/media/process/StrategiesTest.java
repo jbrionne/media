@@ -117,9 +117,9 @@ public class StrategiesTest extends TestCase {
 		for(int i = 0; i < c3.getAxe(0).getElements().size(); i++) {
 			for(int j = 0; j < c3.getAxe(1).getElements().size(); j++) {
 				if(i == 1 && j == 1) {
-					assertEquals(ArrayLogigramValue.NEG, c3.getValueByIndices(i, j));
+					assertEquals(ArrayLogigramValue.NEG, c3.getValueByIndices((float)i,(float) j));
 				} else {
-					assertEquals(ArrayLogigramValue.EMPTY, c3.getValueByIndices(i, j));
+					assertEquals(ArrayLogigramValue.EMPTY, c3.getValueByIndices((float)i, (float)j));
 				}
 			}
 		}

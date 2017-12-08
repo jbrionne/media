@@ -50,24 +50,24 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> extends 
 	}
 
 	@Override
-	public void setValueByIndices(Float value, int... indices) {
+	public void setValueByIndices(Float value, float... indices) {
 		if (indices.length != 2) {
 			throw new AssertionError();
 		}
-		int indexAxeLine = indices[0];
-		int indexAxeCol = indices[1];
+		float indexAxeLine = indices[0];
+		float indexAxeCol = indices[1];
 
-		cases.set(indexAxeLine, indexAxeCol, value);
+		cases.set(convertFloatToInt(indexAxeLine), convertFloatToInt(indexAxeCol), value);
 	}
 
 	@Override
-	public Float getValueByIndices(int... indices) {
+	public Float getValueByIndices(float... indices) {
 		if (indices.length != 2) {
 			throw new AssertionError();
 		}
-		int indexAxeLine = indices[0];
-		int indexAxeCol = indices[1];
-		return cases.get(indexAxeLine, indexAxeCol);
+		float indexAxeLine = indices[0];
+		float indexAxeCol = indices[1];
+		return cases.get(convertFloatToInt(indexAxeLine), convertFloatToInt(indexAxeCol));
 	}
 
 	@Override
@@ -83,11 +83,18 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> extends 
 	}
 
 	@Override
-	public List<Float> getValuesForAnAxe(int indexAxe, int indexToFind) {
+	public List<Float> getValuesForAnAxe(int indexAxe, float indexToFind) {
 		if (indexAxe == 0) {
-			return Arrays.asList(getLine(indexToFind));
+			return Arrays.asList(getLine(convertFloatToInt(indexToFind)));
 		} else {
-			return Arrays.asList(getCol(indexToFind));
+			return Arrays.asList(getCol(convertFloatToInt(indexToFind)));
+		}
+	}
+	
+	@Override
+	public void setValuesForAnAxe(int indexAxe, Float... values) {
+		for(int i = 0; i < values.length; i++) {
+			cases.set(indexAxe, i, values[i]);
 		}
 	}
 
@@ -143,40 +150,15 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> extends 
 	}
 
 	@Override
-	public void setTranslation(Class<Float> clazzT, Float... values) {
-		if (values.length != 3) {
-			throw new AssertionError();
-		}
-		this.cases.setTranslation(values[0], values[1], values[2]);
-	}
-
-	@Override
-	public void setRotationQuaternion(Class<Float> clazzT, Float w, Float... values) {
-		if (values.length != 3) {
-			throw new AssertionError();
-		}
-		this.cases.setRotationQuaternion(new Quaternion(values[0], values[1], values[2], w));
-
-	}
-
-	@Override
-	public void setScale(Class<Float> clazzT, Float... values) {
-		if (values.length != 3) {
-			throw new AssertionError();
-		}
-		this.cases.setTranslation(values[0], values[1], values[2]);
-	}
-
-	@Override
-	public List<Pair<K, Float>> getPairForAnAxe(int indexAxe, int indexToFind) {
+	public List<Pair<K, Float>> getPairForAnAxe(int indexAxe, float indexToFind) {
 		List<Pair<K, Float>> pair = new ArrayList<>();
 		List<Float> values = null;
 		G domains = null;
 		if (indexAxe == 0) {
-			values = Arrays.asList(getLine(indexToFind));
+			values = Arrays.asList(getLine(convertFloatToInt(indexToFind)));
 			domains = domainLine;
 		} else {
-			values = Arrays.asList(getCol(indexToFind));
+			values = Arrays.asList(getCol(convertFloatToInt(indexToFind)));
 			domains = domainCol;
 		}
 		int index = 0;
@@ -187,5 +169,20 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> extends 
 		}
 		return pair;
 	}
+
+	@Override
+	public String toString() {
+		return this.cases.toString();
+	}
+
+	public Matrix4f getCases() {
+		return cases;
+	}
+
+	public void setCases(Matrix4f cases) {
+		this.cases = cases;
+	}
+	
+	
 
 }

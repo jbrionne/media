@@ -39,21 +39,21 @@ public class Array1DGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> extend
 	}
 
 	@Override
-	public void setValueByIndices(T value, int... indexAxeLines) {
+	public void setValueByIndices(T value, float... indexAxeLines) {
 		if(indexAxeLines.length != 1) {
 			throw new AssertionError();
 		}
-		int indexAxeLine = indexAxeLines[0];
-		cases[indexAxeLine] = value;
+		float indexAxeLine = indexAxeLines[0];
+		cases[convertFloatToInt(indexAxeLine)] = value;
 	}
 
 	@Override
-	public T getValueByIndices(int... indices) {
+	public T getValueByIndices(float... indices) {
 		if(indices.length != 1) {
 			throw new AssertionError();
 		}
-		int indexAxeLine = indices[0];
-		return cases[indexAxeLine];
+		float indexAxeLine = indices[0];
+		return cases[convertFloatToInt(indexAxeLine)];
 	}
 
 	@Override
@@ -79,13 +79,20 @@ public class Array1DGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> extend
 	
 	
 	@Override
-	public List<T> getValuesForAnAxe(int indexAxe, int indexToFind) {
+	public List<T> getValuesForAnAxe(int indexAxe, float indexToFind) {
 		return Arrays.asList(cases);
+	}
+	
+	@Override
+	public void setValuesForAnAxe(int indexAxe, T... values) {
+		for(int i = 0; i < values.length; i++) {
+			cases[i] = values[i];
+		}
 	}
 
 
 	@Override
-	public List<Pair<K, T>> getPairForAnAxe(int indexAxe, int indexToFind) {
+	public List<Pair<K, T>> getPairForAnAxe(int indexAxe, float indexToFind) {
 		List<Pair<K, T>> pair = new ArrayList<>();
 		int index = 0;
 		for(T c : cases) {
