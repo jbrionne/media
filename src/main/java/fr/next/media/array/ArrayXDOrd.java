@@ -7,9 +7,11 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public interface ArrayXDOrd<T, K, G extends Axe<? extends AxeVal<K>>> extends Serializable  {
 
+	ArrayXDOrd<T, K, Axe<? extends AxeVal<K>>> addAxe(G axe);
+	
 	void setValue(T value, K... axeValues);
 	
-	void setValueByIndices(T value, CoordinatesXDByIndices<T, K, G> coord);
+	void setValueByIndices(T value, CoordinatesXD<T, K, G> coord);
 	
 	void setValueByIndices(T value, float... indices);
 	
@@ -23,27 +25,29 @@ public interface ArrayXDOrd<T, K, G extends Axe<? extends AxeVal<K>>> extends Se
 	
 	T getValue(K... axeValues);
 	
-	T getValueByIndices(CoordinatesXDByIndices<T, K, G> coord);
+	T getValueByIndices(CoordinatesXD<T, K, G> coord);
 	
 	T getValueFromUpperAxeCoordByIndices(ArrayXDOrd<T, K, G> axes, float... upperAxeIndices);
 	
 	T getValueFromChildAxeCoordByIndices(ArrayXDOrd<T, K, G> axes, float... upperAxeIndices);
 	
-	CoordinatesXDByIndices<T, K, G> getCoordinates(ArrayXDOrd<T, K, G> axes);
+	CoordinatesXD<T, K, G> getCoordinates(ArrayXDOrd<T, K, G> axes);
 	
-	CoordinatesXDByIndices<T, K, G> getCoordinates();
+	CoordinatesXD<T, K, G> getSingleCoordinates();
 	
-	void addCoordinate(CoordinatesXDByIndices<T, K, G> coordinates);
+	List<CoordinatesXD<T, K, G>>  getCoordinates();
+	
+	void addCoordinate(CoordinatesXD<T, K, G> coordinates);
 	
 	/**
 	 * Do not use directly. Not add the coordinates in the parent.
 	 * @param coordinates
 	 */
-	void addChildCoordinate(CoordinatesXDByIndices<T, K, G> coordinates);
+	void addChildCoordinate(CoordinatesXD<T, K, G> coordinates);
 	
-	CoordinatesXDByIndices<T, K, G> getChildCoordinates(ArrayXDOrd<T, K, G> axes);
+	CoordinatesXD<T, K, G> getChildCoordinates(ArrayXDOrd<T, K, G> axes);
 	
-	List<CoordinatesXDByIndices<T, K, G>>  getChildCoordinates();
+	List<CoordinatesXD<T, K, G>>  getChildCoordinates();
 		
 	G getAxe(int indexAxe);
 	

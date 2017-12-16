@@ -21,3 +21,5 @@ Logigram
 
 Le logigram est un jeu de logique permettant de résoudre des engimes de type "Einstein". Ce jeu est idéal pour poser les bases d'une logique par rapport à des repères.
 
+
+

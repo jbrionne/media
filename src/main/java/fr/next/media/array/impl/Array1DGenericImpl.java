@@ -19,13 +19,16 @@ public class Array1DGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> extend
 	private T[] cases;
 
 	private G domainLine;
+	
+	private Class<T> clazz;
 
 	@SuppressWarnings("unchecked")
-	Array1DGenericImpl(Class<T> clazz, G domainLine2) {
+	public Array1DGenericImpl(Class<T> clazz, G domainLine2) {
 		this.domainLine = domainLine2;
 		this.domains = (G[]) Array.newInstance(domainLine2.getClass(), 1);
 		domains[0] = domainLine;
 		cases = (T[]) Array.newInstance(clazz, domainLine2.getElements().size());
+		this.clazz = clazz;
 	}
  
 	@Override
@@ -114,4 +117,14 @@ public class Array1DGenericImpl<T, K, G extends Axe<? extends AxeVal<K>>> extend
 		}
 		return pair;
 	}
+
+	@Override
+	public ArrayXDOrd<T, K, Axe<? extends AxeVal<K>>> addAxe(G axe) {
+		ArrayXDOrd<T, K, Axe<? extends AxeVal<K>>> a = new Array2DGenericImpl<>(clazz, domainLine, axe);
+		for(Pair<List<K>, T> p : getAllWithKey()) {
+			a.setValue(p.getValue(), p.getKey().get(0), axe.getElements().get(0).getValue());
+		}
+		return a;
+	}
+
 }

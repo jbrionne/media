@@ -9,15 +9,12 @@ import fr.next.media.array.Axe;
 import fr.next.media.array.AxeInt;
 import fr.next.media.array.AxeOrd;
 import fr.next.media.array.AxeValue;
-import fr.next.media.array.CoordinatesXDByIndices;
+import fr.next.media.array.CoordinatesXDSpaceByIndices;
 import fr.next.media.array.impl.Array2DMatrix3fImpl;
 import fr.next.media.array.impl.ArrayFactory;
 import fr.next.media.array.impl.MapXDWithEmptyValueGenericImpl;
 import fr.next.media.array.impl.logigram.ArrayLogigramValue;
 import fr.next.media.draw.Draw;
-import fr.next.media.process.History;
-import fr.next.media.process.ResultStrategy;
-import fr.next.media.process.Strategy;
 import junit.framework.TestCase;
 
 public class StrategiesTest extends TestCase {
@@ -84,9 +81,9 @@ public class StrategiesTest extends TestCase {
 		indices01.setValue(1f, 0, 1);
 		List<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>> cubes = new ArrayList<>();
 		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c1 = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domPersons, domCaches);
-		c1.addCoordinate(new CoordinatesXDByIndices(axes, indices00));
+		c1.addCoordinate(new CoordinatesXDSpaceByIndices(axes, indices00));
 		ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> c2 = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(domPersons, domClasse);
-		c2.addCoordinate(new CoordinatesXDByIndices(axes, indices01));
+		c2.addCoordinate(new CoordinatesXDSpaceByIndices(axes, indices01));
 		cubes.add(c1);
 		cubes.add(c2);
 		

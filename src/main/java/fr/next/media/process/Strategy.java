@@ -50,8 +50,8 @@ public class Strategy {
 						match = false;
 						break;
 					}
-					casesInContext.add(new Case(cCC, cC.get(k),  cCC.getCoordinates().getPosition(0).intValue() + j, cCC.getCoordinates().getPosition(1).intValue() +k));
-					casesInContext.add(new Case(cEC, c.get(k),  cEC.getCoordinates().getPosition(0).intValue() + i, cEC.getCoordinates().getPosition(1).intValue() +k));
+					casesInContext.add(new Case(cCC, cC.get(k),  cCC.getSingleCoordinates().getPosition(0).intValue() + j, cCC.getSingleCoordinates().getPosition(1).intValue() +k));
+					casesInContext.add(new Case(cEC, c.get(k),  cEC.getSingleCoordinates().getPosition(0).intValue() + i, cEC.getSingleCoordinates().getPosition(1).intValue() +k));
 				}
 				if (match) {
 					ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> cECl = getArray2D(cEC.getAxe(0), cCC.getAxe(0));
@@ -120,8 +120,8 @@ public class Strategy {
 						match = false;
 						break;
 					}
-					casesInContext.add(new Case(cCC, cC.get(k), cCC.getCoordinates().getPosition(0).intValue() + k, cCC.getCoordinates().getPosition(1).intValue() + j));
-					casesInContext.add(new Case(cEC, c.get(k), cEC.getCoordinates().getPosition(0).intValue() + k, cEC.getCoordinates().getPosition(1).intValue() + i));
+					casesInContext.add(new Case(cCC, cC.get(k), cCC.getSingleCoordinates().getPosition(0).intValue() + k, cCC.getSingleCoordinates().getPosition(1).intValue() + j));
+					casesInContext.add(new Case(cEC, c.get(k), cEC.getSingleCoordinates().getPosition(0).intValue() + k, cEC.getSingleCoordinates().getPosition(1).intValue() + i));
 				}
 				if (match) {
 					ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> cECl = getArray2D(cEC.getAxe(1), cCC.getAxe(1));
@@ -340,8 +340,8 @@ public class Strategy {
 					for (int k = 0; k < c.getAxe(1).getElements().size(); k++) {
 						if (c.getValueByIndices((float)i, (float)k).equals(ArrayLogigramValue.NEG) && c.getValueByIndices((float)j, (float)k).equals(ArrayLogigramValue.NEG)) {
 							count++;
-							casesInContext.add(new Case(c, c.getValuesForAnAxe(0, i).get(k), c.getCoordinates().getPosition(0).intValue() + i,  c.getCoordinates().getPosition(1).intValue() + k));
-							casesInContext.add(new Case(c, c.getValuesForAnAxe(0, j).get(k), c.getCoordinates().getPosition(0).intValue() + j,  c.getCoordinates().getPosition(1).intValue() + k));
+							casesInContext.add(new Case(c, c.getValuesForAnAxe(0, i).get(k), c.getSingleCoordinates().getPosition(0).intValue() + i,  c.getSingleCoordinates().getPosition(1).intValue() + k));
+							casesInContext.add(new Case(c, c.getValuesForAnAxe(0, j).get(k), c.getSingleCoordinates().getPosition(0).intValue() + j,  c.getSingleCoordinates().getPosition(1).intValue() + k));
 							
 						} else if (c.getValueByIndices((float)i, (float)k).equals(ArrayLogigramValue.EMPTY) && c.getValueByIndices((float)j, (float)k).equals(ArrayLogigramValue.EMPTY)) {
 							emptyCol.add(k);
@@ -416,8 +416,8 @@ public class Strategy {
 					for (int k = 0; k < c.getAxe(0).getElements().size(); k++) {
 						if (c.getValueByIndices((float)k, (float)i).equals(ArrayLogigramValue.NEG) && c.getValueByIndices((float)k, (float)j).equals(ArrayLogigramValue.NEG)) {
 							count++;
-							casesInContext.add(new Case(c, c.getValuesForAnAxe(1, i).get(k), c.getCoordinates().getPosition(0).intValue() + k, c.getCoordinates().getPosition(1).intValue() +i));
-							casesInContext.add(new Case(c, c.getValuesForAnAxe(1, j).get(k), c.getCoordinates().getPosition(0).intValue() + k, c.getCoordinates().getPosition(1).intValue() + j));
+							casesInContext.add(new Case(c, c.getValuesForAnAxe(1, i).get(k), c.getSingleCoordinates().getPosition(0).intValue() + k, c.getSingleCoordinates().getPosition(1).intValue() +i));
+							casesInContext.add(new Case(c, c.getValuesForAnAxe(1, j).get(k), c.getSingleCoordinates().getPosition(0).intValue() + k, c.getSingleCoordinates().getPosition(1).intValue() + j));
 						} else if (c.getValueByIndices((float)k,(float) i).equals(ArrayLogigramValue.EMPTY) && c.getValueByIndices((float)k, (float)j).equals(ArrayLogigramValue.EMPTY)) {
 							emptyCol.add(k);
 						} else {

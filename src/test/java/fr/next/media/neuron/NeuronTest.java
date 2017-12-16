@@ -10,7 +10,8 @@ import fr.next.media.array.Axe;
 import fr.next.media.array.AxeInt;
 import fr.next.media.array.AxeOrd;
 import fr.next.media.array.AxeValue;
-import fr.next.media.array.CoordinatesXDByIndices;
+import fr.next.media.array.CoordinatesXDSpaceByIndices;
+import fr.next.media.array.CoordinatesXDSpaceByIndices;
 import fr.next.media.array.impl.Array2DMatrix3fImpl;
 import fr.next.media.array.impl.ArrayFactory;
 import fr.next.media.array.impl.MapXDWithEmptyValueGenericImpl;
@@ -731,11 +732,11 @@ public class NeuronTest extends TestCase {
 		indices3.setValue(6f, 0, 0);
 		indices3.setValue(6f, 0, 1);
 		MedAndBoolean and = new MedAndBoolean(Float.class,"", domNeuroneX, domNeuroneY);
-		and.addCoordinate(new CoordinatesXDByIndices(axes, indices1));
+		and.addCoordinate(new CoordinatesXDSpaceByIndices(axes, indices1));
 		MedOrBoolean or = new MedOrBoolean(Float.class,"", domNeuroneX, domNeuroneY);
-		or.addCoordinate(new CoordinatesXDByIndices(axes, indices2));
+		or.addCoordinate(new CoordinatesXDSpaceByIndices(axes, indices2));
 		MedXorExcludeBoolean xorEx = new MedXorExcludeBoolean(Float.class,"", domNeuroneX, domNeuroneY);
-		xorEx.addCoordinate(new CoordinatesXDByIndices(axes, indices3));
+		xorEx.addCoordinate(new CoordinatesXDSpaceByIndices(axes, indices3));
 		
 		
 		
@@ -796,7 +797,7 @@ public class NeuronTest extends TestCase {
 			domNeuroneY.add(new AxeValue<Integer>(i));
 		}
 		ArrayXDOrd axes = new MapXDWithEmptyValueGenericImpl<>(Float.class, 0f, domNeuroneX, domNeuroneY);
-		NeuronExecutor<CoordinatesXDByIndices> nexec = new NeuronExecutor<>();
+		NeuronExecutor<CoordinatesXDSpaceByIndices> nexec = new NeuronExecutor<>();
 		float noPulseIntensity = 0f;
 		float pulseIntensity = 1f;
 		Agregation agre = (a, b, c) -> (a * b) + c;
@@ -835,67 +836,67 @@ public class NeuronTest extends TestCase {
 		
 		ArrayXDOrd indicesAnd0 = new Array2DMatrix3fImpl<>(domNeuroneX, domNeuroneY);
 		indicesAnd0.setValue(0f, 0, 0);
-		CoordinatesXDByIndices coordAnd0 = new CoordinatesXDByIndices(and, indicesAnd0);
+		CoordinatesXDSpaceByIndices coordAnd0 = new CoordinatesXDSpaceByIndices(and, indicesAnd0);
 	
 		ArrayXDOrd indicesAnd1 = new Array2DMatrix3fImpl<>(domNeuroneX, domNeuroneY);
 		indicesAnd1.setValue(0f, 1, 1);
-		CoordinatesXDByIndices coordAnd1 = new CoordinatesXDByIndices(and, indicesAnd1);
+		CoordinatesXDSpaceByIndices coordAnd1 = new CoordinatesXDSpaceByIndices(and, indicesAnd1);
 	
 		ArrayXDOrd indicesAnd2 = new Array2DMatrix3fImpl<>(domNeuroneX, domNeuroneY);
 		indicesAnd2.setValue(0f, 2, 2);
-		CoordinatesXDByIndices coordAnd2 = new CoordinatesXDByIndices(and, indicesAnd2);
+		CoordinatesXDSpaceByIndices coordAnd2 = new CoordinatesXDSpaceByIndices(and, indicesAnd2);
 	
 		//idem Or
 		
 		ArrayXDOrd indicesOr0 = new Array2DMatrix3fImpl<>(domNeuroneX, domNeuroneY);
 		indicesOr0.setValue(0f, 0, 0);
-		CoordinatesXDByIndices coordOr0 = new CoordinatesXDByIndices(or, indicesOr0);
+		CoordinatesXDSpaceByIndices coordOr0 = new CoordinatesXDSpaceByIndices(or, indicesOr0);
 	
 		ArrayXDOrd indicesOr1 = new Array2DMatrix3fImpl<>(domNeuroneX, domNeuroneY);
 		indicesOr1.setValue(0f, 1, 1);
-		CoordinatesXDByIndices coordOr1 = new CoordinatesXDByIndices(or, indicesOr1);
+		CoordinatesXDSpaceByIndices coordOr1 = new CoordinatesXDSpaceByIndices(or, indicesOr1);
 	
 		ArrayXDOrd indicesOr2 = new Array2DMatrix3fImpl<>(domNeuroneX, domNeuroneY);
 		indicesOr2.setValue(0f, 2, 2);
-		CoordinatesXDByIndices coordOr2 = new CoordinatesXDByIndices(or, indicesOr2);
+		CoordinatesXDSpaceByIndices coordOr2 = new CoordinatesXDSpaceByIndices(or, indicesOr2);
 		
 		//idem Ex
 		
 		ArrayXDOrd indicesXorEx0 = new Array2DMatrix3fImpl<>(domNeuroneX, domNeuroneY);
 		indicesXorEx0.setValue(0f, 0, 0);
-		CoordinatesXDByIndices coordXorEx0 = new CoordinatesXDByIndices(xorEx, indicesXorEx0);
+		CoordinatesXDSpaceByIndices coordXorEx0 = new CoordinatesXDSpaceByIndices(xorEx, indicesXorEx0);
 	
 		ArrayXDOrd indicesXorEx1 = new Array2DMatrix3fImpl<>(domNeuroneX, domNeuroneY);
 		indicesXorEx1.setValue(0f, 1, 1);
-		CoordinatesXDByIndices coordXorEx1 = new CoordinatesXDByIndices(xorEx, indicesXorEx1);
+		CoordinatesXDSpaceByIndices coordXorEx1 = new CoordinatesXDSpaceByIndices(xorEx, indicesXorEx1);
 	
 		ArrayXDOrd indicesXorEx2 = new Array2DMatrix3fImpl<>(domNeuroneX, domNeuroneY);
 		indicesXorEx2.setValue(0f, 2, 2);
-		CoordinatesXDByIndices coordXorEx2 = new CoordinatesXDByIndices(xorEx, indicesXorEx2);
+		CoordinatesXDSpaceByIndices coordXorEx2 = new CoordinatesXDSpaceByIndices(xorEx, indicesXorEx2);
 	
 		
-		Axe<AxeValue<CoordinatesXDByIndices>> coordX = new AxeOrd<AxeValue<CoordinatesXDByIndices>>("coordX");
-		coordX.add(new AxeValue<CoordinatesXDByIndices>(coordAnd0));
-		coordX.add(new AxeValue<CoordinatesXDByIndices>(coordAnd1));
-		coordX.add(new AxeValue<CoordinatesXDByIndices>(coordAnd2));
-		coordX.add(new AxeValue<CoordinatesXDByIndices>(coordOr0));
-		coordX.add(new AxeValue<CoordinatesXDByIndices>(coordOr1));
-		coordX.add(new AxeValue<CoordinatesXDByIndices>(coordOr2));
-		coordX.add(new AxeValue<CoordinatesXDByIndices>(coordXorEx0));
-		coordX.add(new AxeValue<CoordinatesXDByIndices>(coordXorEx1));
-		coordX.add(new AxeValue<CoordinatesXDByIndices>(coordXorEx2));
-		Axe<AxeValue<CoordinatesXDByIndices>> coordY = new AxeOrd<AxeValue<CoordinatesXDByIndices>>("coordY");
-		coordY.add(new AxeValue<CoordinatesXDByIndices>(coordAnd0));
-		coordY.add(new AxeValue<CoordinatesXDByIndices>(coordAnd1));
-		coordY.add(new AxeValue<CoordinatesXDByIndices>(coordAnd2));
-		coordY.add(new AxeValue<CoordinatesXDByIndices>(coordOr0));
-		coordY.add(new AxeValue<CoordinatesXDByIndices>(coordOr1));
-		coordY.add(new AxeValue<CoordinatesXDByIndices>(coordOr2));
-		coordY.add(new AxeValue<CoordinatesXDByIndices>(coordXorEx0));
-		coordY.add(new AxeValue<CoordinatesXDByIndices>(coordXorEx1));
-		coordY.add(new AxeValue<CoordinatesXDByIndices>(coordXorEx2));
+		Axe<AxeValue<CoordinatesXDSpaceByIndices>> coordX = new AxeOrd<AxeValue<CoordinatesXDSpaceByIndices>>("coordX");
+		coordX.add(new AxeValue<CoordinatesXDSpaceByIndices>(coordAnd0));
+		coordX.add(new AxeValue<CoordinatesXDSpaceByIndices>(coordAnd1));
+		coordX.add(new AxeValue<CoordinatesXDSpaceByIndices>(coordAnd2));
+		coordX.add(new AxeValue<CoordinatesXDSpaceByIndices>(coordOr0));
+		coordX.add(new AxeValue<CoordinatesXDSpaceByIndices>(coordOr1));
+		coordX.add(new AxeValue<CoordinatesXDSpaceByIndices>(coordOr2));
+		coordX.add(new AxeValue<CoordinatesXDSpaceByIndices>(coordXorEx0));
+		coordX.add(new AxeValue<CoordinatesXDSpaceByIndices>(coordXorEx1));
+		coordX.add(new AxeValue<CoordinatesXDSpaceByIndices>(coordXorEx2));
+		Axe<AxeValue<CoordinatesXDSpaceByIndices>> coordY = new AxeOrd<AxeValue<CoordinatesXDSpaceByIndices>>("coordY");
+		coordY.add(new AxeValue<CoordinatesXDSpaceByIndices>(coordAnd0));
+		coordY.add(new AxeValue<CoordinatesXDSpaceByIndices>(coordAnd1));
+		coordY.add(new AxeValue<CoordinatesXDSpaceByIndices>(coordAnd2));
+		coordY.add(new AxeValue<CoordinatesXDSpaceByIndices>(coordOr0));
+		coordY.add(new AxeValue<CoordinatesXDSpaceByIndices>(coordOr1));
+		coordY.add(new AxeValue<CoordinatesXDSpaceByIndices>(coordOr2));
+		coordY.add(new AxeValue<CoordinatesXDSpaceByIndices>(coordXorEx0));
+		coordY.add(new AxeValue<CoordinatesXDSpaceByIndices>(coordXorEx1));
+		coordY.add(new AxeValue<CoordinatesXDSpaceByIndices>(coordXorEx2));
 		
-		ArrayXDOrd<Float, CoordinatesXDByIndices, Axe<AxeValue<CoordinatesXDByIndices>>> glueArray = (ArrayXDOrd<Float, CoordinatesXDByIndices, Axe<AxeValue<CoordinatesXDByIndices>>>) ArrayFactory
+		ArrayXDOrd<Float, CoordinatesXDSpaceByIndices, Axe<AxeValue<CoordinatesXDSpaceByIndices>>> glueArray = (ArrayXDOrd<Float, CoordinatesXDSpaceByIndices, Axe<AxeValue<CoordinatesXDSpaceByIndices>>>) ArrayFactory
 				.newInstanceArrayLogigramValueMapX2IntegerWithFloat(coordX, coordY);
 		glueArray.setValue(1f, coordAnd2,  coordXorEx0);
 		glueArray.setValue(1f, coordOr2,  coordXorEx1);
@@ -908,15 +909,15 @@ public class NeuronTest extends TestCase {
 //		MedNode allNode = new MedNode("allNode", allEntries, allOutputs, all);
 //	
 		
-		Map<CoordinatesXDByIndices, Float> step0 = new HashMap<>();
+		Map<CoordinatesXDSpaceByIndices, Float> step0 = new HashMap<>();
 		step0.put(coordAnd0, noPulseIntensity);
 		step0.put(coordAnd1, pulseIntensity);
 		step0.put(coordOr0, noPulseIntensity);
 		step0.put(coordOr1, pulseIntensity);
 
-		List<Map<CoordinatesXDByIndices, Float>> stepsFinal = new ArrayList<>();
+		List<Map<CoordinatesXDSpaceByIndices, Float>> stepsFinal = new ArrayList<>();
 		nexec.simul(stepsFinal, glueArray, step0, agre, activ, false);
-		Map<CoordinatesXDByIndices, Float> lastStep = stepsFinal.get(stepsFinal.size() - 1);
+		Map<CoordinatesXDSpaceByIndices, Float> lastStep = stepsFinal.get(stepsFinal.size() - 1);
 		System.out.println("activate " + lastStep.toString());
 	
 	}

@@ -183,6 +183,14 @@ public class Array2DMatrix4fImpl<K, G extends Axe<? extends AxeVal<K>>> extends 
 		this.cases = cases;
 	}
 	
+	@Override
+	public ArrayXDOrd<Float, K, Axe<? extends AxeVal<K>>> addAxe(G axe) {
+		ArrayXDOrd<Float, K, Axe<? extends AxeVal<K>>> a = new Array3DGenericImpl<>(Float.class, domainLine, domainCol, axe);
+		for(Pair<List<K>, Float> p : getAllWithKey()) {
+			a.setValue(p.getValue(), p.getKey().get(0), p.getKey().get(1), axe.getElements().get(0).getValue());
+		}
+		return a;
+	}
 	
 
 }

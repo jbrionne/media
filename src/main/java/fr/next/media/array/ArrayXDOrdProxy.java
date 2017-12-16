@@ -55,12 +55,12 @@ public class ArrayXDOrdProxy<T, K, G extends Axe<? extends AxeVal<K>>> implement
 	}
 
 	@Override
-	public CoordinatesXDByIndices getCoordinates(ArrayXDOrd<T, K, G> axes){
+	public CoordinatesXD getCoordinates(ArrayXDOrd<T, K, G> axes){
 		return this.base.getCoordinates(axes);
 	}
 	
 	@Override
-	public CoordinatesXDByIndices getChildCoordinates(ArrayXDOrd<T, K, G> axes){
+	public CoordinatesXD getChildCoordinates(ArrayXDOrd<T, K, G> axes){
 		return this.base.getChildCoordinates(axes);
 	}
 
@@ -92,7 +92,7 @@ public class ArrayXDOrdProxy<T, K, G extends Axe<? extends AxeVal<K>>> implement
 	}
 
 	@Override
-	public void addCoordinate(CoordinatesXDByIndices coordinates) {
+	public void addCoordinate(CoordinatesXD coordinates) {
 		 this.base.addCoordinate(coordinates);
 	}
 
@@ -106,17 +106,17 @@ public class ArrayXDOrdProxy<T, K, G extends Axe<? extends AxeVal<K>>> implement
 	}
 
 	@Override
-	public CoordinatesXDByIndices getCoordinates() {
-		return this.base.getCoordinates();
+	public CoordinatesXD getSingleCoordinates() {
+		return this.base.getSingleCoordinates();
 	}
 
 	@Override
-	public List<CoordinatesXDByIndices<T, K, G>> getChildCoordinates() {
+	public List<CoordinatesXD<T, K, G>> getChildCoordinates() {
 		return this.base.getChildCoordinates();
 	}
 
 	@Override
-	public void addChildCoordinate(CoordinatesXDByIndices<T, K, G> coordinates) {
+	public void addChildCoordinate(CoordinatesXD<T, K, G> coordinates) {
 		this.base.addChildCoordinate(coordinates);
 	}
 
@@ -136,19 +136,19 @@ public class ArrayXDOrdProxy<T, K, G extends Axe<? extends AxeVal<K>>> implement
 	}
 
 	@Override
-	public void setValueByIndices(T value, CoordinatesXDByIndices<T, K, G> coord) {
-		float[] newIndicesValue = new float[coord.getPositionList().size() - 1];
+	public void setValueByIndices(T value, CoordinatesXD<T, K, G> coord) {
+		float[] newIndicesValue = new float[coord.getPositionIndicesList().size() - 1];
 		for(int i = 0; i < newIndicesOrder.length; i++) {
-			newIndicesValue[newIndicesOrder[i]] = (int) coord.getPositionList().get(i).intValue();
+			newIndicesValue[newIndicesOrder[i]] = (int) coord.getPositionIndicesList().get(i).intValue();
 		}
 		this.base.setValueByIndices(value, newIndicesValue);
 	}
 
 	@Override
-	public T getValueByIndices(CoordinatesXDByIndices<T, K, G> coord) {
-		float[] newIndicesValue = new float[coord.getPositionList().size() - 1];
+	public T getValueByIndices(CoordinatesXD<T, K, G> coord) {
+		float[] newIndicesValue = new float[coord.getPositionIndicesList().size() - 1];
 		for(int i = 0; i < newIndicesOrder.length; i++) {
-			newIndicesValue[newIndicesOrder[i]] = coord.getPositionList().get(i).floatValue();
+			newIndicesValue[newIndicesOrder[i]] = coord.getPositionIndicesList().get(i).floatValue();
 		}
 		return this.base.getValueByIndices(newIndicesValue);
 	}
@@ -207,6 +207,16 @@ public class ArrayXDOrdProxy<T, K, G extends Axe<? extends AxeVal<K>>> implement
 	public T getValueFromChildAxeCoordByIndices(ArrayXDOrd<T, K, G> axes, float... upperAxeIndices) {
 		return this.base.getValueFromChildAxeCoordByIndices(axes, upperAxeIndices);
 		
+	}
+
+	@Override
+	public ArrayXDOrd<T, K, Axe<? extends AxeVal<K>>> addAxe(G axe) {
+		return this.base.addAxe(axe);
+	}
+
+	@Override
+	public List<CoordinatesXD<T, K, G>> getCoordinates() {
+		return this.base.getCoordinates();
 	}
 
 }

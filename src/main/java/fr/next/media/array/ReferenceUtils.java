@@ -26,7 +26,7 @@ public class ReferenceUtils {
 		transformLoc.setValue(0f, 3,2);
 		transformLoc.setValue(0f, 3,3);
 		ArrayXDOrd mirror = new Array2DGenericImpl<T, String, Axe<AxeValue<String>>>(clazz, axes.getAxe(0), axes.getAxe(1));
-		CoordinatesXDByIndices coord = new CoordinatesXDByIndices(axes, transformLoc);
+		CoordinatesXDSpaceByIndices coord = new CoordinatesXDSpaceByIndices(axes, transformLoc);
 		mirror.addCoordinate(coord);
 		coord.rotate(90f, 0f, 0f, 1f);
 		coord.rotate(180f, 1f, 0f, 0f);

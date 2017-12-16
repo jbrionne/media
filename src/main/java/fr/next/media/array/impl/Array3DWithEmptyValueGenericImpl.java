@@ -221,5 +221,14 @@ public class Array3DWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeV
 		}
 		return pair;
 	}
+	
+	@Override
+	public ArrayXDOrd<T, K, Axe<? extends AxeVal<K>>> addAxe(G axe) {
+		ArrayXDOrd<T, K, Axe<? extends AxeVal<K>>> a = new ArrayXDWithEmptyValueGenericImpl<>(clazz, emptyVal, domainLine, domainCol, domainZ, axe);
+		for(Pair<List<K>, T> p : getAllWithKey()) {
+			a.setValue(p.getValue(), p.getKey().get(0), p.getKey().get(1), p.getKey().get(2), axe.getElements().get(0).getValue());
+		}
+		return a;
+	}
 
 }

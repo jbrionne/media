@@ -22,6 +22,8 @@ public class Array1DWithEmptyGenericImpl<T, K, G extends Axe<? extends AxeVal<K>
 	private G domainLine;
 
 	private T emptyVal;
+	
+	private Class<T> clazz;
 
 	@SuppressWarnings("unchecked")
 	Array1DWithEmptyGenericImpl(Class<T> clazz, G domainLine2, T emptyVal) {
@@ -33,6 +35,7 @@ public class Array1DWithEmptyGenericImpl<T, K, G extends Axe<? extends AxeVal<K>
 		for (int i = 0; i < cases.length; i++) {
 			cases[i] = emptyVal;
 		}
+		this.clazz = clazz;
 	}
 
 	@Override
@@ -119,6 +122,15 @@ public class Array1DWithEmptyGenericImpl<T, K, G extends Axe<? extends AxeVal<K>
 			index++;
 		}
 		return pair;
+	}
+	
+	@Override
+	public ArrayXDOrd<T, K, Axe<? extends AxeVal<K>>> addAxe(G axe) {
+		ArrayXDOrd<T, K, Axe<? extends AxeVal<K>>> a = new Array2DWithEmptyValueGenericImpl<>(clazz, domainLine, axe, emptyVal);
+		for(Pair<List<K>, T> p : getAllWithKey()) {
+			a.setValue(p.getValue(), p.getKey().get(0), axe.getElements().get(0).getValue());
+		}
+		return a;
 	}
 
 }

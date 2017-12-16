@@ -8,9 +8,8 @@ import fr.next.media.array.ArrayXDOrdProxy;
 import fr.next.media.array.Axe;
 import fr.next.media.array.AxeInt;
 import fr.next.media.array.AxeValue;
-import fr.next.media.array.CoordinatesXDByIndices;
+import fr.next.media.array.CoordinatesXDSpaceByIndices;
 import fr.next.media.array.impl.Array2DMatrix3fImpl;
-import fr.next.media.array.impl.Array2DMatrix4fImpl;
 import fr.next.media.array.impl.ArrayFactory;
 import fr.next.media.array.impl.MapXDWithEmptyValueGenericImpl;
 import fr.next.media.array.impl.logigram.ArrayLogigramValue;
@@ -50,14 +49,14 @@ public class Array2DWorld {
 		indices.setValue(0f, 0, 0);
 		indices.setValue(0f, 0, 1);
 		arrays2D = (ArrayXDOrd<ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValueForWorld(axeLine, axeCol);
-		arrays2D.addCoordinate(new CoordinatesXDByIndices(axes, indices));
+		arrays2D.addCoordinate(new CoordinatesXDSpaceByIndices(axes, indices));
 		float indexColO = 0;
 		for (int i = 1; i < domains.size(); i++) {
 			ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>> array = (ArrayXDOrd<ArrayLogigramValue, String, Axe<AxeValue<String>>>) ArrayFactory.newInstanceArrayLogigramValue(d0, domains.get(i));
 			ArrayXDOrd indices2 = new Array2DMatrix3fImpl<>(new AxeInt("x", 3), new AxeInt("y", 3));
 			indices2.setValue(0f, 0, 0);
 			indices2.setValue(indexColO, 0, 1);
-			array.addCoordinate(new CoordinatesXDByIndices(axes, indices2));
+			array.addCoordinate(new CoordinatesXDSpaceByIndices(axes, indices2));
 			arrays2D.setValueByIndices(array, 0, (int) indexColO);
 			indexColO += domains.get(i).getElements().size();
 		}
@@ -70,7 +69,7 @@ public class Array2DWorld {
 				ArrayXDOrd indices2 = new Array2DMatrix3fImpl<>(new AxeInt("x", 3), new AxeInt("y", 3));
 				indices2.setValue(indexLine, 0, 0);
 				indices2.setValue(indexCol, 0, 1);
-				array2D.addCoordinate(new CoordinatesXDByIndices(axes, indices2));
+				array2D.addCoordinate(new CoordinatesXDSpaceByIndices(axes, indices2));
 				arrays2D.setValueByIndices(array2D, (int) indexLine, (int) indexCol);
 				indexCol += domains.get(j).getElements().size();
 			}

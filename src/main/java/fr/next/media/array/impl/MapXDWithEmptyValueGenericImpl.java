@@ -241,7 +241,17 @@ public class MapXDWithEmptyValueGenericImpl<T, K, G extends Axe<? extends AxeVal
 		return all;
 	}
 	
-	
+	@Override
+	public ArrayXDOrd<T, K, Axe<? extends AxeVal<K>>> addAxe(G axe) {
+		G[] newDomains = Arrays.copyOf(domains, domains.length + 1);
+		newDomains[domains.length] = axe;
+		ArrayXDOrd<T, K, Axe<? extends AxeVal<K>>> a = new MapXDWithEmptyValueGenericImpl(clazz, emptyVal, newDomains);
+		for(Pair<List<K>, T> p : getAllWithKey()) {
+			p.getKey().add(axe.getElements().get(0).getValue());
+			a.setValue(p.getValue(), p.getKey().toArray((K[])Array.newInstance(axe.getElements().get(0).getValue().getClass(), newDomains.length)));
+		}
+		return a;
+	}
 	
 	
 }

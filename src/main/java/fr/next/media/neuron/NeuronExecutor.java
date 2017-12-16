@@ -41,7 +41,7 @@ public class NeuronExecutor<T> {
 		for (Entry<CoordinatesXDByIndices, Float> p : currentStep.entrySet()) {
 			Float excitationVal = p.getValue();
 			
-			List<Float> position = p.getKey().getPositionList();
+			List<Float> position = p.getKey().getPositionIndicesList();
 			float[] positionCoord = new float[position.size() - 1];
 			for(int i = 0; i < positionCoord.length; i++) {
 				//Warning !!
