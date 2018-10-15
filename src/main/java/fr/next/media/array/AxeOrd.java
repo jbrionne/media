@@ -20,6 +20,9 @@ public class AxeOrd<T extends AxeVal> implements Axe<T> {
 	 * Order list of axe values.
 	 */
 	protected List<T> elements = new ArrayList<>();
+	
+	protected AxeOrd() {
+	}
 
 	public AxeOrd(String name) {
 		super();
@@ -110,6 +113,31 @@ public class AxeOrd<T extends AxeVal> implements Axe<T> {
 				}
 			}
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AxeOrd other = (AxeOrd) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
 	}
 
 }

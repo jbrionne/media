@@ -30,7 +30,6 @@ public class MemoryTest extends TestCase {
 	
 
 	public void testMemory() {
-		
 		AxeOrd<AxeValue<AxeValue<Character>>> m = new MedString("test");
 		memory.save("test", m);
 		AxeOrd<AxeValue<AxeValue<Character>>> exM = (AxeOrd<AxeValue<AxeValue<Character>>>) memory.findAndGetContent("test");

@@ -37,6 +37,10 @@ public class ManageOrientDb {
 		}
 		checkClose();
 	}
+	
+	public void activateOnCurrentThread() {
+		db.activateOnCurrentThread();
+	}
 
 	private void checkClose() {
 		if (db.isClosed()) {
